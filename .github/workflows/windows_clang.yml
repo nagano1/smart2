@@ -1,0 +1,166 @@
+name: 👽 Windows binary using Clang/LLVM 
+
+on:
+  push:
+  schedule:
+    - cron: '15 3 1 * *' # minute hour day month monday
+
+jobs:
+  mybuild:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - {
+              # Windows 64bit
+              name: 64bit,
+              os: windows-latest,
+              main: "main.exe",
+              hello: "hello.exe",
+              suffix: ".exe",
+              flag: "",
+            }
+          - {
+              # Windows 32bit
+              name: 32bit,
+              os: windows-latest,
+              main: "main32.exe",
+              hello: "hello32.exe",
+              suffix: ".exe",
+              flag: "-m32",
+            }
+          - {
+              # Ubuntu 64bit
+              name: ubuntu-latest-64,
+              os: ubuntu-latest,
+              main: "main",
+              suffix: "",
+              hello: "hello_ubuntu_64",
+              flag: "",
+            }
+          - {
+              # Mac 64bit
+              name: mac-latest-64,
+              os: macos-latest,
+              main: "main_osx",
+              suffix: "",
+              hello: "hello_macos_64",
+              flag: "",
+            }
+          
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: enable problem matcher
+        run: |
+          echo "::add-matcher::.github/problem_matcher.json"
+
+      - name: do build
+        shell: bash
+        run: |
+          npm --version
+          npm i
+          node_modules/.bin/gulp show --github_actions ${{ matrix.config.flag }}
+          # echo wow
+          # ./wow.exe
+      
+
+      - name: Emulating output binary from doorlang - msys64/mingw clang++/llvm compile msys64/mingw on Windows
+        shell: bash
+        run: |
+          clang++ --version
+          
+          cd llvm_ir_test
+          clang++ ${{ matrix.config.flag }} -S main.cpp 
+          clang++ ${{ matrix.config.flag }} -S lib.cpp
+          #llc main.ll
+          #llc lib.ll
+          
+
+          clang++ ${{ matrix.config.flag }} -mwindows -pthread main.s lib.s -o hello${{ matrix.config.suffix }};
+          ls -al;
+          ./hello${{ matrix.config.suffix }};
+
+         
+      - name: Copy artifact
+        shell: bash
+        run: |
+          cd build;
+          mkdir -p deb;
+
+      - name: Copy artifact for windows
+        shell: bash
+        run: |
+          cp wow.exe ./build/deb/${{ matrix.config.main }}
+
+          cd llvm_ir_test;
+          cp hello${{ matrix.config.suffix }} ../build/deb/${{ matrix.config.hello }}
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: win-llvm-_${{ github.sha }}
+          path: build/deb
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+      # - name: Install clang (Windows)
+      #   if: matrix.config.os == 'windows-latest'
+      #   shell: bash
+      #   run: |
+      #     curl -fsSLO https://github.com/llvm/llvm-project/releases/download/llvmorg-10.0.0/LLVM-10.0.0-win64.exe
+      #     7z x LLVM-10.0.0-win64.exe -y -o"llvm"
+      #     #echo "$(pwd)/llvm/bin" >> $GITHUB_PATH
+      #     #echo "WASM_AR=$(pwd)/llvm/bin/llvm-ar.exe" >> $GITHUB_ENV
+
+      # - name: Install llvm-nm (Windows)
+      #   if: matrix.config.os == 'windows-latest'
+      #   shell: bash
+      #   run: |
+      #     rustup update stable
+      #     rustup default stable
+      #     rustup component add llvm-tools-preview
+      #     echo "$(rustc --print sysroot|sed 's|C:|/c|'|sed 's|\\|/|g')/lib/rustlib/x86_64-pc-windows-msvc/bin/llvm-nm.exe"
+      #     ls -al "$(rustc --print sysroot|sed 's|C:|/c|'|sed 's|\\|/|g')/lib/rustlib/x86_64-pc-windows-msvc/bin/"
+
+      # - name: Install llvm-nm (Windows)
+      #   shell: bash
+      #   run: |
+      #     rustup update stable
+      #     rustup default stable
+      #     rustup component add llvm-tools-preview
+      #     echo "::set-env name=WASM_NM::$(rustc --print sysroot|sed 's|C:|/c|'|sed 's|\\|/|g')/lib/rustlib/x86_64-pc-windows-msvc/bin/llvm-nm.exe"
+      #   if: matrix.config.os == 'windows-latest'
+
+
+
+          # clang++ ${{ matrix.config.flag }} -static -lstdc++ -pthread main.s lib.s -o hello.exe;
+
+
+
+
+
+        #       addpath: 'C:\\msys64\mingw64\bin',
+        # addpath_old: 'echo "::add-path::C:\msys64\mingw32\bin"',
+        #       addpath: 'C:\\msys64\mingw32\bin',
+        #   # echo "${{ matrix.config.addpath }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
