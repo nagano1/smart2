@@ -1,4 +1,5 @@
 
+o
 
 ![👽 Windows binary using Clang/LLVM](https://github.com/nagano1/smart/workflows/%F0%9F%91%BD%20Windows%20binary%20using%20Clang/LLVM/badge.svg)
 
