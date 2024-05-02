@@ -53,7 +53,7 @@ let ldFlags = [
 exports_wasm.map((v)=>ldFlags.push("--export="+v));
 exports_funcs.map((v)=>ldFlags.push("--export="+v));
 
-//let INCLUDEs   = ["./include", "../src/"];
+let INCLUDEs   = ["./include/wasm32-wasi/", "../src/"];
 let INCLUDEs   = ["../src/"];
 let SRCDIR    = "./";
 
