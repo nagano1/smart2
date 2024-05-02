@@ -12,21 +12,24 @@ jobs:
     strategy:
       matrix:
         config:
-          # - {
-          #     os: ubuntu-latest,
-          #     addpath: '',
-          #     clang: '',
-          #   }
-          # - {
-          #     os: macos-latest,
-          #     # https://github.com/WebAssembly/wasi-sdk/issues/172
-          #     # You need to install llvm from Homebrew. Xcode's clang doesn't have support for WebAssembly.
-          #     clang: '--clang $(brew --prefix llvm@16)/bin/clang++ --wasmld $(brew --prefix llvm@16)/bin/wasm-ld',
-          #   }
+          - {
+              os: ubuntu-latest,
+              addpath: '',
+              clang: '',
+              wasi_tgz: "wasi-sysroot.tar.gz"
+            }
+          - {
+              os: macos-latest,
+              # https://github.com/WebAssembly/wasi-sdk/issues/172
+              # You need to install llvm from Homebrew. Xcode's clang doesn't have support for WebAssembly.
+              clang: '--clang $(brew --prefix llvm@16)/bin/clang++ --wasmld $(brew --prefix llvm@16)/bin/wasm-ld',
+              wasi_tgz: "wasi-sysroot.tar.gz"
+            }
           - {
               os: windows-latest,
               addpath: 'echo "C:\\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8',
               clang: '',
+              wasi_tgz: "wasi-sysroot-22.tar.gz"
             }  
 
     steps:
@@ -61,7 +64,7 @@ jobs:
           #sudo npm i gulp -g
 
           cd wasm_project/
-          tar zxvf wasi-sysroot.tar.gz
+          tar zxvf ${{ matrix.config.wasi_tgz }}
           npm i
 
           echo ${{ steps.rkey.outputs.rkey }}
