@@ -1141,9 +1141,9 @@ fn afunc(mut test:int): int {
 
 
     @Attr(awf="jofwie")
-    mut b = 224
+    $let b = 224
 
-    mut b = 3142
+    $let b = 3142
     let c = 314
     
     if true {
