@@ -15,7 +15,7 @@ jobs:
           - {
               # Windows 64bit
               name: 64bit,
-              os: windows-2019,
+              os: windows-latest,
               main: "main.exe",
               hello: "hello.exe",
               suffix: ".exe",
@@ -24,7 +24,7 @@ jobs:
           - {
               # Windows 32bit
               name: 32bit,
-              os: windows-2019,
+              os: windows-latest,
               main: "main32.exe",
               hello: "hello32.exe",
               suffix: ".exe",
