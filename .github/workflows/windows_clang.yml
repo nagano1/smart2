@@ -72,8 +72,8 @@ jobs:
         shell: bash
         run: |
           clang++ --version
-          choco upgrade llvm
-          clang++ --version
+          #choco upgrade llvm
+          #clang++ --version
           cd llvm_ir_test
           clang++ ${{ matrix.config.flag }} -S main.cpp 
           clang++ ${{ matrix.config.flag }} -S lib.cpp
