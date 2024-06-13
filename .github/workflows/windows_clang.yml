@@ -30,24 +30,7 @@ jobs:
               suffix: ".exe",
               flag: "-m32",
             }
-          - {
-              # Ubuntu 64bit
-              name: ubuntu-latest-64,
-              os: ubuntu-latest,
-              main: "main",
-              suffix: "",
-              hello: "hello_ubuntu_64",
-              flag: "",
-            }
-          - {
-              # Mac 64bit
-              name: mac-latest-64,
-              os: macos-latest,
-              main: "main_osx",
-              suffix: "",
-              hello: "hello_macos_64",
-              flag: "",
-            }
+
           
 
     steps:
@@ -71,7 +54,8 @@ jobs:
         shell: bash
         run: |
           clang++ --version
-          
+          choco upgrade llvm
+          clang++ --version
           cd llvm_ir_test
           clang++ ${{ matrix.config.flag }} -S main.cpp 
           clang++ ${{ matrix.config.flag }} -S lib.cpp
