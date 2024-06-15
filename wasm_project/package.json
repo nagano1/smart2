@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "chokidar": "^3.4.2",
-    "del": "^6.0.0",
+    "del": "^7.1.0",
     "gulp": "^4.0.2",
     "minimist": "^1.2.7"
   }
