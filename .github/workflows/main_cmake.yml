@@ -113,7 +113,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: deen_actions_cmake_amd64
+          name: deen_actions_cmake_${{ matrix.config.name }}_amd64
           path: build/deb
   
 

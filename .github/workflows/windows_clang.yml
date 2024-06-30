@@ -102,7 +102,7 @@ jobs:
       
       - uses: actions/upload-artifact@v4
         with:
-          name: win-llvm-awe
+          name: win-llvm-_${{ matrix.config.name }}
           path: build/deb
 
 
