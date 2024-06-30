@@ -100,7 +100,7 @@ jobs:
           cd llvm_ir_test;
           cp hello${{ matrix.config.suffix }} ../build/deb/${{ matrix.config.hello }}
       
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: win-llvm-_${{ github.sha }}
           path: build/deb
