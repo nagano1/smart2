@@ -45,8 +45,12 @@ jobs:
       - name: Change wrapper permissions
         run: cd AndroidCanLang; chmod +x ./gradlew
 
+      # Run Tests Build
+      - name: Run gradle tests
+        run: cd AndroidCanLang; gradle test --warning-mode all
+
       - name: Build with Gradle
-        run: cd AndroidCanLang; gradle build
+        run: cd AndroidCanLang; gradle build --warning-mode all
 
 
       # - name: Set current date as env variable
