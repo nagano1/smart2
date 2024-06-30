@@ -393,7 +393,7 @@ namespace smart {
     using JsonObjectKeyNodeStruct = struct {
         NODE_HEADER;
 
-        char *text;
+        char *text;a
         int_fast32_t textLength;
 
         int namePos;
