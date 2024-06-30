@@ -12,7 +12,7 @@ android {
         }
     }
     compileSdk 34
-    buildToolsVersion '33.0.3'
+    buildToolsVersion = '33.0.3'
     defaultConfig {
         applicationId "org.rokist.canlangtest"
         minSdk 23
@@ -40,9 +40,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
+    //composeOptions {
+    //    kotlinCompilerExtensionVersion = "1.4.3"
+    //}
     dataBinding {
         enabled = true
     }
