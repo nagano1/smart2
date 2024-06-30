@@ -102,7 +102,7 @@ jobs:
       
       - uses: actions/upload-artifact@v4
         with:
-          name: win-llvm-_${{ github.sha }}
+          name: win-llvm-awe
           path: build/deb
 
 
