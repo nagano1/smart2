@@ -50,7 +50,8 @@ jobs:
       #   run: cd AndroidCanLang; gradle test --warning-mode all
 
       - name: Build with Gradle
-        run: cd AndroidCanLang; gradle build --warning-mode all
+        run: cd AndroidCanLang; gradle build
+      # --warning-mode all
 
 
       # - name: Set current date as env variable
