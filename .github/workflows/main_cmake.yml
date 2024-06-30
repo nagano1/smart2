@@ -75,7 +75,7 @@ jobs:
       matrix:
         config: ${{ fromJson(needs.set-matrix.outputs.matrixJson) }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: enable problem matcher
         run: |
           echo "::add-matcher::.github/problem_matcher.json"
