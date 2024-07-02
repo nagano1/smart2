@@ -38,6 +38,7 @@ jobs:
         with:
             node-version: 18
             cache: 'npm'
+            cache-dependency-path: wasm_project_test/package-lock.json
       - name: Set color
         shell: bash
         id: rkey
