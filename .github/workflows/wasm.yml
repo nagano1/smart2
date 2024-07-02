@@ -46,7 +46,7 @@ jobs:
             echo "Mac OS";
             brew --prefix llvm@15;
             brew --prefix llvm@16;
-            $(brew --prefix llvm@18)/bin/clang++ --version
+            ls $(brew --prefix llvm@18)
           fi
           
           echo "rkey=$RANDOM" >> $GITHUB_OUTPUT
