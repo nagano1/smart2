@@ -80,6 +80,10 @@ jobs:
         run: |
           echo "::add-matcher::.github/problem_matcher.json"
 
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
       - name: cmake
         run: |
           cd build/
@@ -113,7 +117,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: deen_actions_cmake_${{ matrix.config.name }}_amd64
+          name: actions_cmake_${{ matrix.config.name }}_${{ steps.date.outputs.date }}
           path: build/deb
   
 
