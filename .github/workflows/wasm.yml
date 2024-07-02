@@ -62,7 +62,7 @@ jobs:
           
           # echo "::add-matcher::.github/problem_matcher.json"
 
-      - name: npm i && gulp show
+      - name: npm i
         shell: bash
         run: |
           node --version
@@ -74,7 +74,9 @@ jobs:
           npm i
 
           echo ${{ steps.rkey.outputs.rkey }}
-
+      - name: Compile _ gulp c
+        shell: bash
+        run: |
           node_modules/.bin/gulp c --rkey ${{ steps.rkey.outputs.rkey }} ${{ matrix.config.clang }}
 
           ls -al
