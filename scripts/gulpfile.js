@@ -106,7 +106,7 @@ function collectTestList() {
     }
 
     fs.writeFileSync(
-        path.join("AndroidCanLang", "app", "src", "main", "res", "raw", "testlist.json")
+        path.join("..", "other_projects", "AndroidCanLang", "app", "src", "main", "res", "raw", "testlist.json")
         , JSON.stringify(testlist, null, "\t")
     )
 
