@@ -65,6 +65,7 @@ jobs:
           npm --version
           npm i
           node_modules/.bin/gulp show --github_actions ${{ matrix.config.flag }}
+          ls
           # echo wow
           # ./wow.exe
       
@@ -98,7 +99,7 @@ jobs:
         shell: bash
         run: |
           cd scripts;
-          cp wow.exe ./build/deb/${{ matrix.config.main }}
+          cp wow.exe ../build/deb/${{ matrix.config.main }}
 
           cd ../other_projects/llvm_ir_test;
           cp hello${{ matrix.config.suffix }} ../../build/deb/${{ matrix.config.hello }}
