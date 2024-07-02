@@ -48,6 +48,7 @@ jobs:
             brew --prefix llvm@15;
             brew --prefix llvm@16;
             brew --prefix llvm;
+            where clang++
             ls "$(brew --prefix llvm)"
           fi
           
