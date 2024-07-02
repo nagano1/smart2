@@ -17,7 +17,7 @@
 #include <cstdint>
 #include <ctime>
 
-#include "../../../../../tests/testlib_impl.hpp"
+#include "../../../../../../tests/testlib_impl.hpp"
 
 #include <android/log.h>
 #include "utf8.h"
