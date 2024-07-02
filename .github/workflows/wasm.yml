@@ -41,6 +41,7 @@ jobs:
           if [ "$RUNNER_OS" == "Linux" ]; then
             echo "Linux"
           elif [ "$RUNNER_OS" == "Windows" ]; then
+            clang++ --version
             echo "Windows"
           else
             echo "Mac OS";
