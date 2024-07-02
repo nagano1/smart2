@@ -80,9 +80,10 @@ jobs:
         run: |
           echo "::add-matcher::.github/problem_matcher.json"
 
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: "Set current date as env variable"
+        run: |
+          echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+        id: version  # this is used on variable path
 
       - name: cmake
         run: |
@@ -117,7 +118,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: actions_cmake_${{ matrix.config.name }}_${{ steps.date.outputs.date }}
+          name: actions_cmake_${{ matrix.config.name }}_${{ steps.version.outputs.builddate }}
           path: build/deb
   
 
