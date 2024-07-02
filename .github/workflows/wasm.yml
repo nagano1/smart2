@@ -71,7 +71,7 @@ jobs:
           npm --version
           #sudo npm i gulp -g
 
-          cd wasm_project/
+          cd other_projects/wasm_project/
           tar zxf ${{ matrix.config.wasi_tgz }}
           npm i
 
@@ -79,7 +79,7 @@ jobs:
       - name: Compile _ gulp c
         shell: bash
         run: |
-          cd wasm_project/
+          cd other_projects/wasm_project/
           node_modules/.bin/gulp c --rkey ${{ steps.rkey.outputs.rkey }} ${{ matrix.config.clang }}
 
           ls -al
