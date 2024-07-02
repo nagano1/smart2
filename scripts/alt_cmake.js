@@ -67,7 +67,7 @@ async function doExecAsync(str) {
 }
 
 //console.info(cmake.dev());
-const srcDir = "./src/";
+const srcDir = "../src/";
 const testsDir = "../tests";
 
 
