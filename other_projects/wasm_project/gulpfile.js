@@ -54,9 +54,9 @@ let ldFlags = [
 exports_wasm.map((v)=>ldFlags.push("--export="+v));
 exports_funcs.map((v)=>ldFlags.push("--export="+v));
 
-let INCLUDEs   = ["./include/wasm32-wasi/", "../src/"];
+let INCLUDEs   = ["../include/wasm32-wasi/", "../../src/"];
 //let INCLUDEs   = ["../src/"];
-let SRCDIR    = "./";
+let SRCDIR    = "../";
 
 let SYSLibDIR = "wasi-sysroot/lib/wasm32-wasi";
 let LIBS      = `${SYSLibDIR}/libc.a ${SYSLibDIR}/libc++.a ${SYSLibDIR}/libc++abi.a`;
@@ -66,9 +66,9 @@ let wasmLinker = "";
 
 let groupASrc = ['wasm.cpp'];
 let groupBSrc = ['subwasm.cpp'];
-let libCppSrc = ['../src/codenodes/*.cpp', "../src/utils.cpp"];
+let libCppSrc = ['../../src/codenodes/*.cpp', "../../src/utils.cpp"];
 
-let includeGlobs = ["./include/*.hpp", "../src/*.hpp"];
+let includeGlobs = ["../include/*.hpp", "../../src/*.hpp"];
 let outTop = "out";
 
 
