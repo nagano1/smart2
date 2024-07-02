@@ -16,7 +16,7 @@ jobs:
               os: ubuntu-latest,
               addpath: '',
               clang: '',
-              wasi_tgz: "wasi-sysroot.tar.gz"
+              wasi_tgz: "wasi-sysroot-22.tar.gz"
             }
           # - {
           #     os: macos-latest,
