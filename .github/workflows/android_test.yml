@@ -41,6 +41,7 @@ jobs:
           java-version: 17
           distribution: 'adopt'
           architecture: x64
+          cache: 'gradle'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
