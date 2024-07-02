@@ -61,6 +61,7 @@ jobs:
       - name: do build
         shell: bash
         run: |
+          mkdir build
           npm --version
           npm i
           node_modules/.bin/gulp show --github_actions ${{ matrix.config.flag }}
