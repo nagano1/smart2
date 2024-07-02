@@ -37,10 +37,10 @@ gulp.task("watchtest", async function (cb) {
     }
 
     gulp.watch([
-            `./tests/google_tests/*.cc`,
-            `./tests/google_tests/*.h`,
-            `./tests/google_tests/*.cpp`,
-            `./tests/google_tests/*.hh`,
+            `../tests/google_tests/*.cc`,
+            `../tests/google_tests/*.h`,
+            `../tests/google_tests/*.cpp`,
+            `../tests/google_tests/*.hh`,
         ],
         gaze_opt,
         async cb => {
@@ -52,7 +52,7 @@ gulp.task("watchtest", async function (cb) {
 
 function collectTestList() {
 
-    const testcppfiles = [path.posix.join(".", "tests", "google_tests")];
+    const testcppfiles = [path.posix.join("..", "tests", "google_tests")];
 
     const testlist = []
 

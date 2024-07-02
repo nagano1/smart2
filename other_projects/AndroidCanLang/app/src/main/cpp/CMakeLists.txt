@@ -13,8 +13,8 @@ project(android_test_app)
 # Gradle automatically packages shared libraries with your APK.
 
 # Sets lib_src_DIR to the path of the target CMake project.
-set( lib_src_dir ../../../../../src )
-set( tests_src_dir ../../../../../tests/google_tests )
+set( lib_src_dir ../../../../../../src )
+set( tests_src_dir ../../../../../../tests/google_tests )
 
 # Sets lib_build_DIR to the path of the desired output directory.
 # set( lib_build_DIR ../../../../../src/outputs )
