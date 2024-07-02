@@ -19,7 +19,6 @@ _deps
 lib/googletest/googletest/generated/
 
 node_modules
-package-lock.json
 
 *.s
 *.o
