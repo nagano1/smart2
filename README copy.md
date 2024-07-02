@@ -1,8 +1,8 @@
-[![💎 CMake Build Matrix](https://github.com/nagano1/smart/actions/workflows/main_cmake.yml/badge.svg)](https://github.com/nagano1/smart/actions/workflows/main_cmake.yml)
+[![💎 CMake Build Matrix](https://github.com/nagano1/smart2/actions/workflows/main_cmake.yml/badge.svg)](https://github.com/nagano1/smart/actions/workflows/main_cmake.yml)
 
-[![👽 Windows binary using Clang/LLVM](https://github.com/nagano1/smart/actions/workflows/windows_clang.yml/badge.svg)](https://github.com/nagano1/smart/actions/workflows/windows_clang.yml)
+[![👽 Windows binary using Clang/LLVM](https://github.com/nagano1/smart2/actions/workflows/windows_clang.yml/badge.svg)](https://github.com/nagano1/smart/actions/workflows/windows_clang.yml)
 
-[![👺 Wasm test, build file, upload it and test it](https://github.com/nagano1/smart/actions/workflows/wasm.yml/badge.svg)](https://github.com/nagano1/smart/actions/workflows/wasm.yml)
+[![👺 Wasm test, build file, upload it and test it](https://github.com/nagano1/smart2/actions/workflows/wasm.yml/badge.svg)](https://github.com/nagano1/smart/actions/workflows/wasm.yml)
 
 # Top Folders
 - **AndroidCanLang** : Android app running unit tests(Google Test)
