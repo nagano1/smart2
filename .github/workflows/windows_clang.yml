@@ -61,7 +61,7 @@ jobs:
       - name: do build
         shell: bash
         run: |
-          mkdir build
+          cd scripts
           npm --version
           npm i
           node_modules/.bin/gulp show --github_actions ${{ matrix.config.flag }}
@@ -75,7 +75,7 @@ jobs:
           clang++ --version
           #choco upgrade llvm
           #clang++ --version
-          cd llvm_ir_test
+          cd other_projects/llvm_ir_test
           clang++ ${{ matrix.config.flag }} -S main.cpp 
           clang++ ${{ matrix.config.flag }} -S lib.cpp
           #llc main.ll
@@ -90,6 +90,7 @@ jobs:
       - name: Copy artifact
         shell: bash
         run: |
+          mkdir build
           cd build;
           mkdir -p deb;
 
