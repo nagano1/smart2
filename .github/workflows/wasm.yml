@@ -16,15 +16,15 @@ jobs:
               os: ubuntu-latest,
               addpath: '',
               clang: '',
+              wasi_tgz: "wasi-sysroot.tar.gz" # needs Clang 16+ to use "wasi-sysroot-22.tar.gz"
+            }
+          - {
+              os: macos-latest,
+              # https://github.com/WebAssembly/wasi-sdk/issues/172
+              # You need to install llvm from Homebrew. Xcode's clang doesn't have support for WebAssembly.
+              clang: '--clang $(brew --prefix llvm@16)/bin/clang++ --wasmld $(brew --prefix llvm@16)/bin/wasm-ld',
               wasi_tgz: "wasi-sysroot.tar.gz"
             }
-          # - {
-          #     os: macos-latest,
-          #     # https://github.com/WebAssembly/wasi-sdk/issues/172
-          #     # You need to install llvm from Homebrew. Xcode's clang doesn't have support for WebAssembly.
-          #     clang: '--clang $(brew --prefix llvm@16)/bin/clang++ --wasmld $(brew --prefix llvm@16)/bin/wasm-ld',
-          #     wasi_tgz: "wasi-sysroot.tar.gz"
-          #   }
           - {
               os: windows-latest,
               addpath: 'echo "C:\\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8',
