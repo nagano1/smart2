@@ -46,7 +46,8 @@ jobs:
             echo "Mac OS";
             brew --prefix llvm@15;
             brew --prefix llvm@16;
-            ls $(brew --prefix llvm@18)
+            ls "$(brew --prefix llvm@16)"
+            ls $(brew --prefix llvm@16)
           fi
           
           echo "rkey=$RANDOM" >> $GITHUB_OUTPUT
