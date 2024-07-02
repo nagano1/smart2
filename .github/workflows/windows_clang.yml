@@ -97,10 +97,11 @@ jobs:
       - name: Copy artifact for windows
         shell: bash
         run: |
+          cd scripts;
           cp wow.exe ./build/deb/${{ matrix.config.main }}
 
-          cd llvm_ir_test;
-          cp hello${{ matrix.config.suffix }} ../build/deb/${{ matrix.config.hello }}
+          cd ../other_projects/llvm_ir_test;
+          cp hello${{ matrix.config.suffix }} ../../build/deb/${{ matrix.config.hello }}
       
       - uses: actions/upload-artifact@v4
         with:
