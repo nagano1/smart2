@@ -47,10 +47,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Change wrapper permissions
-        run: cd AndroidCanLang; chmod +x ./gradlew
+        run: cd other_projects/AndroidCanLang; chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: cd AndroidCanLang; gradle build --warning-mode all
+        run: cd other_projects/AndroidCanLang; gradle build --warning-mode all
 
 
 
