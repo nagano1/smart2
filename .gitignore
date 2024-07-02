@@ -24,6 +24,7 @@ node_modules
 *.o
 *.d
 
+package-lock.json
 
 #Libre office draw
 .~lock.*
