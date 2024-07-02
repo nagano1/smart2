@@ -13,7 +13,7 @@ const glob = require('glob')
 const isWin = /^win/.test(process.platform)
 const sep = isWin ? '\\' : '/'
 
-const altCmake = require('./scripts/alt_cmake');
+const altCmake = require('./alt_cmake');
 
 const promise = readyWindowsCommandPrompt()
 
