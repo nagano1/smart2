@@ -96,7 +96,7 @@ jobs:
        
       - name: Run puppeteer
         run: |
-          cd wasm_project_test
+          cd other_projects/wasm_project_test
           npm install
           node puppeteer.js ${{ matrix.config.os }} ${{ steps.rkey.outputs.rkey }}
 
