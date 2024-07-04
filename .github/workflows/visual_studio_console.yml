@@ -1,0 +1,33 @@
+name: 📘 Visual studio console build 
+
+on:
+  push:
+  schedule:
+    - cron: '15 3 1 * *' # minute hour day month monday
+
+jobs:
+  mybuild:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - {
+              # Windows 64bit
+              name: 64bit,
+              os: windows-latest,
+              main: "main.exe",
+              hello: "hello.exe",
+              suffix: ".exe",
+              flag: "",
+            }
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+    
+      - name: Build app for release
+        run: msbuild other_projects/visual_studio_console_sln/ConsoleApplication2/ConsoleApplication2.vcxproj -t:rebuild -verbosity:diag -property:Configuration=Release
+    
+    
