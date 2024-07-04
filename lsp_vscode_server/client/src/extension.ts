@@ -20,7 +20,7 @@ export function activate(context: ExtensionContext) {
         path.join("server", "out", "ConsoleApplication2.exe")
     )
     */
-    let consoleApp = require('path').resolve(__dirname, '../../../') + "/visual_studio_console_sln\\x64\\Debug\\ConsoleApplication2.exe";
+    let consoleApp = require('path').resolve(__dirname, '../../../') + "/other_projects/visual_studio_console_sln\\x64\\Debug\\ConsoleApplication2.exe";
     //consoleApp = __dirname + "/ConsoleApplication2.exe";
 
     let serverOptions: ServerOptions = {
