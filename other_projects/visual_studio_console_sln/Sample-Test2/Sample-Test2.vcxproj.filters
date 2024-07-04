@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\tests\google_tests\cplusplus_test.cpp" />
+    <ClCompile Include="..\..\..\tests\google_tests\parser_test.cpp" />
+    <ClCompile Include="..\..\..\tests\google_tests\speed_test.cpp" />
+    <ClCompile Include="..\..\..\tests\test.cpp" />
+    <ClCompile Include="..\..\..\tests\google_tests\coding_operation_tests.cpp" />
+    <ClCompile Include="..\..\..\tests\google_tests\tokenizers_test.cpp" />
+    <ClCompile Include="..\..\..\tests\google_tests\syntax_error_tests.cpp" />
+    <ClCompile Include="..\..\..\tests\google_tests\script_runtime_test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\tests\test_common.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
