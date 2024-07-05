@@ -29,7 +29,7 @@ jobs:
     
       - name: Build app for release
         shell: cmd
-        run: echo faowcd; cd other_projects/visual_studio_console_sln/StaticLib1;
-            msbuild StaticLib1.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="$(ProjectDir)\..\..\..\..\src;$(IncludePath)"
+        run: 
+            msbuild other_projects\visual_studio_console_sln\StaticLib1.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="$(ProjectDir)\..\..\..\..\src;$(IncludePath)"
     
     
