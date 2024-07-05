@@ -1,4 +1,4 @@
-name: 📘 Visual studio console build 
+name: 📘 msbuild Visual studio console project
 
 on:
   push:
@@ -14,12 +14,8 @@ jobs:
         config:
           - {
               # Windows 64bit
-              name: 64bit,
+              name: Windows,
               os: windows-latest,
-              main: "main.exe",
-              hello: "hello.exe",
-              suffix: ".exe",
-              flag: "",
             }
 
     steps:
