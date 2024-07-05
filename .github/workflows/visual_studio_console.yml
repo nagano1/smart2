@@ -30,4 +30,5 @@ jobs:
         
           msbuild ConsoleApplication2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="${{ matrix.config.include }}"
     
+          msbuild ConsoleApplication2.vcxproj /p:Configuration=Release /p:Platform=x64 /p:IncludePath="${{ matrix.config.include }}"
     
