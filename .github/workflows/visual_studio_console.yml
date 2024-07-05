@@ -29,8 +29,8 @@ jobs:
     
       - name: Build app for release
         shell: cmd
-        run: cd other_projects\visual_studio_console_sln\StaticLib1;
-
+        run: cd other_projects\visual_studio_console_sln\StaticLib1
+        
           msbuild StaticLib1.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="$(ProjectDir)\..\..\..\..\src;$(IncludePath)"
     
     
