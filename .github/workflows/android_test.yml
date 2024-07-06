@@ -1,4 +1,4 @@
-name: 📱 Android CI
+name: 📱 (schedled) Android CI
 
 env:
   main_project_module: app
