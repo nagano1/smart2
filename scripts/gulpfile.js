@@ -37,10 +37,10 @@ gulp.task("s", async function (cb) {
         console.info(`couldn't find a msbuild path`);
     }
 
-    let projPath = `../other_projects/visual_studio_console_sln/StaticLib1/StaticLib1.vcxproj`;
+    let projPath = `../other_projects/visual_studio_console_sln/ConsoleApplication2/ConsoleApplication2.vcxproj`;
+    //let projPath = `../other_projects/visual_studio_console_sln/StaticLib1/StaticLib1.vcxproj`;
     let includePath = `$(ProjectDir)/../../../../src;$(IncludePath)`;
-    let option = `/v:m /nr:false /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="${includePath}"`;
-
+    let option = `/v:m /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="${includePath}"`;
 
     let isBuilding = false;
     let isBuildRequested = false;
@@ -64,6 +64,7 @@ gulp.task("s", async function (cb) {
         console.log();
         console.log("---------------- Build ----------------");
 
+        let date = Date.now();
         let error = await doExecAsyncWithHighlightedOutput(`"${msbuildPath}" ${projPath} ${option}`);
 
         if (error) {
@@ -71,7 +72,8 @@ gulp.task("s", async function (cb) {
             console.error(`---------------- ${s} ----------------`);
         } else {
             let s = '\x1b[32mComplete\x1b[0m';
-            console.log(`---------------- ${s} ----------------`);
+            let span = Date.now() - date;
+            console.log(`---------------- ${s} ${span}ms ----------------`);
         }
 
         isBuilding = false;
