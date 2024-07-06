@@ -1,7 +1,14 @@
 name: 📘 msbuild Visual studio console project
 
 on:
-  create:
+  # Manually trigger from github website.
+  workflow_dispatch:
+
+  # Only pull request commit will trigger quick tests.
+  pull_request:
+    branches:
+      - main
+      
   schedule:
     - cron: '15 3 1 * *' # minute hour day month monday
 
