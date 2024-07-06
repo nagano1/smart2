@@ -1,4 +1,4 @@
-name: 📱 (schedled) Android CI
+name: 📱 (scheduled) build Android test project
 
 env:
   main_project_module: app

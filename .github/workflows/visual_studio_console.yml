@@ -1,4 +1,4 @@
-name: 📘 (schedled) msbuild Visual studio console project
+name: 📘 (scheduled) msbuild Visual studio console project
 
 on:
   # Manually trigger from github website.
