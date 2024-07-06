@@ -1,7 +1,7 @@
 name: 📘 msbuild Visual studio console project
 
 on:
-  push:
+  create:
   schedule:
     - cron: '15 3 1 * *' # minute hour day month monday
 
@@ -21,6 +21,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
     
