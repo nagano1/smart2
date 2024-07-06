@@ -1,4 +1,4 @@
-name: 📘 (scheduled) msbuild Visual studio console project
+name: 📘 (scheduled) msbuild lsp_server win project
 
 on:
   # Manually trigger from github website.
