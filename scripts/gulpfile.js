@@ -29,18 +29,56 @@ gulp.task("show", async function (cb) {
 
 gulp.task("s", async function (cb) {
     await promise;
-    
-    //const val = await altCmake.dev()
-    
-    //console.info(val)
-    console.log(chokidar);
-    chokidar.watch("../src/**/*").on('all', async (event, file) => {
-        console.info(`watch event: ${event} file: ${file}`);
-        if (event == "change") {
 
+    // find msbuild path
+    // https://stackoverflow.com/questions/328017/path-to-msbuild
+    let msbuildPath = await doExecAsync2(`"%ProgramFiles(x86)%\\Microsoft Visual Studio\\Installer\\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe`);
+
+    let path = `../other_projects/visual_studio_console_sln/StaticLib1/StaticLib1.vcxproj`;
+    let includePath = `$(ProjectDir)/../../../../src;$(IncludePath)`;
+    let option = `/v:m /nr:false /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="${includePath}"`;
+
+
+    let isBuilding = false;
+    let isBuildRequested = false;
+
+
+    chokidar.watch("../src/**/*").on('all', async (event, file) => {
+        console.info(`watch event: ${event}, file: ${file}`); //event: add, change
+
+        if (isBuilding) {
+            isBuildRequested = true;
+            return;
         }
+
+        await buildUsingMsBuild(event);
     });
-    //cb();
+
+
+    async function buildUsingMsBuild(event) {
+
+        isBuilding = true;
+
+        console.log("--------------- Build ----------------");
+
+        let error = await doExecAsync(`"` + msbuildPath + `" ${path} ${option}`);
+
+        if (error) {
+            let s = '\x1b[31mError\x1b[0m';
+            console.error(`---------------- ${s} ----------------`);
+        } else {
+            let s = '\x1b[32mComplete\x1b[0m';
+            console.log(`---------------- ${s} ----------------`);
+        }
+
+        isBuilding = false;
+        
+        if (isBuildRequested) {
+            isBuildRequested = false;
+            await buildUsingMsBuild(event);
+        }
+
+    }
 });
 
 // watch and generate a test info json file
@@ -153,7 +191,11 @@ function doExec(str, cb) {
     })
 
     child.stdout.addListener('data', d => {
-        console.log(d)
+        //var BgRed = "\x1b[41m";
+        let s = '\x1b[31mError\x1b[0m';
+        let subst = d.toString().replaceAll("error", s);
+    
+        console.log(subst)
     })
     child.stderr.addListener('data', d => {
         console.log(d)
@@ -167,7 +209,13 @@ async function doExecAsync(str) {
         })
 
         child.stdout.addListener('data', d => {
-            console.log(d)
+            let s = '\x1b[31merror\x1b[0m';
+            let subst = d.toString().replaceAll("error", s);
+            let s2 = '\x1b[31mError\x1b[0m';
+            subst = subst.replaceAll("Error", s2);
+    
+            console.log(subst)
+            //resolve(d);
         })
         child.stderr.addListener('data', d => {
             console.log(d)
@@ -175,6 +223,19 @@ async function doExecAsync(str) {
     })
 }
 
+async function doExecAsync2(str) {
+    return new Promise((resolve, reject) => {
+        child = exec(line(str), (error, stdout, stderr) => {
+            resolve(error)
+        })
+
+        child.stdout.addListener('data', d => {
+            resolve(d);
+        })
+        child.stderr.addListener('data', d => {
+        })
+    })
+}
 
 
 

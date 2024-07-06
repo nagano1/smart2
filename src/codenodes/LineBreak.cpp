@@ -18,18 +18,17 @@
 #include "code_nodes.hpp"
 
 
-namespace smart {
-
+namespace smart
+{
     // Line Break Node implementation
-
-    static int selfTextLength(LineBreakNodeStruct *self) {
+    static int selfTextLength(LineBreakNodeStruct *self)
+    {
         return self->text[1] == '\0' ? 1 : 2;
     }
 
     static const char *self_text(LineBreakNodeStruct *self) {
         return self->text;
     }
-
 
     static CodeLine *appendToLine(LineBreakNodeStruct *self, CodeLine *currentCodeLine) {
         auto *lineBreakNode = self; // Cast::downcast<LineBreakNodeStruct *>(self);
@@ -39,7 +38,6 @@ namespace smart {
             currentCodeLine = currentCodeLine->addPrevLineBreakNode(next); // add space before break
 
             currentCodeLine->appendNode(Cast::upcast(next));
-
             
             auto *newNextLine = lineBreakNode->context->newCodeLine();
             newNextLine->init(lineBreakNode->context);
@@ -51,7 +49,7 @@ namespace smart {
 
             next = next->nextLineBreakNode;
         }
-
+        
         return currentCodeLine;
     }
 
