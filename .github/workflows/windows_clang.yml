@@ -1,4 +1,4 @@
-name: 👽 Build binary with Clang/LLVM and gulp
+name: 👽 Build binary with Gulp/Clang/LLVM
 
 on:
   push:
