@@ -4,8 +4,6 @@ env:
   main_project_module: app
 
 on:
-  push:
-    branches: [ ]
   pull_request:
     branches: [ main ]
   schedule:
