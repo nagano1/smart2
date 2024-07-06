@@ -1,4 +1,4 @@
-name: 👽 Windows binary using Clang/LLVM 
+name: 👽 Build binary with Clang/LLVM and gulp
 
 on:
   push:
