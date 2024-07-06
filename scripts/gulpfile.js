@@ -7,6 +7,7 @@ const util = require('util')
 const exec = require('child_process').exec;
 const del = require('delete')
 const glob = require('glob')
+const chokidar = require('chokidar');
 
 
 //const username = require('username')
@@ -24,6 +25,22 @@ gulp.task("show", async function (cb) {
     
     console.info(val)
     cb();
+});
+
+gulp.task("s", async function (cb) {
+    await promise;
+    
+    //const val = await altCmake.dev()
+    
+    //console.info(val)
+    console.log(chokidar);
+    chokidar.watch("../src/**/*").on('all', async (event, file) => {
+        console.info(`watch event: ${event} file: ${file}`);
+        if (event == "change") {
+
+        }
+    });
+    //cb();
 });
 
 // watch and generate a test info json file

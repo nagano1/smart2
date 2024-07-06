@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/shinyamada/door#readme",
   "dependencies": {
+    "chokidar": "^3.6.0",
     "delete": "^1.1.0",
     "glob": "^7.1.6",
     "gulp": "^4.0.2"
