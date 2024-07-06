@@ -32,9 +32,12 @@ gulp.task("s", async function (cb) {
 
     // find msbuild path
     // https://stackoverflow.com/questions/328017/path-to-msbuild
-    let msbuildPath = await doExecAsync2(`"%ProgramFiles(x86)%\\Microsoft Visual Studio\\Installer\\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe`);
+    let msbuildPath = await execAndReturn(`"%ProgramFiles(x86)%\\Microsoft Visual Studio\\Installer\\vswhere.exe" -latest -prerelease -products * -requires Microsoft.Component.MSBuild -find MSBuild\\**\\Bin\\MSBuild.exe`);
+    if (msbuildPath == null || msbuildPath.trim() == "") {
+        console.info(`couldn't find a msbuild path`);
+    }
 
-    let path = `../other_projects/visual_studio_console_sln/StaticLib1/StaticLib1.vcxproj`;
+    let projPath = `../other_projects/visual_studio_console_sln/StaticLib1/StaticLib1.vcxproj`;
     let includePath = `$(ProjectDir)/../../../../src;$(IncludePath)`;
     let option = `/v:m /nr:false /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="${includePath}"`;
 
@@ -54,14 +57,14 @@ gulp.task("s", async function (cb) {
         await buildUsingMsBuild(event);
     });
 
-
     async function buildUsingMsBuild(event) {
 
         isBuilding = true;
 
-        console.log("--------------- Build ----------------");
+        console.log();
+        console.log("---------------- Build ----------------");
 
-        let error = await doExecAsync(`"` + msbuildPath + `" ${path} ${option}`);
+        let error = await doExecAsyncWithHighlightedOutput(`"${msbuildPath}" ${projPath} ${option}`);
 
         if (error) {
             let s = '\x1b[31mError\x1b[0m';
@@ -77,7 +80,6 @@ gulp.task("s", async function (cb) {
             isBuildRequested = false;
             await buildUsingMsBuild(event);
         }
-
     }
 });
 
@@ -202,7 +204,7 @@ function doExec(str, cb) {
     })
 }
 
-async function doExecAsync(str) {
+async function doExecAsyncWithHighlightedOutput(str) {
     return new Promise((resolve, reject) => {
         child = exec(line(str), (error, stdout, stderr) => {
             resolve(error)
@@ -213,9 +215,7 @@ async function doExecAsync(str) {
             let subst = d.toString().replaceAll("error", s);
             let s2 = '\x1b[31mError\x1b[0m';
             subst = subst.replaceAll("Error", s2);
-    
             console.log(subst)
-            //resolve(d);
         })
         child.stderr.addListener('data', d => {
             console.log(d)
@@ -223,7 +223,7 @@ async function doExecAsync(str) {
     })
 }
 
-async function doExecAsync2(str) {
+async function execAndReturn(str) {
     return new Promise((resolve, reject) => {
         child = exec(line(str), (error, stdout, stderr) => {
             resolve(error)
@@ -241,7 +241,7 @@ async function doExecAsync2(str) {
 
 async function readyWindowsCommandPrompt() {
     if (isWin) {
-        await doExecAsync(`chcp 65001`)
+        await doExecAsyncWithHighlightedOutput(`chcp 65001`)
     }
 }
 
