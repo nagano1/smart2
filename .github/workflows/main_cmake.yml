@@ -52,14 +52,16 @@ jobs:
 
           #  $Win2019, name: "win64_toolsetV142_VS2019", cmakeConfig: "-T v142,host=x64"},
           #  $UnixConf, os: "macos-12", name: "macos_12"}
-          
+
+          # TODO: only periodic test for following 
+          #  $Win2019, name: "win64_toolsetV141_VS2019", cmakeConfig: "-T v141,host=x64"},
+          #  $Win2022, name: "win_x86", cmakeConfig: "-A Win32 -T v143,host=x64"},
+          #  $UnixConf, os: "ubuntu-20.04", name: "ubuntu20_04"},
+
           matrixJson=$(cat <<-END
           [
-            $Win2022, name: "win_x86", cmakeConfig: "-A Win32 -T v143,host=x64"},
             $Win2022, name: "win64_toolsetV143_VS2022", cmakeConfig: "-T v143,host=x64"},
-            $Win2019, name: "win64_toolsetV141_VS2019", cmakeConfig: "-T v141,host=x64"},
             $UnixConf, os: "ubuntu-latest", name: "ubuntu_latest"},
-            $UnixConf, os: "ubuntu-20.04", name: "ubuntu20_04"},
             $UnixConf, os: "macos-latest", name: "mac_latest"},
           ]
           END)

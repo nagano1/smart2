@@ -426,14 +426,14 @@ namespace smart {
 
         return 0;
     }
+
     int canAssignType_null(ScriptEngineContext *context, _typeEntry *otherType)
     {
         return 0;
     }
 
-
-
-    void null_evaluateNode(ScriptEngineContext *context, NullNodeStruct *node) {
+    void null_evaluateNode(ScriptEngineContext *context, NullNodeStruct *node)
+    {
         *(int64_t*)node->calcReg = 0;
     }
 
@@ -612,7 +612,8 @@ namespace smart {
     }
 
 
-    static void reassignLineNumbers(DocumentStruct *docStruct) {
+    static void reassignLineNumbers(DocumentStruct *docStruct)
+    {
         int lineNumber = 0;
         auto *line = docStruct->firstCodeLine;
         while (line) {
