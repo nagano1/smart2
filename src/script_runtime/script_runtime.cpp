@@ -278,7 +278,8 @@ namespace smart {
      *
      */
 
-    void int32_evaluateNode(ScriptEngineContext *context, NumberNodeStruct *numberNode) {
+    void int32_evaluateNode(ScriptEngineContext *context, NumberNodeStruct *numberNode)
+    {
         *(int32_t*)numberNode->calcReg = (int32_t)numberNode->num;
     }
 
@@ -291,7 +292,8 @@ namespace smart {
         return 0;
     }
 
-    void int64_evaluateNode(ScriptEngineContext *context, NumberNodeStruct *numberNode) {
+    void int64_evaluateNode(ScriptEngineContext *context, NumberNodeStruct *numberNode)
+    {
         *(int64_t*)numberNode->calcReg = numberNode->num;
     }
 
