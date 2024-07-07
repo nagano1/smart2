@@ -21,7 +21,8 @@
 namespace smart
 {
     // Line Break Node implementation
-    static int selfTextLength(LineBreakNodeStruct *self) {
+    static int selfTextLength(LineBreakNodeStruct *self)
+    {
         return self->text[1] == '\0' ? 1 : 2;
     }
 

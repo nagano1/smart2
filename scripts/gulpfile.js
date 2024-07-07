@@ -37,6 +37,8 @@ gulp.task("s", async function (cb) {
         console.info(`couldn't find a msbuild path`);
     }
 
+    let exec = `C:\\GitProjects\\doorlang_root\\other_projects\\visual_studio_console_sln\\RunSampleB\\x64\\Debug\\RunSampleB.exe`;
+
     //let projPath = `../other_projects/visual_studio_console_sln/ConsoleApplication2/ConsoleApplication2.vcxproj`;
     //let projPath = `../other_projects/visual_studio_console_sln/StaticLib1/StaticLib1.vcxproj`;
     let projPath = `../other_projects/visual_studio_console_sln/RunSampleB/RunSampleB.vcxproj`;
@@ -75,8 +77,11 @@ gulp.task("s", async function (cb) {
             let s = '\x1b[32mComplete\x1b[0m';
             let span = Date.now() - date;
             console.log(`---------------- ${s} ${span}ms ----------------`);
-        }
 
+            let result = await doExecAsyncWithHighlightedOutput(`${exec}`);
+            console.log(`---------------- Result ----------------`);
+
+        }
         isBuilding = false;
         
         if (isBuildRequested) {
