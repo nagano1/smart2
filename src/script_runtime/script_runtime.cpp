@@ -1453,8 +1453,8 @@ namespace smart {
         int ret = 0;
         auto* mainFunc2 = this->mainFunc;
         if (mainFunc2) {
-            printf("main Found");
-            printf("<%s()>\n", mainFunc2->nameNode.name);
+            //printf("main Found");
+            //printf("<%s()>\n", mainFunc2->nameNode.name);
             ret = executeMain(this, mainFunc2);
         }
 
@@ -1492,7 +1492,6 @@ namespace smart {
             env->context->setErrorPositions();
             return env->context->logicErrorInfo.firstErrorItem->codeErrorItem.errorId;
         }
-
         return env->runScriptEnv();
     }
 }

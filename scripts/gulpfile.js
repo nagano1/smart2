@@ -74,7 +74,7 @@ gulp.task("s", async function (cb) {
             let s = '\x1b[31mError\x1b[0m';
             console.error(`---------------- ${s} ----------------`);
         } else {
-            let s = '\x1b[32mComplete\x1b[0m';
+            let s = '\x1b[32mBuild Complete\x1b[0m';
             let span = Date.now() - date;
             console.log(`---------------- ${s} ${span}ms ----------------`);
 
