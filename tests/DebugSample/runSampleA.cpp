@@ -39,6 +39,7 @@ fn main()
     return c - (b + a)
 }
 )";
+    printf("%s", source);
     int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
 	return 0;
 }
