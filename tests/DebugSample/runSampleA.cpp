@@ -35,7 +35,6 @@ fn main()
     int b = 9
     int a = 500
     int c = 500
-    
     return c - (b + a)
 }
 )";
