@@ -29,6 +29,7 @@ endif()
 
 
 
+include_directories(src/include)
 include_directories(src)
 
 
