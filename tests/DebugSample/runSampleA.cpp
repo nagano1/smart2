@@ -23,12 +23,13 @@
 #include "code_nodes.hpp"
 #include "parse_util.hpp"
 #include "script_runtime.hpp"
+
 //#include "gtest/gtest.h"
 
 using namespace smart;
 
 int main(int argc, char **argv) {
-            constexpr char source[] = R"(
+     constexpr char source[] = R"(
 fn main()
 {
     int b = 9
