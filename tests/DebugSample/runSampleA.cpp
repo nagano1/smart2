@@ -24,17 +24,16 @@
 #include "parse_util.hpp"
 #include "script_runtime.hpp"
 
-//#include "gtest/gtest.h"
-
 using namespace smart;
 
 int main(int argc, char **argv) {
-     constexpr char source[] = R"(
+
+    constexpr char source[] = R"(
 fn main()
 {
     int b = 9
-    int a = 500
-    int c = 500
+    int a = 400
+    int c = 300
     
     return c - (b + a)
 }
@@ -42,5 +41,6 @@ fn main()
     printf("%s", source);
     int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
     printf("ret = %d", ret);
+
 	return 0;
 }

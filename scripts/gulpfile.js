@@ -79,8 +79,8 @@ gulp.task("s", async function (cb) {
             console.log(`---------------- ${s} ${span}ms ----------------`);
 
             let result = await doExecAsyncWithHighlightedOutput(`${exec}`);
+            console.log();
             console.log(`---------------- Result ----------------`);
-
         }
         isBuilding = false;
         
