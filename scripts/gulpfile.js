@@ -37,9 +37,10 @@ gulp.task("s", async function (cb) {
         console.info(`couldn't find a msbuild path`);
     }
 
-    let projPath = `../other_projects/visual_studio_console_sln/ConsoleApplication2/ConsoleApplication2.vcxproj`;
+    //let projPath = `../other_projects/visual_studio_console_sln/ConsoleApplication2/ConsoleApplication2.vcxproj`;
     //let projPath = `../other_projects/visual_studio_console_sln/StaticLib1/StaticLib1.vcxproj`;
-    let includePath = `$(ProjectDir)/../../../../src;$(IncludePath)`;
+    let projPath = `../other_projects/visual_studio_console_sln/RunSampleB/RunSampleB.vcxproj`;
+    let includePath = `$(ProjectDir)/../../../../src;$(ProjectDir)/../../../../src/include;$(IncludePath)`;
     let option = `/v:m /p:Configuration=Debug /p:Platform=x64 /p:IncludePath="${includePath}"`;
 
     let isBuilding = false;

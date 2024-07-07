@@ -22,7 +22,7 @@ jobs:
               # Windows 64bit
               name: Windows,
               os: windows-latest,
-              include: $(ProjectDir)\..\..\..\..\src;$(IncludePath)
+              include: $(ProjectDir)\..\..\..\..\src;$(ProjectDir)\..\..\..\..\src\include;$(IncludePath)
             }
 
     steps:

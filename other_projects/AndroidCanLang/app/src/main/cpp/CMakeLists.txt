@@ -27,6 +27,7 @@ set( tests_src_dir ../../../../../../tests/google_tests )
 #add_subdirectory(cpu_features)
 
 include_directories(${lib_src_dir})
+include_directories(${lib_src_dir}/include)
 
 add_definitions("-DCMAKE_TEST=1")
 
