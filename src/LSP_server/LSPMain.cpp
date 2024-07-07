@@ -28,7 +28,7 @@
 #include "./LSPLocalServer.hpp"
 
 #include "code_nodes.hpp"
-#include "script_runtime/script_runtime.hpp"
+#include "script_runtime.hpp"
 
 #include "common.hpp"
 

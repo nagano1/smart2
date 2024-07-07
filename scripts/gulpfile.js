@@ -65,7 +65,7 @@ gulp.task("s", async function (cb) {
         console.log("---------------- Build ----------------");
 
         let date = Date.now();
-        let error = await doExecAsyncWithHighlightedOutput(`"${msbuildPath}" ${projPath} ${option}`);
+        let error = await doExecAsyncWithHighlightedOutput(`"${msbuildPath}" "${projPath}" ${option}`);
 
         if (error) {
             let s = '\x1b[31mError\x1b[0m';
