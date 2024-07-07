@@ -18,22 +18,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\code_nodes.hpp">
+    <ClInclude Include="..\..\src\include\code_nodes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\common.hpp">
+    <ClInclude Include="..\..\src\include\common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\parse_util.hpp">
+    <ClInclude Include="..\..\src\include\parse_util.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\thread_pool.hpp">
+    <ClInclude Include="..\..\src\include\thread_pool.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\script_runtime\script_runtime.hpp">
+    <ClInclude Include="..\..\src\include\script_runtime.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\errors.hpp">
+    <ClInclude Include="..\..\src\include\errors.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

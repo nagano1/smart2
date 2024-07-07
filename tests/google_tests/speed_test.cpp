@@ -8,7 +8,7 @@
 
 #include "../test_common.h"
 //#include "tokenizer.hpp"
-#include "../../src/parse_util.hpp"
+#include "../../src/include/parse_util.hpp"
 
 
 class P {
