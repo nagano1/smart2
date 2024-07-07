@@ -49,7 +49,7 @@ gulp.task("s", async function (cb) {
     let isBuildRequested = false;
 
 
-    chokidar.watch("../src/**/*").on('all', async (event, file) => {
+    chokidar.watch(["../src/**/*", "../tests/**/*"]).on('all', async (event, file) => {
         console.info(`watch event: ${event}, file: ${file}`); //event: add, change
 
         if (isBuilding) {

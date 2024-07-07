@@ -35,10 +35,12 @@ fn main()
     int b = 9
     int a = 500
     int c = 500
+    
     return c - (b + a)
 }
 )";
     printf("%s", source);
     int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
+    printf("ret = %d", ret);
 	return 0;
 }
