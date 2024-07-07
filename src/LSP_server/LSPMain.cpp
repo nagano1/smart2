@@ -53,7 +53,6 @@ void LSPManager::LSP_main() {
     th.get_id();
     //th2->detach();
 
-    
 
     while (true) {
         int n = 0;

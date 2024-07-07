@@ -44,7 +44,6 @@ int test_central_job_queues();
 extern "C" NTSTATUS NtWriteVirtualMemory(HANDLE processHandle, PVOID baseAddress, PVOID buffer, ULONG numberOfBytesToWrite, PDWORD numberOfBytesWritten);
 
 int main() {
-
     /*
     auto x = 100;
     auto y = 999;

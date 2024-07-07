@@ -96,7 +96,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\script_runtime\script_runtime.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
