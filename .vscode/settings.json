@@ -1,4 +1,9 @@
 {
+    "files.exclude": {
+        "**/.~lock*": true,
+        "bin": true,
+        "obj": true,
+    },
     "files.associations": {
         "type_traits": "cpp",
         "xlocale": "cpp",
