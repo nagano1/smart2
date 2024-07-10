@@ -23,7 +23,8 @@ namespace smart {
         return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
     }
 
-    static const utf8byte *self_text(SymbolStruct *self) {
+    static const utf8byte *self_text(SymbolStruct *self)
+    {
         return self->symbol;
     }
 
