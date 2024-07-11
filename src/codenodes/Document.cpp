@@ -18,16 +18,18 @@ namespace smart {
 
     // --------------------- Defines Document VTable ----------------------
 
-    static int selfTextLength(DocumentStruct *self) {
-
+    static int selfTextLength(DocumentStruct *self)
+    {
         return 5;
     }
 
-    static const char *selfText(DocumentStruct *self) {
+    static const char *selfText(DocumentStruct *self)
+    {
         return "";
     }
 
-    static CodeLine *appendToLine(DocumentStruct *self, CodeLine *currentCodeLine) {
+    static CodeLine *appendToLine(DocumentStruct *self, CodeLine *currentCodeLine)
+    {
         auto *child = self->firstRootNode;
         while (child) {
             currentCodeLine = VTableCall::callAppendToLine(child, currentCodeLine);
@@ -37,7 +39,8 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static int applyFuncToDescendants(DocumentStruct *Node, ApplyFunc_params3) {
+    static int applyFuncToDescendants(DocumentStruct *Node, ApplyFunc_params3)
+    {
         return 0;
     }
 
@@ -489,7 +492,8 @@ namespace smart {
         return text;
     }
 
-    utf8byte *DocumentUtils::getTextFromTree(DocumentStruct *doc) {
+    utf8byte *DocumentUtils::getTextFromTree(DocumentStruct *doc)
+    {
         // get size of chars
         int totalCount = 0;
         {
@@ -521,13 +525,14 @@ namespace smart {
                     auto *chs = VTableCall::selfText(node);
                     if (node->prev_chars > 0) {
                         for (int i = 0; i < node->prev_chars; i++) {
-                            text[currentOffset] = ' ';//node->prev_char;
+                            text[currentOffset] = ' ';
                             currentOffset++;
                         }
                     }
 
                     size_t len = VTableCall::selfTextLength(node);
-                    if (chs[len] == '\0') {
+                    //assert(chs[len] != '\0');
+                    if (chs[len] == '\0') { //?
                         memcpy(text + currentOffset, chs, len);
                     }
 
