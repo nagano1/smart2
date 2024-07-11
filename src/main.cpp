@@ -6,7 +6,7 @@ int wakeup_count = 0;
 
 int main()
 {
-    printf("B");
+    printf("DoorLang");
     fflush(stdout);
 
     //exit(1);

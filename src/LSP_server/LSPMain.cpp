@@ -48,7 +48,6 @@ void LSPManager::LSP_main() {
     LSPManager lspManager;
     auto &&th = std::thread{ []() {
         LSPHttpServer::LSP_server();
-
     } };
     th.get_id();
     //th2->detach();
@@ -62,30 +61,8 @@ void LSPManager::LSP_main() {
             fprintf(stderr, "n: %d\n", n);
             fflush(stderr);
         }
-        if (n > 0) {
-            // skip remain headers
-            bool lineBreak = false;
-            int c1;
-            while (EOF != (c1 = getchar())) {
-                if (c1 == '\n') {
-                    if (lineBreak) break;
-                    lineBreak = true;
-                }
-                else lineBreak = false;
-            }
 
-            auto *chars = (char *)malloc(n + 1);
-
-            auto rsize = fread(chars, 1, n, stdin);
-            if (rsize > 0) {
-                chars[rsize] = '\0';
-                lspManager.nextRequest(chars, (int)rsize);
-                LSPHttpServer::passText(chars, rsize);
-            }
-
-            free(chars);
-        }
-        else {
+        if (n < 1) {
             if (debugLog) {
                 fprintf(stderr, "FAILED!!!\n");
                 fflush(stderr);
@@ -94,7 +71,35 @@ void LSPManager::LSP_main() {
             if (EOF == stop) {
                 return;
             }
+
+            continue;
         }
+
+        // skip remain headers
+        bool lineBreak = false;
+        int c1;
+        while (EOF != (c1 = getchar())) {
+            if (c1 == '\n') {
+                if (lineBreak) {
+                    break; // double linebreaks detected
+                }
+                lineBreak = true;
+            }
+            else {
+                lineBreak = false;
+            }
+        }
+
+        auto *chars = (char *)malloc(n + 1);
+
+        auto rsize = fread(chars, 1, n, stdin);
+        if (rsize > 0) {
+            chars[rsize] = '\0';
+            lspManager.nextRequest(chars, (int)rsize);
+            LSPHttpServer::passText(chars, rsize);
+        }
+
+        free(chars);
     }
 
 
