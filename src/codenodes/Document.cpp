@@ -437,7 +437,8 @@ namespace smart {
 
 
 // { line: 2, startChar:  5, length: 3, tokenType: 0, tokenModifiers: 3 },
-    static int getSemanticTokensLength(DocumentStruct *doc, char *text, int line0, int line1) {
+    static int getSemanticTokensLength(DocumentStruct *doc, char *text, int line0, int line1)
+    {
         int totalByteCount = 0;
         {
             static char buff[255];
@@ -548,7 +549,8 @@ namespace smart {
     }
 
 
-    static void appendRootNode(DocumentStruct *doc, NodeBase *node) {
+    static void appendRootNode(DocumentStruct *doc, NodeBase *node)
+    {
         if (doc->firstRootNode == nullptr) {
             doc->firstRootNode = node;
         }
@@ -560,7 +562,8 @@ namespace smart {
     }
 
 
-    static int tryTokenize(TokenizerParams_parent_ch_start_context) {
+    static int tryTokenize(TokenizerParams_parent_ch_start_context)
+    {
         int result;
 
         if (-1 < (result = Tokenizers::classTokenizer(parent, ch, start, context))) {
