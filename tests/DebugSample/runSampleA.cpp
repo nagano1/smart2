@@ -31,9 +31,9 @@ int main(int argc, char **argv) {
     constexpr char source[] = R"(
 fn main()
 {
-    int b = 9
-    int a = 400
-    int c = 44
+    int b = 1
+    int a = 1
+    int c = -1
     
     return c - (b + a)
 }

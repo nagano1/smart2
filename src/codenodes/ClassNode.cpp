@@ -19,24 +19,26 @@
 
 namespace smart {
 
-    using InnerNodeStruct = struct {
+    using InnerNodeStruct = struct
+    {
         NODE_HEADER;
     };
 
-    struct ClassNodeStruct::Impl {
+    struct ClassNodeStruct::Impl
+    {
         int a;
     };
 
     // --------------------- Defines Class VTable ---------------------- /
 
-    static int selfTextLength(ClassNodeStruct *) {
+    static int selfTextLength(ClassNodeStruct *)
+    {
         return 5;
     }
 
     static const utf8byte *selfText(ClassNodeStruct *) {
         return "class";
     }
-
 
     static CodeLine *appendToLine(ClassNodeStruct *classNode, CodeLine *currentCodeLine) {
 
