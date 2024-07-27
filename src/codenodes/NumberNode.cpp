@@ -166,6 +166,7 @@ namespace smart {
     }
     //*/
     static constexpr const char numberNodeTypeText[] = "<number>";
+    
     int Tokenizers::numberTokenizer(TokenizerParams_parent_ch_start_context)
     {
         int found_count = 0;
