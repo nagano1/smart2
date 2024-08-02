@@ -35,7 +35,7 @@ fn main()
     int a = 1
     int c = -1
     
-    return c - (b + a)
+    return c - (b - a)
 }
 )";
     printf("%s", source);

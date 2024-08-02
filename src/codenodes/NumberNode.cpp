@@ -166,43 +166,58 @@ namespace smart {
     }
     //*/
     static constexpr const char numberNodeTypeText[] = "<number>";
-    
+
+    // jfiowaef
     int Tokenizers::numberTokenizer(TokenizerParams_parent_ch_start_context)
     {
-        int found_count = 0;
-        for (int_fast32_t i = start; i < context->length; i++) {
+        bool hasNegative = false;
+        
+        int numberStart;
+        int charCount;
+
+        if (context->chars[start] == '-') {
+            hasNegative = true;
+            numberStart = start + 1;
+            charCount = 1;
+        } else {
+            numberStart = start;
+            charCount = 0;
+        }
+
+        for (int_fast32_t i = numberStart; i < context->length; i++) {
             if (!ParseUtil::isNumberLetter(context->chars[i])) {
                 break;
             }
 
-            found_count++;
+            charCount++;
         }
 
-        if (found_count > 0) {
+        if (hasNegative ? charCount > 1 : charCount > 0) {
 
             auto *numberNode = Alloc::newNumberNode(context, parent);
 
             context->setCodeNode(numberNode);
-            numberNode->text = context->memBuffer.newMem<char>(found_count + 1 + 1/*L*/);
-            numberNode->textLength = found_count;
+            numberNode->text = context->memBuffer.newMem<char>(charCount + 1/* \0 */ + 1/*L*/);
+            numberNode->textLength = charCount;
 
-            TEXT_MEMCPY(numberNode->text, context->chars + start, found_count);
-            numberNode->text[found_count] = '\0';
+            TEXT_MEMCPY(numberNode->text, context->chars + start, charCount);
+            numberNode->text[charCount] = '\0';
 
-            numberNode->num = S64(numberNode->text, found_count);
+            numberNode->num = S64(numberNode->text, charCount);
 
-            if ('L' == context->chars[start + found_count]) {
+            if ('L' == context->chars[start + charCount]) {
                 numberNode->textLength++;
                 numberNode->unit = 64;
-                numberNode->text[found_count] = 'L';
-                found_count++;
-                numberNode->text[found_count] = '\0';
+                numberNode->text[charCount] = 'L';
+                charCount++;
+                numberNode->text[charCount] = '\0';
+            } else if (!ParseUtil::isTerminatableChar(context->chars[start + charCount])) {
+                // invalid suffix character for numbers
             } else {
                 numberNode->num = (int32_t)numberNode->num;
-
             }
 
-            return start + found_count;
+            return start + charCount;
         }
 
         return -1;

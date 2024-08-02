@@ -118,7 +118,7 @@ namespace smart {
     }
 */
     #define NODE_HEADER \
-        const struct node_vtable *vtable; \
+        const struct node_vtable *vtable; /* virtual table */ \
         _NodeBase *parentNode; \
         _NodeBase *nextNode; \
         _NodeBase *nextNodeInLine; \
@@ -133,6 +133,10 @@ namespace smart {
         bool typeAtHeap2;                \
         int found; \
         int prev_chars
+
+    #define SIMPLE_TEXT_CONTENT \
+        utf8byte *text; \
+        int_fast32_t textLength;
 
 
     #define INIT_NODE(node, context, parent, argvtable) \
@@ -162,8 +166,7 @@ namespace smart {
     using SimpleTextNodeStruct = struct _SimpleTextNodeStruct {
         NODE_HEADER;
 
-        utf8byte *text;
-        int_fast32_t textLength;
+        SIMPLE_TEXT_CONTENT;
     };
 
     using SpaceNodeStruct = SimpleTextNodeStruct;
@@ -218,8 +221,7 @@ namespace smart {
     using BoolNodeStruct = struct {
         NODE_HEADER;
 
-        char *text;
-        int textLength;
+        SIMPLE_TEXT_CONTENT;
         bool boolValue;
     };
 
