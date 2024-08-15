@@ -125,6 +125,7 @@ namespace smart {
 
         ENDTEST
     }
+
     TEST(ScriptEngine, StackMemoryTest_Call_Ret) {
         ScriptEnv* env = ScriptEnv::newScriptEnv();
 
@@ -133,8 +134,9 @@ namespace smart {
         auto *stackPointer0 = stackMemory.stackPointer;
 
         stackMemory.call();
-        stackMemory.localVariables(8 * 4);
-        stackMemory.localVariables(8 * 4);
+        stackMemory.localVariables(8*4);
+
+        //stackMemory.localVariables(1);
         uint32_t a = 100;
         uint32_t b;
         stackMemory.moveTo(-4, 4, (st_byte*)&a);

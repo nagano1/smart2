@@ -129,7 +129,7 @@ namespace smart {
         ParseContext *context; \
         PrimitiveCalcRegisterEnum calcRegEnum; \
         st_byte *calcReg;                 \
-        int typeIndex2;                \
+        int typeIndex;                \
         bool typeAtHeap2;                \
         int found; \
         int prev_chars
@@ -146,7 +146,7 @@ namespace smart {
         (node)->parentNode = (NodeBase*)(parent); \
         (node)->codeLine = nullptr; \
         (node)->found = -1; \
-        (node)->typeIndex2 = -1; \
+        (node)->typeIndex = -1; \
         (node)->typeAtHeap2 = false; \
         (node)->nextNode = nullptr; \
         (node)->nextNodeInLine = nullptr; \
@@ -302,6 +302,10 @@ namespace smart {
         int childCount;
     };
 
+
+    /*
+    * in FuncNodeStruct
+    */
     using BodyNodeStruct = struct {
         NODE_HEADER;
 
@@ -794,7 +798,7 @@ namespace smart {
         void *targetVTable, \
         int (*func)(NodeBase *, void *scriptEngineContext, void *targetVTable,void *func, bool parentIsFirst, void *arg, void *arg2), \
         bool parentIsFirst,           \
-        void *arg,           \
+        void *topLevelNodeInBody,           \
         void *arg2
 
     #define ApplyFunc_params2 \
@@ -802,17 +806,17 @@ namespace smart {
         void *targetVTable, \
         void *func, \
         bool parentIsFirst,           \
-        void *arg,           \
+        void *topLevelNodeInBody,           \
         void *arg2
 
 
     #define ApplyFunc_pass \
                 scriptEngineContext, \
-                targetVTable, (void *)func, parentIsFirst, arg, arg2
+                targetVTable, (void *)func, parentIsFirst, topLevelNodeInBody, arg2
 
     #define ApplyFunc_pass2 \
                 scriptEngineContext, \
-                targetVTable, func, parentIsFirst, arg, arg2
+                targetVTable, func, parentIsFirst, topLevelNodeInBody, arg2
 
 
     #define VTABLE_DEF(T) \
