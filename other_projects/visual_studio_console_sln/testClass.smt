@@ -21,7 +21,7 @@ class ClassMine
         var *str = "0jfoiwjoie"
         int 二音後ab = 123412
 
-        $float floata = 4503
+        float floata = 4503
         ?var *f = null
         ?var g = true
         int a = foijwae

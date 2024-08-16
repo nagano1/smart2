@@ -181,9 +181,9 @@ struct ParseUtil {
         return true;
     }
 
-    static inline bool equal(const char* chars, int charsLength, const char* suffix, int suffixLength) {
-        if (charsLength == suffixLength) {
-            return endsWith(chars, charsLength, suffix, suffixLength);
+    static inline bool equals(const char* chars, int charsLength, const char* chars2, int chars2Length) {
+        if (charsLength == chars2Length) {
+            return endsWith(chars, charsLength, chars2, chars2Length);
         }
         return false;
     }
@@ -241,17 +241,17 @@ struct ParseUtil {
     static bool isValuePresevedWord(utf8byte ch, utf8byte* bytes, int len)
     {
         if (ch == 'n') {
-            if (ParseUtil::equal(bytes, len, "null", 4)) {
+            if (ParseUtil::equals(bytes, len, "null", 4)) {
                 return false;
             }
         }
         else if (ch == 't') {
-            if (ParseUtil::equal(bytes, len, "true", 4)) {
+            if (ParseUtil::equals(bytes, len, "true", 4)) {
                 return false;
             }
         }
         else if (ch == 'f') {
-            if (ParseUtil::equal(bytes, len, "false", 4)) {
+            if (ParseUtil::equals(bytes, len, "false", 4)) {
                 return false;
             }
         }

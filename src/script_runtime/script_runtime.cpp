@@ -1030,7 +1030,7 @@ namespace smart {
                 if (child->vtable == VTables::AssignStatementVTable) {
                     auto *declAssign = Cast::downcast<AssignStatementNodeStruct *>(child);
                     if (declAssign->hasTypeDecl) {
-                        if (ParseUtil::equal(assign->nameNode.name, assign->nameNode.nameLength,
+                        if (ParseUtil::equals(assign->nameNode.name, assign->nameNode.nameLength,
                                              declAssign->nameNode.name, declAssign->nameNode.nameLength)) {
                             if (!declAssign->typeOrLet.hasMutMark) {
                                 context->addErrorWithNode(ErrorCode::assign_to_immutable, assign);
@@ -1135,7 +1135,7 @@ namespace smart {
                 if (child->vtable == VTables::AssignStatementVTable) {
                     auto *declAssign = Cast::downcast<AssignStatementNodeStruct *>(child);
                     if (declAssign->hasTypeDecl) {
-                        if (ParseUtil::equal(vari->name, vari->nameLength,
+                        if (ParseUtil::equals(vari->name, vari->nameLength,
                                              declAssign->nameNode.name, declAssign->nameNode.nameLength)) {
                             vari->stackOffset = declAssign->stackOffset;
                             vari->typeIndex = declAssign->typeIndex;
@@ -1191,7 +1191,7 @@ namespace smart {
                 // fn
                 auto* fnNode = Cast::downcast<FuncNodeStruct*>(rootNode);
                 auto* nameNode = &fnNode->nameNode;
-                if (ParseUtil::equal(nameNode->name, nameNode->nameLength, "main", 4))
+                if (ParseUtil::equals(nameNode->name, nameNode->nameLength, "Main", 4))
                 {
                     return fnNode;
                 }
@@ -1227,7 +1227,7 @@ namespace smart {
 
         this->mainFunc = findMainFunc(this->document);
         if (this->mainFunc == nullptr) {
-            //error: entry func not found
+            // error: entry func not found
         }
     }
 
@@ -1360,7 +1360,7 @@ namespace smart {
     }
 
 
-    static int executeMain(ScriptEnv* env, FuncNodeStruct* mainFunc)
+    static int executeMainFunc(ScriptEnv* env, FuncNodeStruct* mainFunc)
     {
         int stackSize = mainFunc->stackSize;
         env->context->stackMemory.call();
@@ -1445,22 +1445,20 @@ namespace smart {
 
 
 
-    int ScriptEnv::runScriptEnv()
+    int ScriptEnv::runScript()
     {
         assert(this->document->context->syntaxErrorInfo.hasError == false);
         assert(this->context->logicErrorInfo.hasError == false);
 
         int ret = 0;
-        auto* mainFunc2 = this->mainFunc;
-        if (mainFunc2) {
-            //printf("main Found");
-            //printf("<%s()>\n", mainFunc2->nameNode.name);
-            ret = executeMain(this, mainFunc2);
+        auto *mainFunc = this->mainFunc;
+        if (mainFunc) {
+            // printf("main found <%s()>\n", mainFunc2->nameNode.name);
+            ret = executeMainFunc(this, mainFunc);
         }
 
-        auto* rootNode = this->document->firstRootNode;
+        auto *rootNode = this->document->firstRootNode;
         while (rootNode != nullptr) {
-
             // printf("%s\n", rootNode->vtable->typeChars);
 
             if (rootNode->vtable == VTables::ClassVTable) {
@@ -1468,7 +1466,6 @@ namespace smart {
             }
             else if (rootNode->vtable == VTables::FnVTable) {
                 // fn
-
             }
 
             rootNode = rootNode->nextNode;
@@ -1476,22 +1473,33 @@ namespace smart {
 
         Alloc::deleteDocument(this->document);
         ScriptEnv::deleteScriptEnv(this);
+
         return ret;
     }
 
-
-    int ScriptEnv::startScript(char* script, int scriptLength)
+    /*
+    static int calc_hash2(const char(&f4)[SIZE], size_t max) {
+        return VoidHashMap::calc_hash((const char*)f4, SIZE - 1, max);
+    }
+    */
+    int ScriptEnv::startScriptInternal(char* script, int scriptLength)
     {
+        // Load the script
         ScriptEnv *env = ScriptEnv::loadScript(script, scriptLength);
+
+        // Check syntax
         if (env->document->context->syntaxErrorInfo.hasError) {
             return env->document->context->syntaxErrorInfo.errorItem.errorId;
         }
 
+        // Validate types, values, find Main func
         env->validateScript();
         if (env->context->logicErrorInfo.hasError) {
             env->context->setErrorPositions();
             return env->context->logicErrorInfo.firstErrorItem->codeErrorItem.errorId;
         }
-        return env->runScriptEnv();
+
+        // Run script
+        return env->runScript();
     }
 }

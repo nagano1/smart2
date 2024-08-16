@@ -245,7 +245,7 @@ namespace smart {
     TEST(ScriptEngine, ScriptEngineTestSomeScript0) {
 
         constexpr char source[] = R"(
-fn main()
+fn Main()
 {
     int b = 9
     int a = 500
@@ -254,7 +254,7 @@ fn main()
     return c - (b + a)
 }
 )";
-        int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
+        int ret = ScriptEnv::startScript(source);
         EXPECT_EQ(ret, -9);
         ENDTEST
     }
@@ -264,48 +264,49 @@ fn main()
 
     TEST(ScriptEngine, ScriptEngineTest_assign) {
         constexpr char source[] = R"(
-fn main()
+fn Main()
 {
     $int b = 9
     b = (10 + 1) - 2
     return b
 }
 )";
-        int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
+        int ret = ScriptEnv::startScript(source);
         EXPECT_EQ(ret, 9);
         ENDTEST
     }
 
     TEST(ScriptEngine, ScriptEngineTest_null) {
         constexpr char source[] = R"(
-fn main()
+fn Main()
 {
     ?int *ptr = null
+    $int ok = 3421
     return ptr
 }
 )";
-        int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
+        int ret = ScriptEnv::startScript(source);
         EXPECT_EQ(ret, 0);
         ENDTEST
     }
 
     TEST(ScriptEngine, ScriptEngineTest_heapString) {
         constexpr char source[] = R"(
-fn main()
+fn Main()
 {
-    String *ptr = "ijfowjio"
+    string *ptr = "ijfowjio"
     String *ptr2 = ptr
     return ptr2
 }
 )";
-        int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
+        int ret = ScriptEnv::startScript(source);
         EXPECT_NE(ret, 0);
         ENDTEST
     }
     
     TEST(ScriptEngine, ScriptEngineTest_sub) {
         constexpr char source[] = R"(
-fn main()
+fn Main()
 {
     let b = 9
     int a = 5
@@ -314,7 +315,7 @@ fn main()
     return c + b - a
 }
 )";
-        int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
+        int ret = ScriptEnv::startScript(source);
         EXPECT_EQ(ret, 9);
 
         ENDTEST
@@ -322,7 +323,7 @@ fn main()
 
     TEST(ScriptEngine, ScriptEngineTest_variable_to_variable) {
         constexpr char source[] = R"(
-fn main()
+fn Main()
 {
     let b = 9
     int c = b
@@ -330,7 +331,7 @@ fn main()
     return c + b
 }
 )";
-        int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
+        int ret = ScriptEnv::startScript(source);
         EXPECT_EQ(ret, 18);
         ENDTEST
     }
@@ -338,7 +339,7 @@ fn main()
 
     TEST(ScriptEngine, ScriptEngineTest_i64) {
         constexpr char source[] = R"(
-fn main()
+fn Main()
 {
     i64 b = 5L
     i64 a = 900L
@@ -392,7 +393,7 @@ fn main()
             
             node = node->nextNode;
         }
-        int ret = env->runScriptEnv();
+        int ret = env->runScript();
         EXPECT_EQ(ret, -4);
 
         //EXPECT_EQ(c - (a + b), 6);

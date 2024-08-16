@@ -64,7 +64,7 @@ namespace smart
                                      context->chars[currentPos], start, context, currentPos);
 
         if (result > -1) {
-            typeNode->isLet = ParseUtil::equal(
+            typeNode->isLet = ParseUtil::equals(
                                    NodeUtils::getTypeName(typeNode),
                                    NodeUtils::getTypeNameLength(typeNode), let_chars, size_of_let
                                );

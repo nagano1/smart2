@@ -271,11 +271,17 @@ namespace smart
         static _ScriptEnv *newScriptEnv();
         TypeEntry *newTypeEntry() const;
 
-        static int startScript(char* script, int byteLength);
+        static int startScriptInternal(char* script, int byteLength);
+
+        template<std::size_t SIZE>
+        static int startScript(const char(&text)[SIZE])
+        {
+            return startScriptInternal((char*)text, SIZE - 1);
+        }
 
         static _ScriptEnv* loadScript(char* script, int byteLength);
         void validateScript();
-        int runScriptEnv();
+        int runScript();
 
         void registerTypeEntry(TypeEntry* typeEntry);
 
