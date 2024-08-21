@@ -277,7 +277,7 @@ namespace smart {
      *
      */
 
-    void int32_evaluateNode(ScriptEngineContext *context, NumberNodeStruct *numberNode)
+    static void int32_evaluateNode(ScriptEngineContext *context, NumberNodeStruct *numberNode)
     {
         *(int32_t*)numberNode->calcReg = (int32_t)numberNode->num;
     }
@@ -766,7 +766,7 @@ namespace smart {
     //                                       Validate Script
     //
     //------------------------------------------------------------------------------------------
-
+    
     static PrimitiveCalcRegisterEnum findUnusedReg1(PrimitiveCalcRegisterEnum reg1) {
         if (reg1 != PrimitiveCalcRegisterEnum::eax) {
             return PrimitiveCalcRegisterEnum::eax;
@@ -791,7 +791,7 @@ namespace smart {
         return PrimitiveCalcRegisterEnum::edx;
     }
 
-    inline void setCalcRegToNode(NodeBase *node, const ScriptEngineContext *context) {
+    inline static void setCalcRegToNode(NodeBase *node, const ScriptEngineContext *context) {
         int typeIndex = node->typeIndex;
         if (typeIndex == -1) {
             typeIndex = BuiltInTypeIndex::int64;
@@ -803,38 +803,15 @@ namespace smart {
             dataSize = 8;
         }
 
-        if (dataSize == 4) {
-            if (node->calcRegEnum == PrimitiveCalcRegisterEnum::eax) {
-                node->calcReg = (st_byte *) &__EX(&context->cpuRegister.rax);
-            }
-            else if (node->calcRegEnum == PrimitiveCalcRegisterEnum::ebx) {
-                node->calcReg = (st_byte *) &__EX(&context->cpuRegister.rbx);
-            }
-            else if (node->calcRegEnum == PrimitiveCalcRegisterEnum::ecx) {
-                node->calcReg = (st_byte *) &__EX(&context->cpuRegister.rcx);
-            }
-            else if (node->calcRegEnum == PrimitiveCalcRegisterEnum::edx) {
-                node->calcReg = (st_byte *) &__EX(&context->cpuRegister.rdx);
-            }
-        }
-        else if (dataSize == 8) {
-            if (node->calcRegEnum == PrimitiveCalcRegisterEnum::eax) {
-                node->calcReg = (st_byte *) &__RX(&context->cpuRegister.rax);
-            }
-            else if (node->calcRegEnum == PrimitiveCalcRegisterEnum::ebx) {
-                node->calcReg = (st_byte *) &__RX(&context->cpuRegister.rbx);
-            }
-            else if (node->calcRegEnum == PrimitiveCalcRegisterEnum::ecx) {
-                node->calcReg = (st_byte *) &__RX(&context->cpuRegister.rcx);
-            }
-            else if (node->calcRegEnum == PrimitiveCalcRegisterEnum::edx) {
-                node->calcReg = (st_byte *) &__RX(&context->cpuRegister.rdx);
-            }
+        const CalcRegister *calcRegister = CalcEnumToCalcRegister(node->calcRegEnum, &context->cpuRegister);
+        if (calcRegister != nullptr) {
+            st_byte* dataPointer = GetDataPointerFromCalcRegister(calcRegister, dataSize);
+            node->calcReg = dataPointer;
         }
     }
 
     // parent is first
-    int applyFunc_assignCalcOpRegister(NodeBase *node, ApplyFunc_params2)
+    static int applyFunc_assignCalcOpRegister(NodeBase *node, ApplyFunc_params2)
     {
         auto context = (ScriptEngineContext*)scriptEngineContext;
 
@@ -1150,6 +1127,9 @@ namespace smart {
         return 0; // varDefFound ? 1 : 0;
     }
 
+    /// <summary>
+    /// Sets typeIndex and Assigns stackOffset
+    /// </summary>
     static void callTypeSelectorsOnExpressions2(ScriptEngineContext *context, FuncNodeStruct *func)
     {
         auto *child = func->bodyNode.firstChildNode;
@@ -1477,11 +1457,7 @@ namespace smart {
         return ret;
     }
 
-    /*
-    static int calc_hash2(const char(&f4)[SIZE], size_t max) {
-        return VoidHashMap::calc_hash((const char*)f4, SIZE - 1, max);
-    }
-    */
+
     int ScriptEnv::startScriptInternal(char* script, int scriptLength)
     {
         // Load the script
@@ -1492,7 +1468,7 @@ namespace smart {
             return env->document->context->syntaxErrorInfo.errorItem.errorId;
         }
 
-        // Validate types, values, find Main func
+        // Validate types, values, finding Main(entry) function
         env->validateScript();
         if (env->context->logicErrorInfo.hasError) {
             env->context->setErrorPositions();

@@ -40,55 +40,65 @@ namespace smart {
     };
 
 
-    #define __RX(reg) (reg)->rax
-    #define __EX(reg) (reg)->eax.eax
-    #define __X(reg) (reg)->eax.ax.ax
-    #define __H(reg) (reg)->eax.ax.ahal.ah
-    #define __L(reg) (reg)->eax.ax.ahal.al
 
-    #define __RAX(reg) (reg).rax
-    #define __EAX(reg) (reg).eax.eax
-    #define __AX(reg) (reg).eax.ax.ax
-    #define __AH(reg) (reg).eax.ax.ahal.ah
-    #define __AL(reg) (reg).eax.ax.ahal.al
+    // macros for CalcRegister
+    #define __RX(reg) (reg)->r_x
+    #define __EX(reg) (reg)->e_x.e_x
+    #define __X(reg) (reg)->e_x.ax.ax
+    #define __H(reg) (reg)->e_x.ax.ahal.ah
+    #define __L(reg) (reg)->e_x.ax.ahal.al
 
-    #define RAX(reg) __RAX((reg)->rax)
-    #define EAX(reg) __EAX((reg)->rax)
-    #define AX(reg) __AX((reg)->rax)
-    #define AH(reg) __AH((reg)->rax)
-    #define AL(reg) __AL((reg)->rax)
+    #define __RAX(reg) (reg).r_x
+    #define __EAX(reg) (reg).e_x.e_x
+    #define __AX(reg) (reg).e_x.ax.ax
+    #define __AH(reg) (reg).e_x.ax.ahal.ah
+    #define __AL(reg) (reg).e_x.ax.ahal.al
 
-    #define RBX(reg) __RAX((reg)->rbx)
-    #define EBX(reg) __EAX((reg)->rbx)
-    #define BX(reg) __AX((reg)->rbx)
-    #define BH(reg) __AH((reg)->rbx)
-    #define BL(reg) __AL((reg)->rbx)
+    // macros for CPU Register
+    #define RAX(cpu) __RAX((cpu)->rax)
+    #define EAX(cpu) __EAX((cpu)->rax)
+    #define AX(cpu) __AX((cpu)->rax)
+    #define AH(cpu) __AH((cpu)->rax)
+    #define AL(cpu) __AL((cpu)->rax)
 
-    #define RCX(reg) __RAX((reg)->rcx)
-    #define ECX(reg) __EAX((reg)->rcx)
-    #define CX(reg) __AX((reg)->rcx)
-    #define CH(reg) __AH((reg)->rcx)
-    #define CL(reg) __AL((reg)->rcx)
+    #define RBX(cpu) __RAX((cpu)->rbx)
+    #define EBX(cpu) __EAX((cpu)->rbx)
+    #define BX(cpu) __AX((cpu)->rbx)
+    #define BH(cpu) __AH((cpu)->rbx)
+    #define BL(cpu) __AL((cpu)->rbx)
 
-    #define RDX(reg) __RAX((reg)->rdx)
-    #define EDX(reg) __EAX((reg)->rdx)
-    #define DX(reg) __AX((reg)->rdx)
-    #define DH(reg) __AH((reg)->rdx)
-    #define DL(reg) __AL((reg)->rdx)
+    #define RCX(cpu) __RAX((cpu)->rcx)
+    #define ECX(cpu) __EAX((cpu)->rcx)
+    #define CX(cpu) __AX((cpu)->rcx)
+    #define CH(cpu) __AH((cpu)->rcx)
+    #define CL(cpu) __AL((cpu)->rcx)
+
+    #define RDX(cpu) __RAX((cpu)->rdx)
+    #define EDX(cpu) __EAX((cpu)->rdx)
+    #define DX(cpu) __AX((cpu)->rdx)
+    #define DH(cpu) __AH((cpu)->rdx)
+    #define DL(cpu) __AL((cpu)->rdx)
+
+    /*
+    template <typename T>
+    static inline T max(T a, T b) {
+        return a > b ? a : b;
+    }
+    */
 
 
     union CalcRegister {
-        uint64_t rax;
+        uint64_t r_x; // rax, rbx, rcx
         union {
-            uint32_t eax;
+            uint32_t e_x; // eax, ebx, ecx
             union {
-                uint16_t ax;
+                uint16_t ax; // ax, bx, cx
                 struct {
-                    uint8_t al;
-                    uint8_t ah;
-                } ahal;
+                    uint8_t al; // al, bl, cl
+                    uint8_t ah; // ah, bh, ch
+                } ahal; // ah&al, bh&bl, ch&cl
             } ax;
-        } eax;
+        } e_x;
     };
 
     /*
@@ -112,11 +122,42 @@ namespace smart {
         }
     };
 
+
+    static inline const CalcRegister* CalcEnumToCalcRegister(PrimitiveCalcRegisterEnum regTypeEnum, const CPURegister* cpu)
+    {
+        if (regTypeEnum == PrimitiveCalcRegisterEnum::eax) {
+            return &cpu->rax;
+        }
+        else if (regTypeEnum == PrimitiveCalcRegisterEnum::ebx) {
+            return &cpu->rbx;
+        }
+        else if (regTypeEnum == PrimitiveCalcRegisterEnum::ecx) {
+            return &cpu->rcx;
+        }
+        else if (regTypeEnum == PrimitiveCalcRegisterEnum::edx) {
+            return  &cpu->rdx;
+        }
+        return nullptr;
+    }
+
+    static inline st_byte* GetDataPointerFromCalcRegister(const CalcRegister* calcRegister, int dataSize)
+    {
+        if (dataSize == 4) {
+            return (st_byte*)&__EX(calcRegister);
+        }
+        else if (dataSize == 8) {
+            return (st_byte*)&__RX(calcRegister);
+        }
+
+        return nullptr;
+    }
+
     /*
     static void setActualCaclRegister() {
 
     }
-*/
+    */
+
     #define NODE_HEADER \
         const struct node_vtable *vtable; /* virtual table */ \
         _NodeBase *parentNode; \
