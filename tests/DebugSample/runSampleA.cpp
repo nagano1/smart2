@@ -29,7 +29,7 @@ using namespace smart;
 int main(int argc, char **argv) {
 
     constexpr char source[] = R"(
-fn main()
+fn Main()
 {
     int b = 1
     int a = 1
@@ -39,7 +39,7 @@ fn main()
 }
 )";
     printf("%s", source);
-    int ret = ScriptEnv::startScript((char*)source, sizeof(source) - 1);
+    int ret = ScriptEnv::startScript(source);
     printf("ret = %d", ret);
 
 	return 0;
