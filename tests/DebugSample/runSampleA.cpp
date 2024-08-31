@@ -33,7 +33,7 @@ fn Main()
 {
     int b = 1
     int a = 1
-    int c = -1
+    int c = -9
     
     return c - (b - a)
 }
