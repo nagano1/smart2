@@ -1,8 +1,8 @@
-#include<stdlib.h>
+//#include<stdlib.h>
 //#include<string.h>
 
 
-using i32 = uint32_t;
+using i32 = unsigned int ;// uint32_t;
 
 extern "C" i32 print_num( i32 n );
 extern "C" void print( const char * n );
@@ -44,10 +44,12 @@ extern "C" {
 
         //clock_t start = clock();
 
+/*
         uint64_t loopCount = 1000 * 10 * 1000LLU;
         uint64_t current = 255;
 
         uintptr_t val;
+*/
 
         //i32 map_id = new_address_map();
 
