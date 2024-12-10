@@ -29,7 +29,7 @@ jobs:
               os: windows-latest,
               addpath: 'echo "C:\\msys64\mingw64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8',
               clang: '',
-              wasi_tgz: "wasi-sysroot-24.0.tar.gz"
+              wasi_tgz: "wasi-sysroot-22.tar.gz"
             }  
 
     steps:
