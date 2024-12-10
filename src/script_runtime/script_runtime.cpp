@@ -1463,12 +1463,12 @@ namespace smart {
         // Load the script
         ScriptEnv *env = ScriptEnv::loadScript(script, scriptLength);
 
-        // returns if there's a syntax error
+        // Return if there's a syntax error
         if (env->document->context->syntaxErrorInfo.hasError) {
             return env->document->context->syntaxErrorInfo.errorItem.errorId;
         }
 
-        // Validate types, values, finding Main(entry) function
+        // Validate types, values and finding Main(entry) function
         env->validateScript();
         if (env->context->logicErrorInfo.hasError) {
             env->context->setErrorPositions();
