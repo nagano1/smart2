@@ -58,7 +58,7 @@ const rootPath = "../..";
 let INCLUDEs   = ["../include/wasm32-wasi/", rootPath + "/src/", rootPath + "/src/include"];
 //let INCLUDEs   = ["../src/"];
 
-let SYSLibDIR = "wasi-sysroot/lib/wasm32-wasi";
+let g = "wasi-sysroot/lib/wasm32-wasi";
 let LIBS      = `${SYSLibDIR}/libc.a ${SYSLibDIR}/libc++.a ${SYSLibDIR}/libc++abi.a`;
 
 let clangCompiler = "";
@@ -440,7 +440,7 @@ async function prepareCommands() {
     }
 
     preparePromise = new Promise(async (resolve, reject)=>{
-        const version1 = 14;
+        const version1 = 16;
         const version2 = 13;
         
         if (options.clang) {
