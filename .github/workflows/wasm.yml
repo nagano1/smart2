@@ -50,8 +50,8 @@ jobs:
         id: rkey
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
-          clang++ --version
-          wasmld --version
+            clang++ --version
+            ls ${{ env.LLVM_PATH }}
             echo "Linux"
           elif [ "$RUNNER_OS" == "Windows" ]; then
             clang++ --version
