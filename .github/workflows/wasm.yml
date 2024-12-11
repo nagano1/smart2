@@ -51,7 +51,7 @@ jobs:
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
             clang++ --version
-            ls ${{ env.LLVM_PATH }}
+            ls ${{ env.LLVM_PATH }}/bin
             echo "Linux"
           elif [ "$RUNNER_OS" == "Windows" ]; then
             clang++ --version
