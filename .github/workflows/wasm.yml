@@ -15,7 +15,7 @@ jobs:
           - {
               os: ubuntu-latest,
               addpath: '',
-              clang: 'clang++',
+              clang: '--clang clang++',
               wasi_tgz: "wasi-sysroot-24.0.tar.gz" # needs Clang 16+ to use "wasi-sysroot-22.tar.gz"
             }
           - {
