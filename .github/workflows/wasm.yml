@@ -15,7 +15,7 @@ jobs:
           - {
               os: ubuntu-latest,
               addpath: '',
-              clang: '--clang clang++ --wasmld ${{ env.LLVM_PATH }}/bin/wasm-ld',
+              clang: '--clang clang++ --wasmld `which wasm-ld`',
               wasi_tgz: "wasi-sysroot-24.0.tar.gz" # needs Clang 16+ to use "wasi-sysroot-22.tar.gz"
             }
           - {
