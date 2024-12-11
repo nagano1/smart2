@@ -159,6 +159,7 @@
 
 
                 console.log(wasm.instance.exports.calling);
+                console.log("rkey = " + rkey);
                 const ret = wasm.instance.exports.calling(Number(rkey));
                 console.info(wasm.instance)
                 console.info(importObject.env);
