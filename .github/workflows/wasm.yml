@@ -52,6 +52,7 @@ jobs:
           if [ "$RUNNER_OS" == "Linux" ]; then
             sudo ls /usr/lib/
             sudo ls /usr/lib64/
+            sudo ls /usr/lib/x86_64-linux-gnu/
             sudo ls lib/
             #sudo ln -s /usr/lib/libncursesw.so.6 /usr/lib/libtinfo.so.5
             sudo ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/libtinfo.so.5
