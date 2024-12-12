@@ -54,6 +54,7 @@ jobs:
             sudo ls lib/
             sudo ln -s /usr/lib/libncursesw.so.6 /usr/lib/libtinfo.so.5
             sudo ln -s /usr/lib/x86_64-linux-gnu/libtinfo.so.6 /usr/lib/libtinfo.so.5
+            sudo ln -s /usr/lib64/libtinfo.so.6 /usr/lib64/libtinfo.so.5
             clang++ --version
             echo ${{ env.LLVM_PATH }}/bin
             ls ${{ env.LLVM_PATH }}/bin
