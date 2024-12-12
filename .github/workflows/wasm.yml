@@ -50,6 +50,7 @@ jobs:
         id: rkey
         run: |
           if [ "$RUNNER_OS" == "Linux" ]; then
+            ln -s /usr/lib/libncursesw.so.6 /usr/lib/libtinfo.so.5
             clang++ --version
             echo ${{ env.LLVM_PATH }}/bin
             ls ${{ env.LLVM_PATH }}/bin
