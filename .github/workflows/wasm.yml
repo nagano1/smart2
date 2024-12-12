@@ -43,7 +43,7 @@ jobs:
         uses: KyleMayes/install-llvm-action@v2
         if: matrix.config.os == 'ubuntu-latest'
         with:
-          version: "18.0"
+          version: "18.1"
       
       - name: Set color
         shell: bash
