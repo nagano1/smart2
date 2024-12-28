@@ -24,18 +24,23 @@ import org.rokist.canlangtest.databinding.FragmentTestEntryBinding
 import kotlin.concurrent.thread
 
 
-class TestEntryFragment : Fragment() {
+
+
+class TestEntryFragment : Fragment()
+{
     private lateinit var adapter: TabAdapter
     lateinit var binding: FragmentTestEntryBinding
     val sharedData = SharedModel.instance()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
 
         requireActivity().setTitle("test")
     }
 
-    override fun onAttach(context: Context) {
+    override fun onAttach(context: Context)
+    {
         super.onAttach(context)
         adapter = TabAdapter(childFragmentManager, requireContext())
     }
@@ -44,7 +49,8 @@ class TestEntryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View?
+    {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_entry, container, false)
 
         binding.pager.setBackgroundColor(sharedData.commonBackgroundColor)
@@ -79,12 +85,11 @@ class TestEntryFragment : Fragment() {
 
         return binding.root
     }
-
-
 }
 
 
-class Tab02Fragment : Fragment() {
+class Tab02Fragment : Fragment()
+{
 
     private val sharedData = SharedModel.instance()
     lateinit var binding: FragmentTabLogBinding
@@ -93,17 +98,16 @@ class Tab02Fragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View?
+    {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tab_log, container, false)
 
         setup()
         return binding.root
     }
 
-
-
-    private fun setup() {
-
+    private fun setup()
+    {
         val test = sharedData.currentTestItem
 
         binding.textView.setBackgroundColor(sharedData.commonBackgroundColor)
@@ -143,13 +147,14 @@ class Tab02Fragment : Fragment() {
                 //}
             }
 
-        } else {
+        }
+        else {
             binding.textView.text = "error"
         }
-
     }
 
-    private fun runTest() {
+    private fun runTest()
+    {
         val test = sharedData.currentTestItem
 
         if (test is TestEntry) {
@@ -194,42 +199,45 @@ class Tab02Fragment : Fragment() {
                     }
             }
         }
-
-
     }
 }
 
-
 class TabAdapter(fm: FragmentManager, private val context: Context)
-    : FragmentPagerAdapter(fm,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-    override fun getItem(position: Int): Fragment {
+    : FragmentPagerAdapter(fm,FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+{
+    override fun getItem(position: Int): Fragment
+    {
         return when (position) {
             0 -> Tab02Fragment()
             else -> TabCodeFragment()
         }
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence?
+    {
         return when (position) {
             0 -> "Log"
             else -> "Code"
         }
     }
 
-    override fun getCount(): Int {
+    override fun getCount(): Int
+    {
         return 2
     }
 
 }
 
 
-class TabCodeFragment : Fragment() {
+class TabCodeFragment : Fragment()
+{
     private val sharedData = SharedModel.instance()
     lateinit var binding: FragmentTabCodeBinding
 
 
     var setupped = false
-    override fun onResume() {
+    override fun onResume()
+    {
         super.onResume()
 
         if (!setupped) {
@@ -243,7 +251,8 @@ class TabCodeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View?
+    {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tab_code, container, false)
         return binding.root
     }

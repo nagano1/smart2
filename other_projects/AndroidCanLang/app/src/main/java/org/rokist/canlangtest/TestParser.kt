@@ -7,9 +7,12 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 
-class TestParser {
-    companion object {
-        fun collectTests(context: Context, dict:MutableMap<String, TestEntry>): TestGroup {
+class TestParser
+{
+    companion object
+    {
+        fun collectTests(context: Context, dict:MutableMap<String, TestEntry>): TestGroup
+        {
             val topTestGroup = TestGroup(
                 "Top"
             )

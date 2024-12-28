@@ -20,8 +20,8 @@ import org.rokist.canlangtest.databinding.FragmentTestListBinding
 import kotlin.concurrent.thread
 
 
-class TestListFragment : Fragment() {
-
+class TestListFragment : Fragment()
+{
     lateinit var binding: FragmentTestListBinding
     val viewModel = SharedModel.instance()
 
@@ -34,7 +34,8 @@ class TestListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View?
+    {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_test_list, container, false)
 
         context?.toActivity()
@@ -74,7 +75,6 @@ class TestListFragment : Fragment() {
                 }
 
                 myHandler.postDelayed(runnable, 50)
-
             })
 
             val data = testGroup.tests
@@ -98,7 +98,8 @@ class TestListFragment : Fragment() {
 
                             findNavController().navigate(R.id.action_first_to_second)
                         }
-                    } else {
+                    }
+                    else {
                         runAllTests()
                     }
                     isTestAutoRan = true
@@ -118,7 +119,8 @@ class TestListFragment : Fragment() {
                     requireContext(),
                     data,
                     object : OnClickListener {
-                        override fun onClickRoot(entry: ITestItem) {
+                        override fun onClickRoot(entry: ITestItem)
+                        {
                             Handler(Looper.getMainLooper()).postDelayed({
                                 if (entry is TestEntry) {
                                     viewModel.currentTestItem = entry
@@ -144,7 +146,8 @@ class TestListFragment : Fragment() {
 
     }
 
-    fun runAllTests() {
+    fun runAllTests()
+    {
         if (testGroup is TestGroup) {
             val data = testGroup.tests
             testGroup.resetAllTests()
@@ -155,12 +158,13 @@ class TestListFragment : Fragment() {
         }
     }
 
-    private fun runAllTests(data: List<ITestItem>) {
-
+    private fun runAllTests(data: List<ITestItem>)
+    {
         for (entry in data) {
             if (entry is TestGroup) {
                 runAllTests(entry.tests)
-            } else if (entry is TestEntry) {
+            }
+            else if (entry is TestEntry) {
                 requireContext().toActivity()
                     ?.runTest(entry.testcasename, entry.testname)
                     ?.let { testToken ->
@@ -175,10 +179,12 @@ class TestListFragment : Fragment() {
                             if (logText == "[__end_of_test_0];") {
                                 entry.status.postValue(TestEntryStatus.Failed)
                                 break;
-                            } else if (logText == "[__end_of_test_1];") {
+                            }
+                            else if (logText == "[__end_of_test_1];") {
                                 entry.status.postValue(TestEntryStatus.Succeeded)
                                 break;
-                            } else {
+                            }
+                            else {
                                 logText?.let {
                                     if (it.isNotEmpty()) {
                                         entry.log.postValue(entry.log.value + it)
@@ -194,12 +200,14 @@ class TestListFragment : Fragment() {
 }
 
 
-interface OnClickListener {
+interface OnClickListener
+{
     fun onClickRoot(testItem: ITestItem): Unit
 }
 
 
-class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+{
     val root: View = itemView.findViewById(R.id.item_root)
     val button: TextView = itemView.findViewById(R.id.item_textview)
     val titleTextView: TextView = itemView.findViewById(R.id.itemTextView)
@@ -208,14 +216,16 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 }
 
 
-class TestGroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class TestGroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+{
     val root: View = itemView.findViewById(R.id.item_root)
     val titleTextView: TextView = itemView.findViewById(R.id.groupTextView)
     val statusImage: ImageView = itemView.findViewById(R.id.status_image)
 
 }
 
-enum class TestItemViewType(val id: Int) {
+enum class TestItemViewType(val id: Int)
+{
     TestEntry(0),
     TestGroup(1);
 }
@@ -224,13 +234,15 @@ class RecyclerAdapter(
     private val context: Context,
     private val data: List<ITestItem>,
     private val clickListener: OnClickListener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>()
+{
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     val viewModel = SharedModel.instance()
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
+    {
         if (viewType == TestItemViewType.TestEntry.id) {
             val holder = ViewHolder(
                 inflater.inflate(
@@ -243,8 +255,8 @@ class RecyclerAdapter(
             holder.titleTextView.setTextColor(viewModel.secondaryForegroundColor)
             holder.root.setBackgroundResource(R.drawable.list_item_background)
             return holder
-
-        } else {
+        }
+        else {
             val holder = TestGroupViewHolder(
                 inflater.inflate(
                     R.layout.list_group_item,
@@ -258,7 +270,8 @@ class RecyclerAdapter(
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
+    override fun getItemViewType(position: Int): Int
+    {
         val item = data[position]
         return if (item is TestEntry) {
             TestItemViewType.TestEntry.id
@@ -267,13 +280,15 @@ class RecyclerAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int
+    {
         return data.size
     }
 
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int)
+    {
         val item = data[position];
 
         if (item is TestEntry) {
@@ -292,9 +307,8 @@ class RecyclerAdapter(
             testHolder.root.setOnClickListener {
                 clickListener.onClickRoot(data[position])
             }
-
-
-        } else if (item is TestGroup) {
+        }
+        else if (item is TestGroup) {
             val groupHolder = holder as TestGroupViewHolder
             groupHolder.titleTextView.text = "\uD83D\uDCE6  ${item.name}" //📁
             //holder.bodyTextView.text = item.name
@@ -314,8 +328,6 @@ class RecyclerAdapter(
             }
         }
     }
-
-
 }
 
 

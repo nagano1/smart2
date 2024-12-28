@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 
-interface ITestItem {
+interface ITestItem
+{
     val name: String
     var status: MutableLiveData<TestEntryStatus>
 }
@@ -14,13 +15,15 @@ interface ITestItem {
 
 data class TestGroup(
     override val name: String
-) : ITestItem {
+) : ITestItem
+{
     var isTop: Boolean = false
     override var status: MutableLiveData<TestEntryStatus> = MutableLiveData(TestEntryStatus.NotTestedYet)
     private val _mutableTests = mutableListOf<ITestItem>()
     val tests: List<ITestItem> get() = _mutableTests
 
-    private fun updateStatus() {
+    private fun updateStatus()
+    {
         var failed = false
         var isTesting = false
         var allNotYet = true
@@ -35,16 +38,20 @@ data class TestGroup(
 
         if (isTesting) {
             this.status.postValue( TestEntryStatus.IsTesting )
-        } else if (failed) {
+        }
+        else if (failed) {
             this.status.postValue( TestEntryStatus.Failed)
-        } else if (allNotYet) {
+        }
+        else if (allNotYet) {
             this.status.postValue( TestEntryStatus.NotTestedYet )
-        } else {
+        }
+        else {
             this.status.postValue(TestEntryStatus.Succeeded)
         }
     }
 
-    fun addTest(test: ITestItem) {
+    fun addTest(test: ITestItem)
+    {
         test.status.observeForever( Observer {
             updateStatus()
         })
@@ -53,11 +60,13 @@ data class TestGroup(
 
     }
 
-    fun resetAllTests() {
+    fun resetAllTests()
+    {
         _setAllItems(this.tests)
     }
 
-    private fun _setAllItems(tests:List<ITestItem>) {
+    private fun _setAllItems(tests:List<ITestItem>)
+    {
         for (entry in tests) {
             if (entry is TestGroup) {
                 _setAllItems(entry.tests)
@@ -76,19 +85,22 @@ data class TestEntry(
     , val filename: String
     , val testtext: String
 
-) : ITestItem {
+) : ITestItem
+{
     var requestRun: Boolean = false
     var log: MutableLiveData<String> = MutableLiveData<String>()
     var result: String = ""
     override var status: MutableLiveData<TestEntryStatus> = MutableLiveData(TestEntryStatus.NotTestedYet)
 
     override val name: String
-        get() {
+        get()
+        {
             return "$filename\n$testcasename / $testname"
         }
 }
 
-enum class TestEntryStatus(val rep: String) {
+enum class TestEntryStatus(val rep: String)
+{
     NotTestedYet(""),
     IsTesting("⌛ Testing..."),
     Failed("❌ Failed"),

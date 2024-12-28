@@ -3,7 +3,8 @@ package org.rokist.canlangtest
 import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 
-enum class Theme {
+enum class Theme
+{
     Dark,
     White
 }
@@ -13,22 +14,26 @@ class SharedModel(
     val theme: Theme,
     topTestGroup: TestGroup,
     testEntryMap2: Map<String, TestEntry>
-) {
+)
+{
     val selected = MutableLiveData<Boolean>()
 
     val testEntryMap: Map<String, TestEntry>
 
-    init {
+    init
+    {
         this.selected.value = false
         this.testEntryMap = testEntryMap2
     }
 
-    private fun darkTheme(): Boolean {
+    private fun darkTheme(): Boolean
+    {
         return theme == Theme.Dark
     }
 
     val commonBackgroundColor: Int
-        get() {
+        get()
+        {
             return when (darkTheme()) {
                 true -> Color.BLACK
                 false -> Color.WHITE
@@ -36,14 +41,16 @@ class SharedModel(
         }
 
     val commonForegroundColor: Int
-        get() {
+        get()
+        {
             return when (darkTheme()) {
                 true -> Color.WHITE
                 false -> Color.BLACK
             }
         }
     val secondaryForegroundColor: Int
-        get() {
+        get()
+        {
             return when (darkTheme()) {
                 true -> Color.GRAY
                 false -> Color.DKGRAY
@@ -52,8 +59,10 @@ class SharedModel(
 
 
     val tabHiddenTextColor: Int
-        get() {
-            return when (darkTheme()) {
+        get()
+        {
+            return when (darkTheme())
+            {
                 true -> Color.parseColor("#727272")
                 false -> Color.parseColor("#AAAAAA")
             }
@@ -62,17 +71,20 @@ class SharedModel(
     var topTestGroup: TestGroup = topTestGroup
     var currentTestItem: ITestItem = topTestGroup
 
-    fun select(item: Boolean) {
+    fun select(item: Boolean)
+    {
         selected.postValue(item)
     }
 
-    companion object {
+    companion object
+    {
         var mInstance: SharedModel? = null
         fun createInstance(
             theme: String,
             testGroup: TestGroup,
             testEntryMap: Map<String, TestEntry>
-        ) {
+        )
+        {
             val themeClass = if (theme == "dark") {
                 Theme.Dark
             } else {
@@ -85,7 +97,8 @@ class SharedModel(
             )
         }
 
-        fun instance(): SharedModel {
+        fun instance(): SharedModel
+        {
             return mInstance!!
         }
     }
