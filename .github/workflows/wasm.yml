@@ -13,7 +13,7 @@ jobs:
       matrix:
         config:
           - {
-              os: ubuntu-latest,
+              os: ubuntu-22.04,
               addpath: '',
               clang: '--clang clang++ --wasmld `which wasm-ld`',
               wasi_tgz: "wasi-sysroot-24.0.tar.gz" # needs Clang 16+ to use "wasi-sysroot-22.tar.gz"
