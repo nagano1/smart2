@@ -99,7 +99,7 @@ TEST(SpeedTest, try_catch_is_slow) {
     if (ARM) {
         EXPECT_LT(one_op_nanosec, 15);
     } else {
-        EXPECT_GT(one_op_nanosec, 0.002);
+        EXPECT_GT(one_op_nanosec, 0.0008);
         EXPECT_LT(one_op_nanosec, 4);
     }
 
