@@ -470,7 +470,7 @@ async function prepareCommands() {
         }
 
         clangCompiler = clangCompiler.trim();
-        if (wasmLinker != null) {
+        if (wasmLinker.trim != null) {
             wasmLinker = wasmLinker.trim();
         }
         console.info(`Compiler: \t ${clangCompiler}`);
