@@ -238,7 +238,7 @@ namespace smart {
         if (resul > -1) {
             assignStatement->hasTypeDecl = true;
 
-            context->afterLineBreak = false;
+            //context->afterLineBreak = false;
             int resultPos;
             if (-1 < (resultPos = Scanner::scanMulti(assignStatement,
                                                      inner_assignStatementTokenizerMulti,

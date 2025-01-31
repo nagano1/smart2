@@ -699,8 +699,18 @@ class jips {
 
 ENDTEST
 
+void functio(int& commendEndIndex, bool& isLineComment) {
+    commendEndIndex = 3;
+
+}
 
 TEST(ParserTest_, aaHashMap) {
+    int commendEndIndex = 0;
+    bool isLineComment = false;
+    functio(commendEndIndex, isLineComment);
+    EXPECT_EQ(3, commendEndIndex);
+
+
     {
         auto hashKey = VoidHashMap::calc_hash2("ak", 10000);
         auto hashKey2 = VoidHashMap::calc_hash2("ka", 10000);
