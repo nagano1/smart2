@@ -24,11 +24,12 @@ namespace smart {
         NODE_HEADER;
     };
 
+    /*
     struct ClassNodeStruct::Impl
     {
         int a;
     };
-
+    */
     // --------------------- Defines Class VTable ---------------------- /
 
     static int selfTextLength(ClassNodeStruct *)
