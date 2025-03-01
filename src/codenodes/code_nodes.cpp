@@ -185,7 +185,10 @@ namespace smart
         for (int32_t i = start; i <= context->length;) {
             ch = context->chars[i];
 
-            if (ch == '/') { // comment
+            if (ch == '\0') {
+                break;
+            }
+            else if (ch == '/') { // comment
                 int commendEndIndex = handleComments(context, i, &commentNode, whitespace_startpos, parentNode, &prevLineBreak);
                 if (commendEndIndex > -1) {
                     i = commendEndIndex;
@@ -218,9 +221,6 @@ namespace smart
 
             returnResult = result;
             if (result > -1) {
-                context->afterLineBreak = false;
-                context->prevFoundPos = result;
-
                 // assign spaces
                 if (context->leftNode != nullptr) {
                     if (whitespace_startpos != -1) {
@@ -238,6 +238,9 @@ namespace smart
 
                 i = result;
 
+                context->afterLineBreak = false;
+                context->prevFoundPos = result;
+
                 prevLineBreak = nullptr;
                 lastLineBreak = nullptr;
 
@@ -245,11 +248,12 @@ namespace smart
                     context->scanEnd = false;
                     break;
                 }
-
+ 
                 if (scanMulti) {
                     continue;
                 }
             }
+            /*
             if (ch == '\0') {
                 break;
             }
@@ -258,6 +262,7 @@ namespace smart
             {
 
             }
+            */
             //if (!root) {
                 break;
             //}

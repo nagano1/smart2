@@ -1222,8 +1222,7 @@ class A {
 
         class C { }
     }
-}
-)";
+} // jofiawijeo)";
 
     const char *chars = text.c_str();
     auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
@@ -1240,6 +1239,8 @@ class A {
     EXPECT_EQ(document->firstCodeLine->firstNode->vtable, VTables::LineBreakVTable);
     EXPECT_EQ(document->firstCodeLine->nextLine->firstNode->vtable, VTables::LineBreakVTable);
 
+    auto* lastCommentText = ((LineCommentNodeStruct*)document->lastRootNode->prevCommentNode)->text;
+    EXPECT_EQ(std::string(lastCommentText), std::string("// jofiawijelo"));
 
     Alloc::deleteDocument(document);
 }
