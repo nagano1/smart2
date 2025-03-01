@@ -40,7 +40,7 @@ jobs:
           WinConf=$(cat <<-END
             ${{ toJSON(matrix.config.win) }}
           END)
-          Win2022="${WinConf%\}*}, os:\"windows-latest\"";
+          Win2022="${WinConf%\}*}, os:\"windows-2025\"";
           Win2019="${WinConf%\}*}, os:\"windows-2019\"";
 
           UnixConf=$(cat <<-END
