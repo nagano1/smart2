@@ -144,10 +144,6 @@ class A
         char *treeText = DocumentUtils::getTextFromTree(document);
         EXPECT_EQ(std::string{ treeText }, std::string{ autoIndentedText });
     }
-
-
-
-
 }
 
 ENDTEST
