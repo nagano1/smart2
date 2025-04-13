@@ -36,13 +36,18 @@ auto clangPath = when {
 
 func(24, lmd (x,k) -> {return x*k;})
 
+public static int
+fn Afwjoie() {
+
+}
+
 let result = func()
 
 func()
 =let result
-=var test
-=ins awejif().fjoiwejow["jfioewjoi"]
-
+=let$ test
+=> awejif().fjoiwejow["jfioewjoi"]
+=> 
 
 
 abfewf(abc, {
