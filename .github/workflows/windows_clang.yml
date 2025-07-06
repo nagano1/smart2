@@ -15,7 +15,7 @@ jobs:
           - {
               # Windows 64bit
               name: 64bit,
-              os: windows-latset,
+              os: windows-latest,
               main: "main.exe",
               hello: "hello.exe",
               suffix: ".exe",
