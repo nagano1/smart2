@@ -5,6 +5,7 @@ on:
   schedule:
     - cron: '15 3 1 * *' # minute hour day month monday
 
+    
 jobs:
   mybuild:
     name: ${{ matrix.config.name }}
