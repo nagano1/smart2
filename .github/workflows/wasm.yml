@@ -69,7 +69,7 @@ jobs:
             brew --prefix llvm;
             ls "$(brew --prefix)/opt"
             echo "--------------A------------------------------"
-            ls "$(brew --prefix llvm@16)"
+            ls "$(brew --prefix)"
           fi
           
           echo "rkey=$RANDOM" >> $GITHUB_OUTPUT
