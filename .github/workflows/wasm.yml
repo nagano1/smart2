@@ -68,6 +68,8 @@ jobs:
             brew --prefix llvm@16;
             brew --prefix llvm;
             ls "$(brew --prefix)/opt"
+            echo "--------------A------------------------------"
+            ls "$(brew --prefix llvm@16)"
           fi
           
           echo "rkey=$RANDOM" >> $GITHUB_OUTPUT
