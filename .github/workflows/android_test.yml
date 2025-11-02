@@ -1,4 +1,4 @@
-name: 📱 (scheduled) build Android test project
+name: 📱 (not on push) build Android test project
 
 env:
   main_project_module: app
