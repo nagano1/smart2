@@ -11,12 +11,12 @@ android {
             keyPassword 'doorlang'
         }
     }
-    compileSdk 34
+    compileSdk 36
     buildToolsVersion = '33.0.3'
     defaultConfig {
         applicationId "org.rokist.canlangtest"
         minSdk 23
-        targetSdk 34
+        targetSdk 36
         versionCode 1
         versionName "1.0"
         externalNativeBuild {
