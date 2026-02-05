@@ -175,7 +175,7 @@ namespace smart {
         stackMemory.localVariables(8 * 4);
 
         stackMemory.ret();
-        // retruned from func2
+        // returned from func2
 
         EXPECT_EQ((uint64_t)basePointer1, (uint64_t)stackMemory.stackBasePointer);
         EXPECT_EQ((uint64_t)stackPointer1, (uint64_t)stackMemory.stackPointer);
