@@ -123,7 +123,8 @@ namespace smart {
             context->scanEnd = true;
 
             return result;
-        } else {
+        }
+        else {
             //context->scanEnd = true;
             context->setError(ErrorCode::no_value_for_return, start);
         }
@@ -134,27 +135,29 @@ namespace smart {
     // return 1234
     int Tokenizers::returnStatementTokenizer(TokenizerParams_parent_ch_start_context) {
         // return
-        if ('r' == ch) {
-            auto idx = ParseUtil::matchAt(context->chars, context->length, start, returnText);
-            if (idx > -1) {
-                auto *returnNode = Alloc::newReturnStatement(context, parent);
-                Init::assignText_SimpleTextNode(&returnNode->returnText, context, start, returnTextSize);
+        if ('r' != ch) {
+            return -1;
+        }
 
-                context->afterLineBreak = false;
-                int currentPos = idx + returnTextSize;
-                int resultPos;
-                if (-1 < (resultPos = Scanner::scanMulti(returnNode,
-                                                         inner_returnStatementTokenizerMulti,
-                                                         currentPos, context))) {
+        auto idx = ParseUtil::matchAt(context->chars, context->length, start, returnText);
+        if (idx > -1) {
+            auto *returnNode = Alloc::newReturnStatement(context, parent);
+            Init::assignText_SimpleTextNode(&returnNode->returnText, context, start, returnTextSize);
 
-                    context->leftNode = Cast::upcast(&returnNode->returnText);
-                    context->virtualCodeNode = Cast::upcast(returnNode);
-                    return resultPos;
-                } else {
-                    context->leftNode = Cast::upcast(&returnNode->returnText);
-                    context->virtualCodeNode = Cast::upcast(returnNode);
-                    return currentPos;
-                }
+            //context->afterLineBreak = false;
+            int currentPos = idx + returnTextSize;
+            int resultPos;
+            if (-1 < (resultPos = Scanner::scanMulti(returnNode,
+                                                        inner_returnStatementTokenizerMulti,
+                                                        currentPos, context))) {
+
+                context->leftNode = Cast::upcast(&returnNode->returnText);
+                context->virtualCodeNode = Cast::upcast(returnNode);
+                return resultPos;
+            } else {
+                context->leftNode = Cast::upcast(&returnNode->returnText);
+                context->virtualCodeNode = Cast::upcast(returnNode);
+                return currentPos;
             }
         }
 

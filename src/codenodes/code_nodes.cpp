@@ -221,7 +221,6 @@ namespace smart
                 context->afterLineBreak = false;
                 context->prevFoundPos = result;
 
-                // assign spaces
                 if (context->leftNode != nullptr) {
                     if (whitespace_startpos != -1) {
                         context->leftNode->prev_chars = i - whitespace_startpos;
@@ -250,18 +249,19 @@ namespace smart
                     continue;
                 }
             }
-            if (ch == '\0') {
-                break;
-            }
-
-            if ((ch & 0x80) != 0x80)
-            {
-
-            }
-            //if (!root) {
-                break;
+            break;
+            //if (ch == '\0') {
+            //    break;
             //}
-            //i++;
+
+            //if ((ch & 0x80) != 0x80)
+            //{
+
+            //}
+            ////if (!root) {
+            //    break;
+            ////}
+            ////i++;
         }
 
         if (root) {
@@ -271,7 +271,7 @@ namespace smart
                 context->remaindPrevChars = context->length - whitespace_startpos;
             }
         }
-        context->scanEnd = false;
+        //context->scanEnd = false;
         return returnResult;
     }
 

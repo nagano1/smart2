@@ -1144,8 +1144,17 @@ fn method() : int {
 
 }
 
-@Attr(awf="jofwie")
-fn afunc(mut test:int): int {
+prop 
+{
+
+}
+
+public static bool
+fn afunc(
+    int intA
+    double b
+    float c
+) {
     @Attr(awf="jofwie")
     mut a = 342
 
@@ -1160,11 +1169,17 @@ fn afunc(mut test:int): int {
         a = 314
     }
 
-    for i = 0; i < 10; i++ {
+    for i = 0
+        i < 10
+        i++ {
 
     }
 
     let res2 = method()
+
+    method()
+    =let myVarTranslation
+    =set existingVar
 
     let res = try {
         method()
@@ -1190,15 +1205,16 @@ fn afunc(mut test:int): int {
 
 
     when abc {
-        3 -> 45
-        else -> 54
+        3 => 45
+        else => 54
     }
     
     0
     =let aboiajw
 
     32 / 123 - 4321 + 5
-    =set wow
+    =set ex
+    =var wow
 
 
 }
@@ -1208,12 +1224,14 @@ fn afunc(mut test:int): int {
 TEST(ParserTest_, NodeTypeEquality) {
     std::string text = u8R"(
 
-class A {
-    class B {
-        class TestCl😂日本語10234ass {
+class A
+{
+    class B
+    {
+        class TestCl😂日本語10234ass
+        {
 
-            fn aFunc (
-                )
+            fn aFunc ()
             {
                 
             }
