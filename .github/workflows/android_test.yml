@@ -17,9 +17,9 @@ jobs:
     strategy:
       matrix:
         config:
-          - {
-              os: ubuntu-latest,
-            }
+          # - {
+          #     os: ubuntu-latest,
+          #   }
           - {
               os: macos-latest,
             }
