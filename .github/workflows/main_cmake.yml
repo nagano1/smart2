@@ -96,7 +96,7 @@ jobs:
           mkdir -p deb/${{ matrix.config.name }};
           cp ${{ matrix.config.bin }} deb/${{ matrix.config.name }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: actions_cmake_${{ matrix.config.name }}_${{ steps.version.outputs.builddate }}
           path: build/deb
