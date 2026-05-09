@@ -237,46 +237,6 @@ namespace smart {
         return chars;
     }
 
-
-    /*
-    static int32_t int32_value(ValueBase *value)
-    {
-        return  *(int32_t*)value->ptr;
-    }
-     */
-
-    /*
-     *
-     *         if (expressionNode->vtable == VTables::StringLiteralVTable) {
-            //auto* strNode = Cast::downcast<StringLiteralNodeStruct *>(expressionNode);
-            //int size = (1 + strNode->strLength) * (int)sizeof(char);
-//          memcpy(chars, strNode->str, strNode->strLength);
-//          chars[strNode->strLength] = '\0';
-            return;
-        }
-
-        if (expressionNode->vtable == VTables::ParenthesesVTable) {
-            auto* parentheses = Cast::downcast<ParenthesesNodeStruct *>(expressionNode);
-            evaluateExprNode(parentheses->valueNode);
-            return;
-        }
-
-
-        if (expressionNode->vtable == VTables::NumberVTable) {
-            auto* numberNode = Cast::downcast<NumberNodeStruct *>(expressionNode);
-            if (numberNode->unit == 64) {
-                *(int64_t*)numberNode->calcReg = numberNode->num;
-            }
-            else {
-                *(int32_t*)numberNode->calcReg = (int32_t)numberNode->num;
-            }
-            return;
-        }
-
-     *
-     *
-     */
-
     static void int32_evaluateNode(ScriptEngineContext *context, NumberNodeStruct *numberNode)
     {
         *(int32_t*)numberNode->calcReg = (int32_t)numberNode->num;

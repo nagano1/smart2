@@ -35,53 +35,10 @@ using st_byte = unsigned char;
 #endif
 #define assert(expression) static_assert(true, "ok")
 
-
-
-#define when(op) switch(op) 
-#define wfor_noop(val) case val: {\
-    break; \
-    } \
-
-#define wfor(val, handler) case val: {\
-    (handler); break; \
-    } \
-
-#define welse(handler) default: {\
-    (handler); break; \
-    } \
-
 template<class T>
 static inline T *simpleMalloc2() {
     return (T *) malloc(sizeof(T));
 }
-
-
-#ifdef __ANDROID__
-
-#include <android/log.h>
-
-inline void console_log(const char *str) {
-    __android_log_print(ANDROID_LOG_DEBUG, "aaaa", ": %s", str);
-}
-
-
-#define PREPARE_OSTREAM \
-//Foo foo{};
-
-#else
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-inline void console_log(const char *str) {
-    //std::cout << message;
-    printf("%s", str);
-}
-#else
-inline void console_log(const char *str) {
-    //std::cout << message;
-    printf("%s", str);
-}
-#endif
-
-#endif
 
 
 struct MemBufferBlock {

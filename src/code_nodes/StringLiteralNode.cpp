@@ -82,13 +82,7 @@ namespace smart {
                         break;
                     }
                 }
-
-//                if (startsWithDQuote) {
-//                } else {
-//                    break;
-//                }
             }
-
         }
 
         if (startsWithQuote &&  !endsWithQuote) {
@@ -137,22 +131,20 @@ namespace smart {
                         }
                     }
 
-                    when(strLiteralNode->text[i]) {
-                        //wfor_noop('r')
-                        wfor('r', str[currentStrIndex++] = '\r')
-                        wfor('n', str[currentStrIndex++] = '\n')
-                        wfor('t', str[currentStrIndex++] = '\t')
-                        wfor('\\', str[currentStrIndex++] = '\\')
-                        wfor('f', str[currentStrIndex++] = 'f')
-                        wfor('/', str[currentStrIndex++] = '/')
-                        wfor('"', str[currentStrIndex++] = '"')
-                        wfor('\'', str[currentStrIndex++] = '\'')
-                        wfor('u', str[currentStrIndex++] = 'u')
-                        welse(str[currentStrIndex++] = strLiteralNode->text[i])
+                    switch (strLiteralNode->text[i]) {
+                        case 'r': str[currentStrIndex++] = '\r'; break;
+                        case 'n': str[currentStrIndex++] = '\n'; break;
+                        case 't': str[currentStrIndex++] = '\t'; break;
+                        case '\\': str[currentStrIndex++] = '\\'; break;
+                        case 'f': str[currentStrIndex++] = 'f'; break;
+                        case '/': str[currentStrIndex++] = '/'; break;
+                        case '"': str[currentStrIndex++] = '"'; break;
+                        case '\'': str[currentStrIndex++] = '\''; break;
+                        case 'u': str[currentStrIndex++] = 'u'; break;
+                        default: str[currentStrIndex++] = strLiteralNode->text[i]; break;
                     }
 
                     strLength++;
-
                     continue;
                 }
 
