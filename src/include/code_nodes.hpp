@@ -564,7 +564,7 @@ namespace smart {
 
         template<typename T>
         void tryDelete(T *m) {
-            return (T *) memBuffer.tryDelete(m);
+            (T *) memBuffer.tryDelete(m);
         }
 
         template<typename T>

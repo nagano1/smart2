@@ -22,7 +22,7 @@ jobs:
             },
             unix: {
               bin: "./src/main_run",
-              prescript: "",
+              prescript: "export CXX=clang++",
               cmakeConfig: "",
               cmakeBuildConfig: ""
             },
