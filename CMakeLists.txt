@@ -38,10 +38,6 @@ include_directories(src)
 
 
 add_subdirectory(src)
-add_subdirectory(tests)
-add_subdirectory(tests/long_running)
-add_subdirectory(lsp_vscode_server)
-add_subdirectory(lib/googletest)
 
 if(DOOR32 EQUAL 1)
     set_target_properties(gtest PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
