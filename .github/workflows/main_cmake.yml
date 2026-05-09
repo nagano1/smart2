@@ -21,7 +21,7 @@ jobs:
               longrunning_bin: "./tests/long_running/main_tst_long_running",
               lspbin: "./lsp_vscode_server/main_lsp",
               prescript: "export CXX=clang++",
-              cmakeConfig: " -D NODOOR32=1 ",
+              cmakeConfig: "",
               cmakeBuildConfig: ""
             },
             win: {

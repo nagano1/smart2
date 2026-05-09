@@ -13,11 +13,6 @@ file(GLOB cpp_files
 
 
 add_executable(${BINARY}_run ${cpp_files})
-if(DEFINED DOOR32)
-    set_target_properties(${BINARY}_run PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif()
-
-
 
 install(TARGETS ${BINARY}_run
         RUNTIME	DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
@@ -27,9 +22,6 @@ install(TARGETS ${BINARY}_run
 
 
 add_library(${BINARY}_lib STATIC ${cpp_files})
-if(DEFINED DOOR32)
-    set_target_properties(${BINARY}_lib PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-endif()
 
 find_package(Threads REQUIRED)
 target_link_libraries(${BINARY}_run Threads::Threads)
