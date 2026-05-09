@@ -18,7 +18,7 @@ jobs:
             win: {
               bin: "src/Release/main_run.exe",
               cmakeBuildConfig: "--config Release ",
-              cmakeConfig: "-T v143,host=x64"
+              cmakeConfig: "-T v143,host=x64",
               prescript: "chcp 65001",
             },
             unix: {
