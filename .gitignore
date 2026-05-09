@@ -16,7 +16,6 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
-lib/googletest/googletest/generated/
 
 node_modules
 
