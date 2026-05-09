@@ -6,7 +6,6 @@ set(BINARY ${CMAKE_PROJECT_NAME})
 
 file(GLOB cpp_files
     "./main.cpp"
-
     "./codenodes/*.cpp"
 )
 
@@ -32,5 +31,3 @@ endif()
 
 find_package(Threads REQUIRED)
 target_link_libraries(${BINARY}_run Threads::Threads)
-
-

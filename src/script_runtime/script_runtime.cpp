@@ -1417,7 +1417,6 @@ namespace smart {
 
         auto* document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
         DocumentUtils::parseText(document, script, byteLength);
-        DocumentUtils::generateHashTables(document);
         env->document = document;
 
         return env;

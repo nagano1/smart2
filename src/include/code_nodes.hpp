@@ -435,67 +435,6 @@ namespace smart {
     };
 
 
-
-
-    using JsonObjectKeyNodeStruct = struct {
-        NODE_HEADER;
-
-        char *text;
-        int_fast32_t textLength;
-
-        int namePos;
-        int nameLength;
-    };
-
-    using JsonKeyValueItemStruct = struct {
-        NODE_HEADER;
-
-        JsonObjectKeyNodeStruct *keyNode;
-
-        NodeBase *valueNode;
-
-        SymbolStruct delimeter;
-
-        SymbolStruct follwingComma;
-        bool hasComma;
-    };
-
-    // --------- Json Object --------- //
-    using JsonObjectStruct = struct {
-        NODE_HEADER;
-
-        int parsePhase;
-
-        utf8byte body[2]; // '{'
-        SymbolStruct endBodyNode;
-        JsonKeyValueItemStruct *firstKeyValueItem;
-        JsonKeyValueItemStruct *lastKeyValueItem;
-        VoidHashMap *hashMap;
-    };
-
-    // --------- Json Array Item --------- //
-    using JsonArrayItemStruct = struct {
-        NODE_HEADER;
-
-        NodeBase *valueNode;
-        SymbolStruct follwingComma;
-        bool hasComma;
-    };
-
-
-    // --------- Json Array --------- //
-    using JsonArrayStruct = struct {
-        NODE_HEADER;
-
-        int parsePhase;
-
-        utf8byte body[2]; // '{'
-        SymbolStruct endBodyNode;
-        JsonArrayItemStruct *firstItem;
-        JsonArrayItemStruct *lastItem;
-    };
-
-
     enum DocumentType {
         CodeDocument,
         JsonDocument
@@ -800,14 +739,6 @@ namespace smart {
         Number = 9,
         LineBreak = 10,
         Bool = 11,
-
-
-        JsonObject = 12,
-        JsonObjectKey = 13,
-        JsonKeyValueItem = 14,
-
-        JsonArrayItem = 7,
-        JsonArrayStruct = 8,
         
         Space = 15,
 
@@ -950,13 +881,6 @@ namespace smart {
                 *LineCommentVTable,
                 *BlockCommentVTable,
                 *BlockCommentFragmentVTable,
-
-
-                *JsonObjectVTable,
-                *JsonArrayVTable,
-                *JsonKeyValueItemVTable,
-                *JsonArrayItemVTable,
-                *JsonObjectKeyVTable,
 
                 *EndOfFileVTable;
     };
@@ -1118,12 +1042,6 @@ namespace smart {
 
     };
 
-    struct JsonUtils {
-        static void
-        put(JsonObjectStruct *json, utf8byte *key, int keyLength, NodeBase *node);
-    };
-
-
     struct NodeUtils {
         static int getTypeNameLength(TypeNodeStruct *typeNode);
         static char* getTypeName(TypeNodeStruct *typeNode);
@@ -1139,7 +1057,6 @@ namespace smart {
         );
 
         static void parseText(DocumentStruct *docStruct, const utf8byte *text, int length);
-        static JsonObjectStruct *generateHashTables(DocumentStruct *doc);
 
         static void regenerateCodeLines(DocumentStruct *docStruct);
         static void checkIndentSyntaxErrors(DocumentStruct *doc);
@@ -1213,11 +1130,6 @@ namespace smart {
 
         static FuncNodeStruct *newFuncNode(ParseContext *context, NodeBase *parentNode);
 
-        static JsonObjectStruct *newJsonObject(ParseContext *context, NodeBase *parentNode);
-        static JsonObjectKeyNodeStruct *newJsonObjectKeyNode(ParseContext *context, NodeBase *parentNode);
-        static JsonKeyValueItemStruct *newJsonKeyValueItemNode(ParseContext *context, NodeBase *parentNode);
-        static JsonArrayStruct *newJsonArray(ParseContext *context, NodeBase *parentNode);
-        static JsonArrayItemStruct *newJsonArrayItem(ParseContext *context, NodeBase *parentNode);
         static FuncParameterItemStruct *newFuncParameterItem(ParseContext *context, NodeBase *parentNode);
         static FuncArgumentItemStruct *newFuncArgumentItem(ParseContext *context, NodeBase *parentNode);
 
@@ -1261,13 +1173,6 @@ namespace smart {
         static int classTokenizer(TokenizerParams_parent_ch_start_context);
         static int bodyTokenizer(TokenizerParams_parent_ch_start_context);
         static int fnTokenizer(TokenizerParams_parent_ch_start_context);
-
-        static int jsonObjectTokenizer(TokenizerParams_parent_ch_start_context);
-        static int jsonArrayTokenizer(TokenizerParams_parent_ch_start_context);
-        static int jsonObjectNameTokenizer(TokenizerParams_parent_ch_start_context);
-        static int jsonValueTokenizer2(TokenizerParams_parent_ch_start_context);
-
-
 
         static int assignStatementTokenizer(TokenizerParams_parent_ch_start_context);
         static int assignStatementWithoutLetTokenizer(TokenizerParams_parent_ch_start_context);
