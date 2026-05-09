@@ -104,9 +104,6 @@ jobs:
 
           echo ${{ matrix.config.bin }}
           ${{ matrix.config.bin }}
-          
-          echo ${{ matrix.config.testbin }}
-          ${{ matrix.config.testbin }}
 
       - name: Copy artifact
         shell: bash
@@ -115,10 +112,6 @@ jobs:
           clang++ --version;
           mkdir -p deb/${{ matrix.config.name }};
           cp ${{ matrix.config.bin }} deb/${{ matrix.config.name }}
-          cp ${{ matrix.config.testbin }} deb/${{ matrix.config.name }}
-          cp ${{ matrix.config.lspbin }} deb/${{ matrix.config.name }}
-          cp ${{ matrix.config.longrunning_bin }} deb/${{ matrix.config.name }}
-       
 
       - uses: actions/upload-artifact@v4
         with:
