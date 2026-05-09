@@ -187,18 +187,22 @@ namespace smart {
 			return nullptr;
 		}
 
-		when(op) {
-			wfor(CodingOperations::AutoIndentForSpacingRule,
-				performIndentSelectionOperation(doc, startNode, endNode, true))
+		switch(op) {
+			case CodingOperations::AutoIndentForSpacingRule:
+				performIndentSelectionOperation(doc, startNode, endNode, true);
+				break;
 
-			wfor(CodingOperations::AutoIndentSelection,
-				performIndentSelectionOperation(doc, startNode, endNode, false))
+			case CodingOperations::AutoIndentSelection:
+				performIndentSelectionOperation(doc, startNode, endNode, false);
+				break;
 
-			wfor(CodingOperations::Deletion,
-				performIndentSelectionOperation(doc, startNode, endNode, false))
+			case CodingOperations::Deletion:
+				performIndentSelectionOperation(doc, startNode, endNode, false);
+				break;
 
-			wfor(CodingOperations::BreakLine,
-				performIndentSelectionOperation(doc, startNode, endNode, false))
+			case CodingOperations::BreakLine:
+				performIndentSelectionOperation(doc, startNode, endNode, false);
+				break;
 		}
 
 		return nullptr;
