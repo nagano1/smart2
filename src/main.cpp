@@ -1,4 +1,3 @@
-#include "thread_pool.hpp"
 #include <cstdio>
 
 bool stopped = false;
