@@ -249,38 +249,6 @@ namespace smart {
         return text;
     }
 
-
-    JsonObjectStruct *DocumentUtils::generateHashTables(DocumentStruct *doc) {
-        JsonObjectStruct *retJson = nullptr;
-        auto *line = doc->firstCodeLine;
-        while (line) {
-            auto *node = line->firstNode;
-            while (node) {
-                if (node->vtable == VTables::JsonObjectVTable) {
-                    auto *jsonObject = Cast::downcast<JsonObjectStruct *>(node);
-                    retJson = jsonObject;
-
-                    auto *keyItem = jsonObject->firstKeyValueItem;
-                    while (keyItem) {
-                        auto *keyNode = keyItem->keyNode;
-                        jsonObject->hashMap->put(keyNode->text + keyNode->namePos,
-                                                 keyNode->nameLength,
-                                                 keyItem->valueNode);
-
-                        keyItem = Cast::downcast<JsonKeyValueItemStruct *>(keyItem->nextNode);
-                    }
-                }
-
-                node = node->nextNodeInLine;
-            }
-
-            line = line->nextLine;
-        }
-
-        return retJson;
-    }
-
-
     static int getTokenTypeId(NodeBase *node, int i)
     {
         auto *targetNode = node;
@@ -587,22 +555,6 @@ namespace smart {
         return -1;
     }
 
-
-    static int tryTokenizeJson(TokenizerParams_parent_ch_start_context) {
-        int result;
-        if (-1 < (result = Tokenizers::jsonObjectTokenizer(parent, ch, start, context))) {
-            auto *doc = Cast::downcast<DocumentStruct *>(parent);
-            appendRootNode(doc, context->virtualCodeNode);
-            return result;
-        }
-        if (-1 < (result = Tokenizers::jsonArrayTokenizer(parent, ch, start, context))) {
-            auto *doc = Cast::downcast<DocumentStruct *>(parent);
-            appendRootNode(doc, context->virtualCodeNode);
-            return result;
-        }
-        return -1;
-    }
-
     static void callAllLineEvent(DocumentStruct *docStruct, CodeLine *line, ParseContext *context) {
         CodeLine *prev = nullptr;
         int lineCount = 0;
@@ -662,14 +614,9 @@ namespace smart {
         context->unusedClassNode = nullptr;
 
 
-
         if (docStruct->documentType == DocumentType::CodeDocument) {
             Scanner::scan_for_root(docStruct, tryTokenize, 0, context, /*root*/true, true);
         }
-        else {
-            Scanner::scan_for_root(docStruct, tryTokenizeJson, 0, context, true, true);
-        }
-
         
         if (!context->syntaxErrorInfo.hasError)
         {
