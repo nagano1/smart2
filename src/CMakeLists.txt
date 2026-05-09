@@ -1,16 +1,11 @@
 set(BINARY ${CMAKE_PROJECT_NAME})
 
-#file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.h *.cpp)
-
-#set(SOURCES ${SOURCES})
-
 file(GLOB cpp_files
     "./main.cpp"
     "./utils/utils.cpp"
     "./code_nodes/*.cpp"
     "./script_runtime/*.cpp"
 )
-
 
 add_executable(${BINARY}_run ${cpp_files})
 

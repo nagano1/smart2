@@ -24,21 +24,11 @@ using st_size = unsigned long;
 using st_uint = unsigned long;
 using st_int = long;
 
-//using st_textlen = long;
 using st_byte = unsigned char;
 
 #define UNUSED(x) (void)(x)
 
 #define st_size_of(T) ((int)sizeof(T))
-//#define st_size_of(T) ((st_size)sizeof(T))
-
-#ifdef __x86_64__
-// do x64 stuff
-#elif __arm__
-// do arm stuff
-#endif
-
-constexpr static int BUFFER_SIZE = 64; //25
 
 #ifdef assert
 #undef assert
