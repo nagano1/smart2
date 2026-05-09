@@ -19,17 +19,6 @@
 #include "common.hpp"
 #include "errors.hpp"
 
-//using utf8byte = char;
-/*
- *
- * aewffweoif
- *     <int>
- *     () {
- *
- * }
- *
- *
- */
 namespace smart {
 
     struct ParseContext;

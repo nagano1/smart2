@@ -22,7 +22,7 @@ jobs:
             },
             unix: {
               bin: "./src/main_run",
-              prescript: "export CXX=clang++",
+              prescript: "",
               cmakeConfig: "",
               cmakeBuildConfig: ""
             },
@@ -47,7 +47,7 @@ jobs:
 
           matrixJson=$(cat <<-END
           [
-            $WinConf, os:"windows-latest", name: "VS2025", cmakeConfig: "-T v143,host=x64"},
+            $WinConf, os:"windows-latest", name: "VS2025-latest", cmakeConfig: "-T v143,host=x64"},
             $WinConf, os:"windows-2022", name: "VS2022", cmakeConfig: "-T v143,host=x64"},
             $UnixConf, os: "ubuntu-latest", name: "ubuntu_latest"},
             $UnixConf, os: "macos-latest", name: "mac_latest"},
