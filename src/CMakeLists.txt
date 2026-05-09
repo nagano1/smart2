@@ -6,6 +6,7 @@ set(BINARY ${CMAKE_PROJECT_NAME})
 
 file(GLOB cpp_files
     "./main.cpp"
+    "./utils.cpp"
     "./codenodes/*.cpp"
     "./script_runtime/*.cpp"
 )
