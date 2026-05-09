@@ -19,11 +19,11 @@ jobs:
               bin: "src/Release/main_run.exe",
               cmakeBuildConfig: "--config Release ",
               cmakeConfig: "-T v143,host=x64",
-              prescript: "chcp 65001",
+              prescript: "",
             },
             unix: {
               bin: "./src/main_run",
-              prescript: "",
+              prescript: "export CXX=clang++",
               cmakeConfig: "",
               cmakeBuildConfig: ""
             },
