@@ -1336,7 +1336,7 @@ namespace smart {
                     // if (valueBase->typeIndex == BuiltInTypeIndex::int32) {}
                     auto *typeEntry = env->typeEntryList[assignStatement->typeIndex];
                     auto dataSize = typeEntry->dataSize;
-                    if (assignStatement->typeAtHeap2) {
+                    if (assignStatement->typeAtHeap) {
                         dataSize = 8;
                     }
 
