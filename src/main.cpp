@@ -22,11 +22,11 @@ int main()
 constexpr char source[] = R"(
 fn Main()
 {
+    int a = 8
     int b = 1
-    int a = 3
     int c = -9
     
-    return c - (b + a)
+    return a - (b + c)
 }
 )";
 
@@ -49,7 +49,7 @@ class FooClass
 
         float f = 4503
         ?let *f = null
-        $let g = true
+        let g = true
         
         "abcdefg"
         3142

@@ -279,7 +279,7 @@ namespace smart {
     using TypeNodeStruct = struct _TypeNodeStruct {
         NODE_HEADER;
 
-        bool hasMutMark; // $
+        bool hasConstMark; // $
         bool hasNullableMark; // ?
         bool isLet; // or has type
 
@@ -290,10 +290,10 @@ namespace smart {
     using AssignStatementNodeStruct = struct {
         NODE_HEADER;
 
-        // $int a = 5
+        // #int a = 5 , immutable
         // ?let *ptr = "jfwio"
 
-        TypeNodeStruct typeOrLet; // $let, int, ?string, etc..
+        TypeNodeStruct typeOrLet; // #let, int, ?string, etc..
         bool hasTypeDecl; // $let, int, ?string, etc..
         SymbolStruct pointerAsterisk; // *
 
@@ -332,9 +332,8 @@ namespace smart {
         int childCount;
     };
 
-
     /*
-    * in FuncNodeStruct
+    * for FuncNodeStruct
     */
     using BodyNodeStruct = struct {
         NODE_HEADER;
@@ -352,11 +351,9 @@ namespace smart {
 
 
 
-    /* ($int point) */
+    /* (?int point = null) */
     using FuncParameterItemStruct = struct {
         NODE_HEADER;
-        //TypeNodeStruct typeNode;
-        //NameNodeStruct nameNode;
         AssignStatementNodeStruct *assignStatementNodeStruct;
         SymbolStruct follwingComma;
         bool hasComma;
@@ -399,8 +396,6 @@ namespace smart {
     };
 
 
-
-
     using FuncArgumentItemStruct = struct {
         NODE_HEADER;
 
@@ -410,7 +405,7 @@ namespace smart {
     };
 
 
-    // value(param, param)
+    // func(param, param)
     using CallFuncNodeStruct = struct {
         NODE_HEADER;
 
@@ -426,7 +421,7 @@ namespace smart {
 
     enum DocumentType {
         CodeDocument,
-        JsonDocument
+        JsonDocument,// for LSP server
     };
 
     using DocumentStruct = struct _documentStruct {

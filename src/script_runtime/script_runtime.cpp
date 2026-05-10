@@ -937,7 +937,7 @@ namespace smart {
                     }
                 }
             } else { // no value
-                if (assign->typeOrLet.hasNullableMark || assign->typeOrLet.hasMutMark) {
+                if (assign->typeOrLet.hasNullableMark || assign->typeOrLet.hasConstMark) {
 
                 } else {
                     context->addErrorWithNode(ErrorCode::need_mutable_mark_for_no_value_assignment, &assign->typeOrLet);
@@ -969,7 +969,7 @@ namespace smart {
                     if (declAssign->hasTypeDecl) {
                         if (ParseUtil::equals(assign->nameNode.name, assign->nameNode.nameLength,
                                              declAssign->nameNode.name, declAssign->nameNode.nameLength)) {
-                            if (!declAssign->typeOrLet.hasMutMark) {
+                            if (!declAssign->typeOrLet.hasConstMark) {
                                 context->addErrorWithNode(ErrorCode::assign_to_immutable, assign);
                             }
 

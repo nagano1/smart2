@@ -59,7 +59,7 @@ namespace smart
         }
 
         typeNode->hasNullableMark = hasNullableMark;
-        typeNode->hasMutMark = hasMutMark;
+        typeNode->hasConstMark = hasMutMark;
         int result = Tokenizers::nameTokenizer_ignore(Cast::upcast(&typeNode->nameNode),
                                      context->chars[currentPos], start, context, currentPos);
 
@@ -79,7 +79,7 @@ namespace smart
 
     int NodeUtils::getTypeNameLength(TypeNodeStruct *typeNode)
     {
-        if (typeNode->hasNullableMark || typeNode->hasMutMark) {
+        if (typeNode->hasNullableMark || typeNode->hasConstMark) {
             return typeNode->nameNode.nameLength - 1;
         }
 
@@ -88,7 +88,7 @@ namespace smart
 
     char* NodeUtils::getTypeName(TypeNodeStruct *typeNode)
     {
-        if (typeNode->hasNullableMark || typeNode->hasMutMark) {
+        if (typeNode->hasNullableMark || typeNode->hasConstMark) {
             return typeNode->nameNode.name + 1;
         }
 
@@ -125,7 +125,7 @@ namespace smart
 
         node->typeNode = nullptr;
 
-        node->hasMutMark = false;
+        node->hasConstMark = false;
         node->hasNullableMark = false;
         node->isLet = false;
 

@@ -287,7 +287,7 @@ namespace smart {
             return (int) TokenTypeIds::keywordId;
         } else if (targetNode->vtable == VTables::AssignStatementVTable) {
             auto *assign = Cast::downcast<AssignStatementNodeStruct *>(targetNode);
-            if (assign->typeOrLet.hasMutMark || assign->typeOrLet.hasNullableMark) {
+            if (assign->typeOrLet.hasConstMark || assign->typeOrLet.hasNullableMark) {
                 if (i == 0) {
                     return (int) TokenTypeIds::numberId;
                 }
@@ -306,7 +306,7 @@ namespace smart {
         else if (targetNode->vtable == VTables::TypeVTable) {
             auto* typeNode = Cast::downcast<TypeNodeStruct*>(targetNode);
 
-            if (typeNode->hasMutMark || typeNode->hasNullableMark) {
+            if (typeNode->hasConstMark || typeNode->hasNullableMark) {
                 if (i == 0) {
                     return (int)TokenTypeIds::commentId;
                 }
@@ -336,7 +336,7 @@ namespace smart {
 
         if (targetNode->vtable == VTables::AssignStatementVTable) {
             auto *assign = Cast::downcast<AssignStatementNodeStruct *>(targetNode);
-            if (assign->typeOrLet.hasMutMark || assign->typeOrLet.hasNullableMark) {
+            if (assign->typeOrLet.hasConstMark || assign->typeOrLet.hasNullableMark) {
                 *utf16Len1 = *utf16Len0 - 1;
                 *len0 = 1;
                 *utf16Len0 = 1;
@@ -346,7 +346,7 @@ namespace smart {
         }
         if (targetNode->vtable == VTables::TypeVTable) {
             auto* typeNode = Cast::downcast<TypeNodeStruct*>(targetNode);
-            if (typeNode->hasMutMark || typeNode->hasNullableMark) {
+            if (typeNode->hasConstMark || typeNode->hasNullableMark) {
                 *utf16Len1 = *utf16Len0 - 1;
                 *len0 = 1;
                 *utf16Len0 = 1;

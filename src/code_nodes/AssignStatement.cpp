@@ -19,15 +19,13 @@
 
 namespace smart {
 
-    // --------------------- Defines AssignStatement VTable ---------------------- /
+    // --------------------- Implements AssignStatement VTable ---------------------- //
 
     static int selfTextLength(AssignStatementNodeStruct *) {
-        // virtual node
         return 0;
     }
 
     static const utf8byte *selfText(AssignStatementNodeStruct *self) {
-        // virtual node
         return ""; // self->useMut ? "mut" : "let";
     }
 
