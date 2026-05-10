@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "code_nodes.hpp"
+//#include "code_nodes.hpp"
 #include "parse_util.hpp"
 #include "script_runtime.hpp"
 
@@ -39,7 +39,7 @@ class FooClass
         let *str = "0jfoiwjoie"
         int ab = 123412
 
-        #float f = 4503
+        float f = 4503
         ?let *f = null
         $let g = true
         
