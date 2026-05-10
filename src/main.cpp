@@ -3,7 +3,7 @@
 #include "code_nodes.hpp"
 #include "parse_util.hpp"
 #include "script_runtime.hpp"
-
+#include "main.h"
 
 bool stopped = false;
 int wakeup_count = 0;
@@ -17,22 +17,17 @@ int main()
 
     assert(true);
 
-    constexpr char source[] = R"(
-fn Main()
-{
-    int b = 1
-    int a = 1
-    int c = -9
-    
-    return c - (b - a)
-}
-)";
-    printf("%s", source);
-    int ret = ScriptEnv::startScript(source);
-    printf("ret = %d", ret);
+    testAssignment();
+    testAssignment2();
+    testAssignment3();
 
+    return 0;
+}
+
+void testAssignment2()
 {
-                    auto *text = const_cast<char *>(u8R"(
+    {
+        auto *text = const_cast<char *>(u8R"(
 class FooClass
 {
     fn funcB()
@@ -70,8 +65,37 @@ class FooClass
 
     }
 }
+        )");
+        auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
+        DocumentUtils::parseText(document, text, strlen(text));
+        char *treeText = DocumentUtils::getTextFromTree(document);
 
+        free(treeText);
+        Alloc::deleteDocument(document);
+    }
+}
 
+void testAssignment()
+{
+    constexpr char source[] = R"(
+fn Main()
+{
+    int b = 1
+    int a = 1
+    int c = -9
+    
+    return c - (b - a)
+}
+)";
+    printf("%s", source);
+    int ret = ScriptEnv::startScript(source);
+    printf("ret = %d", ret);
+}
+
+void testAssignment3()
+{
+    {
+        auto *text = const_cast<char *>(u8R"(
 class OuterClass
 {
     class InnerClass/**/
@@ -103,13 +127,11 @@ class OuterClass
 
 
         )");
-                auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
-                DocumentUtils::parseText(document, text, strlen(text));
-                char *treeText = DocumentUtils::getTextFromTree(document);
+        auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
+        DocumentUtils::parseText(document, text, strlen(text));
+        char *treeText = DocumentUtils::getTextFromTree(document);
 
-                free(treeText);
-                Alloc::deleteDocument(document);
-        }
-
-    return 0;
+        free(treeText);
+        Alloc::deleteDocument(document);
+    }
 }
