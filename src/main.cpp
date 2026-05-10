@@ -15,8 +15,7 @@ int main()
     printf("cshort");
     fflush(stdout);
 
-    //exit(1);
-    //assert(false);
+    assert(true);
 
     constexpr char source[] = R"(
 fn Main()
@@ -51,6 +50,9 @@ class FooClass
         null
         false
         true
+        unknownIdentifier
+        true
+        "string sample"
 
         /*
           block comment test
@@ -65,9 +67,7 @@ class FooClass
         let f = 343214213
         int a = 3124
 
-        unknownIdentifier
-        true
-        "jofoajwieofawo"
+
     }
 }
 
