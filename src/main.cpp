@@ -92,7 +92,7 @@ fn Main()
 }
 
 
-constexpr char *testCode3 = const_cast<char *>(u8R"(
+char *testCode3 = u8R"(
 class OuterClass
 {
     class InnerClass/**/
@@ -121,7 +121,7 @@ class OuterClass
     //
     /* fwaei */
 }
-)");
+)";
 
 void testParser3()
 {
