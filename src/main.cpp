@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "code_nodes.hpp"
+//#include "code_nodes.hpp"
 #include "parse_util.hpp"
 #include "script_runtime.hpp"
 
@@ -9,9 +9,9 @@ int wakeup_count = 0;
 
 using namespace smart;
 
-void testAssignment();
-void testAssignment2();
-void testAssignment3();
+void testParser1();
+void testParser2();
+void testParser3();
 
 int main()
 {
@@ -20,14 +20,14 @@ int main()
 
     assert(true);
 
-    testAssignment();
-    testAssignment2();
-    testAssignment3();
+    testParser1();
+    testParser2();
+    testParser3();
 
     return 0;
 }
 
-void testAssignment2()
+void testParser2()
 {
     {
         auto *text = const_cast<char *>(u8R"(
@@ -78,7 +78,7 @@ class FooClass
     }
 }
 
-void testAssignment()
+void testParser1()
 {
     constexpr char source[] = R"(
 fn Main()
@@ -95,7 +95,7 @@ fn Main()
     printf("ret = %d", ret);
 }
 
-void testAssignment3()
+void testParser3()
 {
     {
         auto *text = const_cast<char *>(u8R"(
