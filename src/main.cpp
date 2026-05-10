@@ -17,8 +17,6 @@ int main()
     printf("cshort");
     fflush(stdout);
 
-    assert(true);
-
     testSimpleCalculation();
     testParsing();
 
@@ -114,7 +112,7 @@ class OuterClass
 }
 )");
 
-void parseText(char *code)
+void testParsing(char *code)
 {
     auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
     DocumentUtils::parseText(document, code, strlen(code));
@@ -128,6 +126,6 @@ void parseText(char *code)
 
 void testParsing()
 {
-    parseText(text);
-    parseText(testCode3);
+    testParsing(text);
+    testParsing(testCode3);
 }
