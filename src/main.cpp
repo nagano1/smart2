@@ -117,6 +117,7 @@ void testParsing(char *code)
     auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
     DocumentUtils::parseText(document, code, strlen(code));
     char *treeText = DocumentUtils::getTextFromTree(document);
+    treeText[0] = 'a';
 
     assert(strcmp(code, treeText) == 0);
     free(treeText);
