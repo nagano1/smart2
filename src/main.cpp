@@ -120,6 +120,7 @@ void parseText(char *code)
     DocumentUtils::parseText(document, code, strlen(code));
     char *treeText = DocumentUtils::getTextFromTree(document);
 
+    assert(strcmp(code, treeText) == 0);
     free(treeText);
     Alloc::deleteDocument(document);
 }
