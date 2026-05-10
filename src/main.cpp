@@ -3,12 +3,15 @@
 #include "code_nodes.hpp"
 #include "parse_util.hpp"
 #include "script_runtime.hpp"
-#include "main.h"
 
 bool stopped = false;
 int wakeup_count = 0;
 
 using namespace smart;
+
+void testAssignment();
+void testAssignment2();
+void testAssignment3();
 
 int main()
 {
