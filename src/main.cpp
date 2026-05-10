@@ -9,9 +9,8 @@ int wakeup_count = 0;
 
 using namespace smart;
 
-void testParser1();
-void testParser2();
-void testParser3();
+void testSimpleCalculation();
+void testParsing();
 
 int main()
 {
@@ -20,34 +19,32 @@ int main()
 
     assert(true);
 
-    testParser1();
-    testParser2();
-    testParser3();
+    testSimpleCalculation();
+    testParsing();
 
     return 0;
 }
 
-void testParser1()
-{
-    constexpr char source[] = R"(
+constexpr char source[] = R"(
 fn Main()
 {
     int b = 1
-    int a = 1
+    int a = 3
     int c = -9
     
-    return c - (b - a)
+    return c - (b + a)
 }
 )";
+
+void testSimpleCalculation()
+{
     printf("%s", source);
     int ret = ScriptEnv::startScript(source);
     printf("ret = %d", ret);
 }
 
 
-void testParser2()
-{
-        auto *text = const_cast<char *>(u8R"(
+constexpr auto *text = const_cast<char *>(u8R"(
 class FooClass
 {
     fn funcB()
@@ -84,16 +81,9 @@ class FooClass
     }
 }
     )");
-    auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
-    DocumentUtils::parseText(document, text, strlen(text));
-    char *treeText = DocumentUtils::getTextFromTree(document);
-
-    free(treeText);
-    Alloc::deleteDocument(document);
-}
 
 
-constexpr auto *testCode3 = u8R"(
+constexpr auto *testCode3 = const_cast<char *>(u8R"(
 class OuterClass
 {
     class InnerClass/**/
@@ -122,14 +112,21 @@ class OuterClass
     //
     /* fwaei */
 }
-)";
+)");
 
-void testParser3()
+void parseText(char *code)
 {
     auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
-    DocumentUtils::parseText(document, testCode3, strlen(testCode3));
+    DocumentUtils::parseText(document, code, strlen(code));
     char *treeText = DocumentUtils::getTextFromTree(document);
 
     free(treeText);
     Alloc::deleteDocument(document);
+}
+
+
+void testParsing()
+{
+    parseText(text);
+    parseText(testCode3);
 }
