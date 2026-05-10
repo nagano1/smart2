@@ -1,11 +1,7 @@
 #include <cstdio>
 
-//#include "code_nodes.hpp"
 #include "parse_util.hpp"
 #include "script_runtime.hpp"
-
-bool stopped = false;
-int wakeup_count = 0;
 
 using namespace smart;
 
@@ -38,7 +34,7 @@ void testSimpleCalculation()
 {
     printf("%s", source);
     int ret = ScriptEnv::startScript(source);
-    printf("ret = %d", ret);
+    printf("returned value: %d", ret);
 }
 
 
@@ -119,6 +115,7 @@ void testParsing(char *code)
     char *treeText = DocumentUtils::getTextFromTree(document);
 
     assert(strcmp(code, treeText) == 0);
+
     free(treeText);
     Alloc::deleteDocument(document);
 }
