@@ -1,6 +1,6 @@
 #include <cstdio>
 
-//#include "code_nodes.hpp"
+#include "code_nodes.hpp"
 #include "parse_util.hpp"
 #include "script_runtime.hpp"
 
@@ -18,7 +18,7 @@ int main()
     printf("cshort");
     fflush(stdout);
 
-    assert(false);
+    assert(true);
 
     testAssignment();
     testAssignment2();
