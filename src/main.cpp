@@ -92,7 +92,7 @@ fn Main()
 }
 
 
-constexpr char *testCode3 = u8R"(
+constexpr auto *testCode3 = u8R"(
 class OuterClass
 {
     class InnerClass/**/
