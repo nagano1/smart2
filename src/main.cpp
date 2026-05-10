@@ -34,68 +34,51 @@ fn Main()
 
 {
                     auto *text = const_cast<char *>(u8R"(
-class fjawioejap
+class FooClass
 {
     fn funcB()
     {
         let a = 893214
         let *str = "0jfoiwjoie"
         int ab = 123412
-        "fjoiiw" // u889u98u
 
-
-
-        $float f = 4503
+        #float f = 4503
         ?let *f = null
         $let g = true
         
         "abcdefg"
         3142
-        true
         null
         false
+        true
 
-        "jfiowjaoie"
-        123490
-        false
-        null
-        true
         /*
-        ofijaweifaow 
-        aiwjeofijaw jpawijfw4213
-        jioawjeifoaw
-        jfaiwejfiwoajoijw
-        jofijeiowajiwa
+          block comment test
+          コメントテスト
         */
-        // joiwfaejfo
-        // joijweoifjaw oiaoiwjfoijwaioji
+        // line comment test
+        // コメントテスト
+
+        "fjoiiw" // comment test
 
         let *abc = "joifwjoe01234"
         let f = 343214213
         int a = 3124
-        2134
-        4123
 
-        afwfiiaeawe
-        taijetjwap
-        faijefjwap
+        unknownIdentifier
         true
         "jofoajwieofawo"
     }
 }
 
 
-
-
-class A
+class OuterClass
 {
-    class AClass/**/
+    class InnerClass/**/
     {/**/
         // awef
-        fn ffanc()
+        fn func1()
         {
-            3142314
-            false
             // jfoiaweoifaw
             
             func(true, "jfoiw", 1203)
