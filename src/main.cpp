@@ -27,6 +27,24 @@ int main()
     return 0;
 }
 
+void testParser1()
+{
+    constexpr char source[] = R"(
+fn Main()
+{
+    int b = 1
+    int a = 1
+    int c = -9
+    
+    return c - (b - a)
+}
+)";
+    printf("%s", source);
+    int ret = ScriptEnv::startScript(source);
+    printf("ret = %d", ret);
+}
+
+
 void testParser2()
 {
         auto *text = const_cast<char *>(u8R"(
@@ -72,23 +90,6 @@ class FooClass
 
     free(treeText);
     Alloc::deleteDocument(document);
-}
-
-void testParser1()
-{
-    constexpr char source[] = R"(
-fn Main()
-{
-    int b = 1
-    int a = 1
-    int c = -9
-    
-    return c - (b - a)
-}
-)";
-    printf("%s", source);
-    int ret = ScriptEnv::startScript(source);
-    printf("ret = %d", ret);
 }
 
 
