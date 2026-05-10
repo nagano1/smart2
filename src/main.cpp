@@ -15,7 +15,7 @@ int main()
     printf("cshort");
     fflush(stdout);
 
-    assert(true);
+    assert(false);
 
     testAssignment();
     testAssignment2();
