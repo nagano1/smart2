@@ -160,7 +160,7 @@ namespace smart {
         PrimitiveCalcRegisterEnum calcRegEnum; \
         st_byte *calcReg;                 \
         int typeIndex;                \
-        bool typeAtHeap2;                \
+        bool typeAtHeap;                \
         int found; \
         int prev_chars
 
@@ -177,7 +177,7 @@ namespace smart {
         (node)->codeLine = nullptr; \
         (node)->found = -1; \
         (node)->typeIndex = -1; \
-        (node)->typeAtHeap2 = false; \
+        (node)->typeAtHeap = false; \
         (node)->nextNode = nullptr; \
         (node)->nextNodeInLine = nullptr; \
         (node)->prevLineBreakNode = nullptr; \
@@ -275,7 +275,6 @@ namespace smart {
 
     // $let
     // ?string a
-    // alt
     using TypeNodeStruct = struct _TypeNodeStruct {
         NODE_HEADER;
 

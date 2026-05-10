@@ -260,8 +260,8 @@ namespace smart {
                            BinaryOperationNodeStruct *binaryNode, bool typeCheck)
     {
         // heap is not supported
-        if (binaryNode->rightExprNode->typeAtHeap2 ||
-            binaryNode->leftExprNode->typeAtHeap2) {
+        if (binaryNode->rightExprNode->typeAtHeap ||
+            binaryNode->leftExprNode->typeAtHeap) {
             return -1;
         }
 
@@ -294,7 +294,7 @@ namespace smart {
     int int64_binary_operate(ScriptEngineContext *context, BinaryOperationNodeStruct *binaryNode, bool typeCheck)
     {
         // heap is not supported
-        if (binaryNode->rightExprNode->typeAtHeap2 || binaryNode->leftExprNode->typeAtHeap2) {
+        if (binaryNode->rightExprNode->typeAtHeap || binaryNode->leftExprNode->typeAtHeap) {
             return -1;
         }
 
@@ -348,7 +348,7 @@ namespace smart {
 
     int heapString_binary_operate(ScriptEngineContext *context, BinaryOperationNodeStruct *binaryNode, bool typeCheck)
     {
-        if (!binaryNode->rightExprNode->typeAtHeap2 || !binaryNode->leftExprNode->typeAtHeap2) {
+        if (!binaryNode->rightExprNode->typeAtHeap || !binaryNode->leftExprNode->typeAtHeap) {
             return -1;
         }
 
@@ -514,7 +514,7 @@ namespace smart {
 
     static int selectTypeFromNumberNode(ScriptEnv *env, NumberNodeStruct *numberNode)
     {
-        numberNode->typeAtHeap2 = false;
+        numberNode->typeAtHeap = false;
         if (numberNode->unit == 64) {
             numberNode->typeIndex = BuiltInTypeIndex::int64;
         }
@@ -527,13 +527,13 @@ namespace smart {
 
     static int selectTypeFromStringNode(ScriptEnv *env, StringLiteralNodeStruct *nodeBase)
     {
-        nodeBase->typeAtHeap2 = true;
+        nodeBase->typeAtHeap = true;
         return nodeBase->typeIndex = BuiltInTypeIndex::heapString;
     }
 
     static int selectTypeFromNullNode(ScriptEnv *env, NullNodeStruct *nodeBase)
     {
-        nodeBase->typeAtHeap2 = true;
+        nodeBase->typeAtHeap = true;
         return nodeBase->typeIndex = BuiltInTypeIndex::null;
     }
 
@@ -759,7 +759,7 @@ namespace smart {
 
         auto *typeEntry = context->scriptEnv->typeEntryList[typeIndex];
         int dataSize = typeEntry->dataSize;
-        if (node->typeAtHeap2) {
+        if (node->typeAtHeap) {
             dataSize = 8;
         }
 
@@ -866,25 +866,25 @@ namespace smart {
                 context->addErrorWithNode(ErrorCode::no_variable_defined, &assign->typeOrLet);
             }
         }
-        assign->typeAtHeap2 = assign->pointerAsterisk.found > -1;
+        assign->typeAtHeap = assign->pointerAsterisk.found > -1;
 
         if (assign->hasTypeDecl) {
             if (assign->valueNode) { // int b = 8, let b = 8
                 int childTypeIndex = determineChildTypeIndex(context->scriptEnv, assign->valueNode);
-                assign->typeAtHeap2 = assign->valueNode->typeAtHeap2;
+                assign->typeAtHeap = assign->valueNode->typeAtHeap;
 
                 if (assign->typeOrLet.isLet) { // let b = 8
                     assign->typeIndex = childTypeIndex;
 
                     if (assign->pointerAsterisk.found > -1) {
-                        if (assign->valueNode->typeAtHeap2) {
+                        if (assign->valueNode->typeAtHeap) {
                         }
                         else {
                             // error: int *b = 8
                         }
                     }
                     else {
-                        if (assign->valueNode->typeAtHeap2) {
+                        if (assign->valueNode->typeAtHeap) {
                             // error: String str = "jfoiwjio"
                         }
                         else {
@@ -956,7 +956,7 @@ namespace smart {
 
             int childTypeIndex = determineChildTypeIndex(context->scriptEnv, assign->valueNode);
             assign->typeIndex = childTypeIndex;
-            assign->typeAtHeap2 = assign->valueNode->typeAtHeap2;
+            assign->typeAtHeap = assign->valueNode->typeAtHeap;
 
             auto *child = bodyNode->firstChildNode;
             bool hit = false;
@@ -986,7 +986,7 @@ namespace smart {
                                 }
                             }
 
-                            if (assign->valueNode->typeAtHeap2 != declAssign->typeAtHeap2) {
+                            if (assign->valueNode->typeAtHeap != declAssign->typeAtHeap) {
                                 // error
                                 context->addErrorWithNode(ErrorCode::type_is_not_assigneable, assign);
                             }
@@ -1019,7 +1019,7 @@ namespace smart {
                 int binaryType = leftTypeEntry->binary_operate(context, binary, true);
                 if (binaryType > 0) {
                     binary->typeIndex = leftTypeIndex;
-                    binary->typeAtHeap2 = binary->leftExprNode->typeAtHeap2;
+                    binary->typeAtHeap = binary->leftExprNode->typeAtHeap;
                 }
                 else {
                     // error:
@@ -1041,7 +1041,7 @@ namespace smart {
             auto *parentheses = Cast::downcast<ParenthesesNodeStruct *>(node);
             if (parentheses->valueNode) {
                 parentheses->typeIndex = determineChildTypeIndex(context->scriptEnv, parentheses->valueNode);
-                parentheses->typeAtHeap2 = parentheses->valueNode->typeAtHeap2;
+                parentheses->typeAtHeap = parentheses->valueNode->typeAtHeap;
             }
         }
 
@@ -1049,7 +1049,7 @@ namespace smart {
             auto* returnState = Cast::downcast<ReturnStatementNodeStruct*>(node);
             if (returnState->valueNode) {
                 returnState->typeIndex = determineChildTypeIndex(context->scriptEnv, returnState->valueNode);
-                returnState->typeAtHeap2 = returnState->valueNode->typeAtHeap2;
+                returnState->typeAtHeap = returnState->valueNode->typeAtHeap;
             }
         }
 
@@ -1076,7 +1076,7 @@ namespace smart {
                                              declAssign->nameNode.name, declAssign->nameNode.nameLength)) {
                             vari->stackOffset = declAssign->stackOffset;
                             vari->typeIndex = declAssign->typeIndex;
-                            vari->typeAtHeap2 = declAssign->typeAtHeap2;
+                            vari->typeAtHeap = declAssign->typeAtHeap;
                         }
                     }
                 }
@@ -1108,7 +1108,7 @@ namespace smart {
             if (child->vtable == VTables::AssignStatementVTable) {
                 auto* assign = Cast::downcast<AssignStatementNodeStruct*>(child);
                 if (assign->hasTypeDecl && assign->typeIndex > -1) {
-                    if (assign->typeAtHeap2) {
+                    if (assign->typeAtHeap) {
                         currentStackOffset -= 8;
                     }
                     else {
@@ -1190,7 +1190,7 @@ namespace smart {
 
         if (expressionNode->vtable == VTables::VariableVTable) {
             auto* variableNode = Cast::downcast<VariableNodeStruct *>(expressionNode);
-            if (variableNode->typeAtHeap2) {
+            if (variableNode->typeAtHeap) {
                 this->stackMemory.moveFrom(variableNode->stackOffset, 8, variableNode->calcReg);
             } else {
                 int dataSize = this->scriptEnv->typeEntryList[variableNode->typeIndex]->dataSize;
@@ -1352,7 +1352,7 @@ namespace smart {
                 env->context->evaluateExprNode(returnNode->valueNode);
                 auto* typeEntry = env->typeEntryList[returnNode->valueNode->typeIndex];
 
-                if (typeEntry->dataSize == 8 || returnNode->valueNode->typeAtHeap2) {
+                if (typeEntry->dataSize == 8 || returnNode->valueNode->typeAtHeap) {
                     int64_t v = *(int64_t*)returnNode->valueNode->calcReg;
                     return (int32_t)v;
                 }
