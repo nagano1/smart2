@@ -29,7 +29,6 @@ int main()
 
 void testParser2()
 {
-    {
         auto *text = const_cast<char *>(u8R"(
 class FooClass
 {
@@ -64,18 +63,15 @@ class FooClass
         let *abc = "joifwjoe01234"
         let f = 343214213
         int a = 3124
-
-
     }
 }
-        )");
-        auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
-        DocumentUtils::parseText(document, text, strlen(text));
-        char *treeText = DocumentUtils::getTextFromTree(document);
+    )");
+    auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
+    DocumentUtils::parseText(document, text, strlen(text));
+    char *treeText = DocumentUtils::getTextFromTree(document);
 
-        free(treeText);
-        Alloc::deleteDocument(document);
-    }
+    free(treeText);
+    Alloc::deleteDocument(document);
 }
 
 void testParser1()
@@ -95,10 +91,8 @@ fn Main()
     printf("ret = %d", ret);
 }
 
-void testParser3()
-{
-    {
-        auto *text = const_cast<char *>(u8R"(
+
+constexpr char *testCode3 = const_cast<char *>(u8R"(
 class OuterClass
 {
     class InnerClass/**/
@@ -127,14 +121,14 @@ class OuterClass
     //
     /* fwaei */
 }
+)");
 
+void testParser3()
+{
+    auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
+    DocumentUtils::parseText(document, testCode3, strlen(testCode3));
+    char *treeText = DocumentUtils::getTextFromTree(document);
 
-        )");
-        auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
-        DocumentUtils::parseText(document, text, strlen(text));
-        char *treeText = DocumentUtils::getTextFromTree(document);
-
-        free(treeText);
-        Alloc::deleteDocument(document);
-    }
+    free(treeText);
+    Alloc::deleteDocument(document);
 }
