@@ -779,7 +779,7 @@ namespace smart {
                 int currentPos = idx + size_of_fn;
                 int resultPos = -1;
 
-                // "fn " came here
+                // now after "fn "
                 auto *fnNode = Alloc::newFuncNode(context, parent);
                 {
                     resultPos = Scanner::scanOnce(&fnNode->nameNode,

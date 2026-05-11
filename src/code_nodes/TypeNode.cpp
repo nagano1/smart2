@@ -123,8 +123,6 @@ namespace smart
     void Init::initTypeNode(TypeNodeStruct *node, ParseContext *context, void *parentNode) {
         INIT_NODE(node, context, parentNode, VTables::TypeVTable);
 
-        node->typeNode = nullptr;
-
         node->hasConstMark = false;
         node->hasNullableMark = false;
         node->isLet = false;
