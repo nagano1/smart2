@@ -1,6 +1,5 @@
 name: 🌕 CMake Build Matrix
 
-
 on:
   push:
   schedule:
@@ -48,10 +47,10 @@ jobs:
 
           matrixJson=$(cat <<-END
           [
-            $WinConf, os:"windows-latest", name: "VS2025-latest" },
-            $WinConf, os:"windows-2022", name: "VS2022" },
-            $UnixConf, os: "ubuntu-latest", name: "ubuntu_latest"},
-            $UnixConf, os: "macos-latest", name: "mac_latest"},
+            $WinConf, os:"windows-latest", name: "Windows-latest 2025" },
+            $WinConf, os:"windows-2022", name: "Windows-2022" },
+            $UnixConf, os: "ubuntu-latest", name: "ubuntu-latest"},
+            $UnixConf, os: "macos-latest", name: "mac-latest"},
           ]
           END)
 
@@ -79,7 +78,7 @@ jobs:
 
           ${{ matrix.config.prescript }}
 
-          cmake -D NO_SPEED_TEST=1 ${{ matrix.config.cmakeConfig }} .. 
+          cmake ${{ matrix.config.cmakeConfig }} .. 
           cmake --build . ${{ matrix.config.cmakeBuildConfig }}
       
       - name: run test
