@@ -15,13 +15,13 @@ jobs:
         config:
           - {
             win: {
-              bin: "src/Release/main_run.exe",
+              bin: "src/Release/cshort_run.exe",
               cmakeBuildConfig: "--config Release ",
               cmakeConfig: "-T v143,host=x64",
               prescript: "chcp 65001",
             },
             unix: {
-              bin: "./src/main_run",
+              bin: "./src/cshort_run",
               prescript: "export CXX=clang++",
               cmakeConfig: "",
               cmakeBuildConfig: ""
@@ -98,5 +98,5 @@ jobs:
 
       - uses: actions/upload-artifact@v6
         with:
-          name: built_${{ matrix.config.name }}_${{ steps.version.outputs.builddate }}
+          name: cshort_${{ matrix.config.name }}_${{ steps.version.outputs.builddate }}
           path: build/deb
