@@ -47,7 +47,7 @@ jobs:
 
           matrixJson=$(cat <<-END
           [
-            $WinConf, os:"windows-latest", name: "Windows-latest 2025" },
+            $WinConf, os:"windows-latest", name: "Windows-latest" },
             $WinConf, os:"windows-2022", name: "Windows-2022" },
             $UnixConf, os: "ubuntu-latest", name: "ubuntu-latest"},
             $UnixConf, os: "macos-latest", name: "mac-latest"},
