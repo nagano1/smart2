@@ -220,8 +220,6 @@ namespace smart {
 
     using EndOfFileNodeStruct = struct {
         NODE_HEADER;
-
-        LineCommentNodeStruct *prevLineCommentNode;
     };
 
 
