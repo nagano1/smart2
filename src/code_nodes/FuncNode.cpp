@@ -740,9 +740,6 @@ namespace smart {
     static int inner_fnParamsAndBodyTokenizer(TokenizerParams_parent_ch_start_context) {
         auto *fnNode = Cast::downcast<FuncNodeStruct *>(parent);
 
-        //console_log(std::string(""+ch).c_str());
-        //console_log((std::string{"==,"} + std::string{ch} + std::to_string(ch)).c_str());
-
         if (fnNode->parameterStartNode.found == -1) {
             if (ch == '(') {
                 fnNode->parameterStartNode.found = start;
@@ -791,8 +788,7 @@ namespace smart {
                                               context);
 
                     if (resultPos == -1) {
-                        // the class should have a class name
-                        //console_log(std::string(classNode->nameNode.name).c_str());
+                        // the fn should have a function name
                         context->setError(ErrorCode::invalid_fn_name, start);
 
                         context->setCodeNode(fnNode);

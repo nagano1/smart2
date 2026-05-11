@@ -229,8 +229,6 @@ namespace smart {
         NODE_HEADER;
 
         int stackOffset;
-//        int typeIndex;
-
         char *name;
         int_fast32_t nameLength;
     };
@@ -239,7 +237,7 @@ namespace smart {
 
     using StringLiteralNodeStruct = struct {
         NODE_HEADER;
-        char *text; // unparsed, includes ""
+        char *text; // unparsed text including ""
         int_fast32_t textLength;
 
         char *str;
@@ -293,14 +291,13 @@ namespace smart {
         // ?let *ptr = "jfwio"
 
         TypeNodeStruct typeOrLet; // #let, int, ?string, etc..
-        bool hasTypeDecl; // $let, int, ?string, etc..
+        bool hasTypeDecl; // #let, int, ?string, etc..
         SymbolStruct pointerAsterisk; // *
 
         int stackOffset;
         NameNodeStruct nameNode; // varName
         SymbolStruct equalSymbol; // =
         NodeBase *valueNode; // 32
-        //int typeIndex;
     };
 
     using KeywordAndValueStruct = struct {

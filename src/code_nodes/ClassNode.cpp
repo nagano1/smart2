@@ -140,9 +140,6 @@ namespace smart {
     static int inner_classBodyTokenizer(TokenizerParams_parent_ch_start_context) {
         auto *classNode = Cast::downcast<ClassNodeStruct *>(parent);
 
-        //console_log(std::string(""+ch).c_str());
-        //console_log((std::string{"==,"} + std::string{ch} + std::to_string(ch)).c_str());
-
         if (!classNode->startFound) {
             if (ch == '{') {
                 classNode->startFound = true;
@@ -204,7 +201,6 @@ namespace smart {
 
                     if (resultPos == -1) {
                         // the class should have a class name
-                        //console_log(std::string(classNode->nameNode.name).c_str());
                         context->setError(ErrorCode::invalid_class_name, start);
                         return -1;
                     }

@@ -122,8 +122,6 @@ namespace smart {
     static int inner_assignStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
 
-        // console_log((std::string{"==,"} + std::string{ch} + std::to_string(ch)).c_str());
-
         if (assignment->nameNode.found == -1) {
              if (assignment->hasTypeDecl && context->afterLineBreak) {
                  return -1;
@@ -156,8 +154,7 @@ namespace smart {
                 assignment->equalSymbol.found = start;
                 context->setCodeNode(&assignment->equalSymbol);
                 return start+1;
-            }
-            else {
+            } else {
                 if (assignment->hasTypeDecl) {
                     context->setCodeNode(nullptr);
                     context->scanEnd = true;
