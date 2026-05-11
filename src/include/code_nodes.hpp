@@ -278,12 +278,12 @@ namespace smart {
     using TypeNodeStruct = struct _TypeNodeStruct {
         NODE_HEADER;
 
-        bool hasConstMark; // $
+        bool hasConstMark; // # immutable
         bool hasNullableMark; // ?
         bool isLet; // or has type
 
         NameNodeStruct nameNode;
-        _TypeNodeStruct *typeNode; // generics
+        //_TypeNodeStruct *typeNode; // generics
     };
 
     using AssignStatementNodeStruct = struct {

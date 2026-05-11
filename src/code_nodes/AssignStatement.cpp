@@ -21,12 +21,14 @@ namespace smart {
 
     // --------------------- Implements AssignStatement VTable ---------------------- //
 
-    static int selfTextLength(AssignStatementNodeStruct *) {
+    static int selfTextLength(AssignStatementNodeStruct *)
+    {
         return 0;
     }
 
-    static const utf8byte *selfText(AssignStatementNodeStruct *self) {
-        return ""; // self->useMut ? "mut" : "let";
+    static const utf8byte *selfText(AssignStatementNodeStruct *self)
+    {
+        return "";
     }
 
 
@@ -56,7 +58,8 @@ namespace smart {
 
     static constexpr const char assignTypeText[] = "<AssignStatement>";
 
-    static int applyFuncToDescendants(AssignStatementNodeStruct *node, ApplyFunc_params3)
+    static
+    int applyFuncToDescendants(AssignStatementNodeStruct *node, ApplyFunc_params3)
     {
         if (parentIsFirst) {
             if (targetVTable == nullptr || node->vtable == targetVTable) {
