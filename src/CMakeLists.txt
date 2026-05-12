@@ -1,4 +1,5 @@
-set(BINARY ${CMAKE_PROJECT_NAME})
+set(BINARY "test")
+#set(BINARY ${CMAKE_PROJECT_NAME})
 
 file(GLOB cpp_files
     "./main.cpp"
