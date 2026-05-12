@@ -235,7 +235,7 @@ namespace smart {
         char *str;
         int strLength;
 
-        int literalType; // 0: "text", 1: `wjfeiofw`, 2: r"testfaojiwe"
+        int literalType; // 0: "text", 1: `text`, 2: r"text"
     };
 
     using BoolNodeStruct = struct {

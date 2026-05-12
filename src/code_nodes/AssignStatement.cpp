@@ -80,18 +80,12 @@ namespace smart {
         return 0;
     }
 
-    /*
-     * class A {
-     *
-     *
-     * }
-     */
     static node_vtable _assignVTable = CREATE_VTABLE(AssignStatementNodeStruct,
-                                                          selfTextLength,
-                                                          selfText,
-                                                          appendToLine, applyFuncToDescendants,
-                                                          assignTypeText
-                                                          , NodeTypeId::AssignStatement);
+                                                     selfTextLength,
+                                                     selfText,
+                                                     appendToLine, applyFuncToDescendants,
+                                                     assignTypeText,
+                                                     NodeTypeId::AssignStatement);
 
     const struct node_vtable *VTables::AssignStatementVTable = &_assignVTable;
 
@@ -109,7 +103,6 @@ namespace smart {
         assignStatement->hasTypeDecl = false;
         assignStatement->valueNode = nullptr;
         assignStatement->stackOffset = 0;
-
 
         Init::initSymbolNode(&assignStatement->pointerAsterisk, context, assignStatement, '*');
 
@@ -146,7 +139,6 @@ namespace smart {
             else {
                 //context->scanEnd = true;
                 //context->setError(ErrorCode::syntax_error, start);
-
             }
         }
         else if (assignment->equalSymbol.found == -1) {

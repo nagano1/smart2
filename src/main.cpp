@@ -6,6 +6,7 @@
 using namespace smart;
 
 void testSimpleCalculation();
+void testNodeTypeEquality();
 void testParsing();
 
 int main()
@@ -15,6 +16,7 @@ int main()
 
     testSimpleCalculation();
     testParsing();
+    testNodeTypeEquality();
 
     return 0;
 }
@@ -125,4 +127,44 @@ void testParsing()
 {
     testParsing(text);
     testParsing(testCode3);
+}
+
+void testNodeTypeEquality() {
+    std::string text = u8R"(
+
+class A
+{
+    class B
+    {
+        class TestCl😂日本語10234ass
+        {
+
+            fn aFunc ()
+            {
+                
+            }
+
+        }
+
+        class C { }
+    }
+}
+)";
+
+    const char *chars = text.c_str();
+    auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
+
+    DocumentUtils::parseText(document, chars, text.size());
+
+    char *treeText = DocumentUtils::getTextFromTree(document);
+    assert(std::string(treeText) ==  std::string(chars));
+    assert(strlen(treeText) == strlen(chars));
+
+    assert(document->context->syntaxErrorInfo.hasError == false);
+
+
+    assert(document->firstCodeLine->firstNode->vtable == VTables::LineBreakVTable);
+    assert(document->firstCodeLine->nextLine->firstNode->vtable == VTables::LineBreakVTable);
+
+    Alloc::deleteDocument(document);
 }
