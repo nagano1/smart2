@@ -1,14 +1,14 @@
 set(BINARY "test")
 #set(BINARY ${CMAKE_PROJECT_NAME})
 
-file(GLOB cpp_files
-    "./test.cpp"
+file(GLOB cpp_lib_files
     "./utils/utils.cpp"
     "./code_nodes/*.cpp"
     "./script_runtime/*.cpp"
 )
 
-add_executable(${BINARY}_run ${cpp_files})
+
+add_executable(${BINARY}_run ${cpp_lib_files} "./test.cpp")
 
 install(TARGETS ${BINARY}_run
         RUNTIME	DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
@@ -17,7 +17,7 @@ install(TARGETS ${BINARY}_run
 )
 
 
-add_library(${BINARY}_lib STATIC ${cpp_files})
+# add_library(${BINARY}_lib STATIC ${cpp_files})
 
 find_package(Threads REQUIRED)
 target_link_libraries(${BINARY}_run Threads::Threads)
