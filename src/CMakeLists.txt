@@ -2,7 +2,7 @@ set(BINARY "test")
 #set(BINARY ${CMAKE_PROJECT_NAME})
 
 file(GLOB cpp_files
-    "./main.cpp"
+    "./test.cpp"
     "./utils/utils.cpp"
     "./code_nodes/*.cpp"
     "./script_runtime/*.cpp"
