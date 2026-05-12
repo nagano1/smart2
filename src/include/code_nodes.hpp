@@ -229,7 +229,6 @@ namespace smart {
         NODE_HEADER;
 
         int stackOffset;
-//        int typeIndex;
 
         char *name;
         int_fast32_t nameLength;
@@ -286,31 +285,31 @@ namespace smart {
         //_TypeNodeStruct *typeNode; // generics
     };
 
+
+    // int a = 5
+    // immutable: #int a = 5
+    // nullable: ?let *ptr = "jfwio"
     using AssignStatementNodeStruct = struct {
         NODE_HEADER;
 
-        // #int a = 5 , immutable
-        // ?let *ptr = "jfwio"
-
         TypeNodeStruct typeOrLet; // #let, int, ?string, etc..
-        bool hasTypeDecl; // $let, int, ?string, etc..
+        bool hasTypeDecl; // only assignment: a = 3
         SymbolStruct pointerAsterisk; // *
 
         int stackOffset;
-        NameNodeStruct nameNode; // varName
+        NameNodeStruct nameNode; // variable name
         SymbolStruct equalSymbol; // =
         NodeBase *valueNode; // 32
-        //int typeIndex;
     };
 
-    using KeywordAndValueStruct = struct {
+    using KeywordAndExpressionStruct = struct {
         NODE_HEADER;
 
         SimpleTextNodeStruct returnText;
         NodeBase *valueNode;
     };
 
-    using ReturnStatementNodeStruct = KeywordAndValueStruct; // return 32
+    using ReturnStatementNodeStruct = KeywordAndExpressionStruct; // return 32
 
     using ClassNodeStruct = struct {
         NODE_HEADER;
