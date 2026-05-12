@@ -141,12 +141,6 @@ namespace smart {
         return nullptr;
     }
 
-    /*
-    static void setActualCaclRegister() {
-
-    }
-    */
-
     #define NODE_HEADER \
         const struct node_vtable *vtable; /* virtual table */ \
         _NodeBase *parentNode; \
@@ -207,7 +201,7 @@ namespace smart {
     using LineBreakNodeStruct = struct _LineBreakNodeStruct {
         NODE_HEADER;
 
-        utf8byte text[3]; // "\r\n" or "\n" or "\r" plus "\0"
+        utf8byte text[3]; // "\r\n", "\n", "\r" or "\0"
         _LineBreakNodeStruct *nextLineBreakNode;
     };
 
@@ -220,8 +214,6 @@ namespace smart {
 
     using EndOfFileNodeStruct = struct {
         NODE_HEADER;
-
-        LineCommentNodeStruct *prevLineCommentNode;
     };
 
 
@@ -229,7 +221,6 @@ namespace smart {
         NODE_HEADER;
 
         int stackOffset;
-
         char *name;
         int_fast32_t nameLength;
     };
@@ -238,7 +229,7 @@ namespace smart {
 
     using StringLiteralNodeStruct = struct {
         NODE_HEADER;
-        char *text; // unparsed, includes ""
+        char *text; // unparsed text including ""
         int_fast32_t textLength;
 
         char *str;
@@ -272,17 +263,15 @@ namespace smart {
     };
 
 
-    // $let
-    // ?string a
+    // ?string str
     using TypeNodeStruct = struct _TypeNodeStruct {
         NODE_HEADER;
 
-        bool hasConstMark; // # immutable
+        bool hasConstMark; // # const
         bool hasNullableMark; // ?
         bool isLet; // or has type
 
         NameNodeStruct nameNode;
-        //_TypeNodeStruct *typeNode; // generics
     };
 
 
