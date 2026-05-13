@@ -513,9 +513,6 @@ namespace smart {
         AssignStatementNodeStruct *unusedAssignment;
         ClassNodeStruct *unusedClassNode;
 
-        void (*actionCreator)(void *node1, void *node2, int actionRequest);
-
-
         LineBreakNodeStruct *remainedLineBreakNode;
         void *remainedCommentNode;
         int remaindPrevChars{0};
@@ -921,8 +918,6 @@ namespace smart {
             this->nextLine = nullptr;
             ///this->prev = nullptr;
             this->depth = 0;
-
-            // context->actionCreator(Cast::upcast(doc), 1);
         }
 
         CodeLine *insertNode(NodeBase *node, NodeBase *prev) {
@@ -1104,10 +1099,7 @@ namespace smart {
         static FuncParameterItemStruct *newFuncParameterItem(ParseContext *context, NodeBase *parentNode);
         static FuncArgumentItemStruct *newFuncArgumentItem(ParseContext *context, NodeBase *parentNode);
 
-        static DocumentStruct *newDocument(
-                DocumentType docType,
-                void(*actionCreator)(void *node1, void *node2, int actionRequest)
-        );
+        static DocumentStruct *newDocument(DocumentType docType);
 
         static void deleteDocument(DocumentStruct *doc);
     };

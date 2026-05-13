@@ -53,23 +53,14 @@ namespace smart {
 
     const node_vtable *VTables::DocumentVTable = &DocumentVTable_;
 
-    static void staticActionCreator(void *node1, void *node2, int actionRequest) {
-        UNUSED(node1);
-        UNUSED(node2);
-        UNUSED(actionRequest);
-    }
+
 
     // --------------------- Implements Document functions ----------------------
-    DocumentStruct *Alloc::newDocument(
-            DocumentType docType,
-            void(*actionCreator)(void *node1, void *node2, int actionRequest)
-    ) {
-        UNUSED(actionCreator);
+    DocumentStruct *Alloc::newDocument(DocumentType docType) {
 
         auto *context = simpleMalloc2<ParseContext>();
         auto *doc = simpleMalloc2<DocumentStruct>();
 
-        context->actionCreator = actionCreator != nullptr ? actionCreator : &staticActionCreator;
 
         INIT_NODE(doc, context, nullptr, VTables::DocumentVTable);
         INIT_NODE(&doc->endOfFile, context, Cast::upcast(doc), VTables::EndOfFileVTable);
@@ -77,9 +68,6 @@ namespace smart {
         doc->documentType = docType;
         doc->firstRootNode = nullptr;
         doc->lastRootNode = nullptr;
-
-        context->actionCreator(Cast::upcast(doc), nullptr,
-                               EventType::CreateDocument); // create document
 
         doc->firstCodeLine = nullptr;
         doc->nodeCount = 0;
@@ -559,15 +547,12 @@ namespace smart {
         CodeLine *prev = nullptr;
         int lineCount = 0;
         while (line) {
-            context->actionCreator(prev, line, EventType::CreateLine);
             lineCount++;
             prev = line;
             line = line->nextLine;
         }
 
         docStruct->lineCount = lineCount;
-        // change first line of document
-        context->actionCreator(docStruct, nullptr, EventType::FirstLineChanged);
     }
 
     void DocumentUtils::regenerateCodeLines(DocumentStruct *docStruct)

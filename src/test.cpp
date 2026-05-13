@@ -35,8 +35,9 @@ fn Main()
 void testSimpleCalculation()
 {
     printf("%s", source);
-    int ret = ScriptEnv::startScript(source);
-    printf("returned value: %d", ret);
+    int result = ScriptEnv::startScript(source);
+    printf("result: %d", result);
+    assert(result == 3);
 }
 
 
@@ -49,7 +50,7 @@ class FooClass
         let *str = "0jfoiwjoie"
         int ab = 123412
 
-        float f = 4503
+        #float f = 4503
         ?let *f = null
         let g = true
         
@@ -59,7 +60,6 @@ class FooClass
         false
         true
         unknownIdentifier
-        true
         "string sample"
 
         /*
@@ -72,7 +72,8 @@ class FooClass
         "fjoiiw" // comment test
 
         let *abc = "joifwjoe01234"
-        let f = 343214213
+        $let f = 343214213
+        var g = 1234
         int a = 3124
     }
 }
@@ -110,7 +111,7 @@ class OuterClass
 }
 )");
 
-void testParsing(char *code)
+void checkTextEquality(char *code)
 {
     auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
     DocumentUtils::parseText(document, code, strlen(code));
@@ -125,8 +126,8 @@ void testParsing(char *code)
 
 void testParsing()
 {
-    testParsing(text);
-    testParsing(testCode3);
+    checkTextEquality(text);
+    checkTextEquality(testCode3);
 }
 
 void testNodeTypeEquality() {
