@@ -1375,7 +1375,7 @@ namespace smart {
         ScriptEnv* env = ScriptEnv::newScriptEnv();
         setupBuiltInTypeSelectors(env);
 
-        auto* document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
+        auto* document = Alloc::newDocument(DocumentType::CodeDocument);
         DocumentUtils::parseText(document, script, byteLength);
         env->document = document;
 

@@ -113,7 +113,7 @@ class OuterClass
 
 void checkTextEquality(char *code)
 {
-    auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
+    auto *document = Alloc::newDocument(DocumentType::CodeDocument);
     DocumentUtils::parseText(document, code, strlen(code));
     char *treeText = DocumentUtils::getTextFromTree(document);
 
@@ -153,7 +153,7 @@ class A
 )";
 
     const char *chars = text.c_str();
-    auto *document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
+    auto *document = Alloc::newDocument(DocumentType::CodeDocument);
 
     DocumentUtils::parseText(document, chars, text.size());
 
