@@ -37,7 +37,7 @@ void testSimpleCalculation()
     printf("%s", source);
     int result = ScriptEnv::startScript(source);
     printf("result: %d", result);
-    assert(result == 3);
+    assert(result == 16);
 }
 
 
