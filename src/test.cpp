@@ -50,7 +50,7 @@ class FooClass
         let *str = "0jfoiwjoie"
         int ab = 123412
 
-        #float f = 4503
+        float f = 4503
         ?let *f = null
         let g = true
         
