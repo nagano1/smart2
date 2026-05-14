@@ -92,7 +92,7 @@ jobs:
           for SCRIPT in ${{ matrix.config.testdir }}*
           do
             if [[ $SCRIPT == *_run* ]]; then
-                echo SCRIPT
+                echo $SCRIPT
                 $SCRIPT
             fi
           done
