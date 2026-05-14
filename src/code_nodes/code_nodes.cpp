@@ -112,37 +112,29 @@ namespace smart
             int searchEndPos = textStartPos;
             while (true) {
                 int endCommentPos = ParseUtil::indexOf2(context->chars, context->length, searchEndPos, '*', '/');
-                if (endCommentPos > -1 && tagLength > 0) {
+
+                if (endCommentPos == -1) {
+                    commendEndIndex = context->length;
+                    break;
+                }
+
+                if (tagLength > 0) {
                     // [hoge]*/
                     if (context->chars[endCommentPos - 1] == ']'
                         && context->chars[endCommentPos - tagLength - 2] == '['
                             && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
                         commendEndIndex = endCommentPos + 2;
                     }
+                    else {
+                        searchEndPos = endCommentPos + 2;
+                        continue;;
+                    }
                 }
-
-                int endTagClosePos = ParseUtil::indexOf(context->chars, context->length, endOfStartTagPos + 1, tagText, tagLength);
-                if (endTagClosePos > -1) {
-                    commendEndIndex = endTagClosePos + 2;
-                }
-
-                if (tagText != nullptr) {
-
-                }
-
-                if (tagLength > 0) {
-                    continue;
+                else {
+                    commendEndIndex = endCommentPos + 2;
                 }
                 break;
             }
-
-            if (tempCommendEndIndex == -1)
-            {
-                //  find the correspond "*/"
-                tempCommendEndIndex = searchEndBlockCommentPos(i + 2, context->chars, context->length);
-            }
-            commendEndIndex = tempCommendEndIndex;// searchEndBlockCommentPos(i + 2, context->chars, context->length);
-
         }
 
         if (commendEndIndex > -1) {
