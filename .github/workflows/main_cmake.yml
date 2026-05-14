@@ -95,7 +95,7 @@ jobs:
           cd build;
           clang++ --version;
           mkdir -p deb/${{ matrix.config.name }};
-          cp ${{ matrix.config.bin }} deb/${{ matrix.config.name }}
+          cp -r ${{ matrix.config.bin }}/tests/* deb/${{ matrix.config.name }}
 
       - uses: actions/upload-artifact@v6
         with:
