@@ -89,10 +89,11 @@ jobs:
           echo ${{ matrix.config.bin }}
           # ls ${{ matrix.config.bin }}/tests
           # ${{ matrix.config.bin }}/tests/test_run
-          for SCRIPT in ${{ matrix.config.bin }}/tests/*
+          for SCRIPT in ${{ matrix.config.bin }}tests/*
           do
           if [ -f $SCRIPT -a -x $SCRIPT ]
           then
+          echo $SCRIPT
           $SCRIPT
           fi
           done
@@ -103,7 +104,7 @@ jobs:
           cd build;
           clang++ --version;
           mkdir -p deb/${{ matrix.config.name }};
-          cp -r ${{ matrix.config.bin }}/tests/* deb/${{ matrix.config.name }}
+          cp -r ${{ matrix.config.bin }}tests/* deb/${{ matrix.config.name }}
           ls -al deb/${{ matrix.config.name }}
 
 
