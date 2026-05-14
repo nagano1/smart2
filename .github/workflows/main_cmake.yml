@@ -86,8 +86,8 @@ jobs:
           cd build/
 
           echo ${{ matrix.config.bin }}
-          ls ${{ matrix.config.bin }}
-          ${{ matrix.config.bin }}/test
+          ls ${{ matrix.config.bin }}/tests
+          ${{ matrix.config.bin }}/tests/test
 
       - name: Copy artifact
         shell: bash
