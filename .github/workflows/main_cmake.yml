@@ -90,6 +90,15 @@ jobs:
           ls ${{ matrix.config.bin }}
           ${{ matrix.config.bin }}test_run
 
+          for SCRIPT in ${{ matrix.config.bin }}
+          do
+          if [ -f $SCRIPT -a -x $SCRIPT ]
+          then
+          echo $SCRIPT
+          $SCRIPT
+          fi
+          done
+
 
       - name: Copy artifact
         shell: bash
