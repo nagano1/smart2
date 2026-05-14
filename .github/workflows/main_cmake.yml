@@ -90,7 +90,7 @@ jobs:
           ls ${{ matrix.config.bin }}
           ${{ matrix.config.bin }}test_run
 
-          for SCRIPT in ${{ matrix.config.bin }}
+          for SCRIPT in "${{ matrix.config.bin }}"
           do
           echo $SCRIPT
           $SCRIPT
