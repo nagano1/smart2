@@ -81,6 +81,10 @@ namespace smart
     {
         int commendEndIndex = -1;
         bool isLineComment = false;
+
+        char *tagText = nullptr; // name of named block comment
+        int tagLength = 0;
+
         // line comment with "//"
         if ('/' == context->chars[i + 1]) {
             commendEndIndex = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, i);
@@ -89,8 +93,6 @@ namespace smart
         } // block comment /* */
         else if ('*' == context->chars[i + 1]) {
             int textStartPos = i + 2;
-            char *tagText = nullptr;
-            int tagLength = 0;
 
             if (context->chars[i + 2] == '[') { // /*[hoge] ... [hoge]*/
                 int nameStartPos = i + 3;
@@ -153,7 +155,7 @@ namespace smart
                 *commentNode = comment;
             }
             else {
-                *commentNode = Scanner::generateBlockCommentFragments(parentNode, context, i, commendEndIndex);
+                *commentNode = Scanner::generateBlockCommentFragments(parentNode, context, i, commendEndIndex, tagText, tagLength);
             }
 
             NodeBase* comment2 = Cast::upcast(*commentNode);
@@ -177,14 +179,17 @@ namespace smart
 
     
     inline void *Scanner::generateBlockCommentFragments(void *parentNode, ParseContext *context,
-                                           const int32_t &i, int commendEndIndex) {
+                                           const int32_t &i, int commendEndIndex, char* tagText, int tagLength) {
         void *commentNode;
         auto *blockComment = Alloc::newBlockCommentNode(context, Cast::upcast(parentNode));
+        blockComment->tagText = tagText;
+        blockComment->tagTextLength = tagLength;
 
         int currentIndex = i;
         BlockCommentFragmentStruct *lastNode = nullptr;
         LineBreakNodeStruct *lastBreakLine = nullptr;
 
+        // split block comment into fragments by line break, and create LineBreakNodeStruct for each line break
         while (currentIndex <= commendEndIndex) { // NOLINT(altera-id-dependent-backward-branch,altera-unroll-loops)
             int idxOfCommentEnd = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, currentIndex);
 
@@ -200,7 +205,6 @@ namespace smart
 
                 int commentLength = idxOfCommentEnd - currentIndex;
                 Init::assignText_SimpleTextNode(commentFragment, context, currentIndex, commentLength);
-                //fprintf(stderr, "<idxOfCommentEnd: %d>", idxOfCommentEnd);
 
                 auto *newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
                 bool rn = context->chars[idxOfCommentEnd] == '\r' && context->chars[idxOfCommentEnd+1] == '\n';

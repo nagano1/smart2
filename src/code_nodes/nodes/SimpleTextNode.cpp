@@ -212,6 +212,8 @@ namespace smart {
         INIT_NODE(node, context, parentNode, VTables::BlockCommentVTable);
 
         node->firstCommentFragment = nullptr;
+        node->tagText = nullptr;
+        node->tagTextLength = 0;
         return node;
     }
 
