@@ -87,7 +87,6 @@ jobs:
           cd build/
 
           echo ${{ matrix.config.bin }}
-          ls ${{ matrix.config.bin }}tests
           ls ${{ matrix.config.bin }}
           # ${{ matrix.config.bin }}/tests/test_run
           for SCRIPT in ${{ matrix.config.bin }}tests/*
