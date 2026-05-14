@@ -92,13 +92,10 @@ jobs:
 
           for SCRIPT in ${{ matrix.config.bin }}*
           do
-          if [[ -x "$SCRIPT" && $SCRIPT == *_run ]];
-          then
-          echo "File '$SCRIPT' is executable"
-          $SCRIPT
-          else
-          echo "File '$SCRIPT' is not executable or found"
-          fi
+            if [[ $SCRIPT == *_run* ]]; then
+                echo "File '$SCRIPT' is executable"
+                $SCRIPT
+            fi
           done
 
 
