@@ -13,8 +13,8 @@ file(GLOB cpp_lib_files
 add_executable(${BINARY_A}_run ${cpp_lib_files} "./test.cpp")
 add_executable(${BINARY_B}_run ${cpp_lib_files} "./parser_utils_test.cpp")
 
-#install(TARGETS ${BINARY_A}_run RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-#install(TARGETS ${BINARY_B}_run RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS ${BINARY_A}_run RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS ${BINARY_B}_run RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 
 # add_library(${BINARY}_lib STATIC ${cpp_files})
