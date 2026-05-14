@@ -89,7 +89,14 @@ jobs:
           echo ${{ matrix.config.bin }}
           ls ${{ matrix.config.bin }}/tests
           # ${{ matrix.config.bin }}/tests/test_run
-          find ${{ matrix.config.bin }}/tests -type f -executable -exec {} \;
+          # find ${{ matrix.config.bin }}/tests -type f -executable -exec {} \;
+          for SCRIPT in ${{ matrix.config.bin }}/tests/*
+          do
+          if [ -f $SCRIPT -a -x $SCRIPT ]
+          then
+          $SCRIPT
+          fi
+          done
 
       - name: Copy artifact
         shell: bash
