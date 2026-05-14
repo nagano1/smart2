@@ -21,7 +21,7 @@ jobs:
               prescript: "chcp 65001",
             },
             unix: {
-              bin: "./src/",
+              bin: "./src/tests/",
               prescript: "export CXX=clang++",
               cmakeConfig: "",
               cmakeBuildConfig: ""
@@ -86,7 +86,7 @@ jobs:
           cd build/
 
           echo ${{ matrix.config.bin }}
-          #ls ${{ matrix.config.bin }}
+          ls ${{ matrix.config.bin }}
           ${{ matrix.config.bin }}test_run
 
 
