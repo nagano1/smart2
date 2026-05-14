@@ -125,7 +125,8 @@ namespace smart
                         && context->chars[endCommentPos - tagLength - 2] == '['
                         && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
                         // the end tag of the named block comment found
-                        commendEndIndex = endCommentPos + 2;
+                        commendEndIndex = endCommentPos - tagLength;
+                        break;
                     }
                     else {
                         // not the end of the named block comment, continue to search
@@ -136,6 +137,7 @@ namespace smart
                 else {
                     // not a named block comment, the first */ is the end of the block comment
                     commendEndIndex = endCommentPos + 2;
+                    break;
                 }
                 break;
             }
