@@ -62,10 +62,10 @@ class FooClass
         unknownIdentifier
         "string sample"
 
-        /*
+        /*[hoge]
           block comment test
           コメントテスト
-        */
+        [hoge]*/
         // line comment test
         // コメントテスト
 
@@ -83,7 +83,7 @@ class FooClass
 constexpr auto *testCode3 = const_cast<char *>(u8R"(
 class OuterClass
 {
-    class InnerClass/**/
+    class InnerClass/*[A]this is so nice![A]*/
     {/**/
         // awef
         fn func1()

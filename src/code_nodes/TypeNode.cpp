@@ -39,7 +39,7 @@ namespace smart
 
 
     int Tokenizers::typeTokenizer(TokenizerParams_parent_ch_start_context) {
-        auto *typeNode  = Cast::downcast<TypeNodeStruct*>(parent);// Alloc::newTypeNode(context, parent);
+        auto *typeNode  = Cast::downcast<TypeNodeStruct*>(parent); // Alloc::newTypeNode(context, parent);
 
         int currentPos = start;
 
