@@ -82,6 +82,7 @@ jobs:
           cmake --build . ${{ matrix.config.cmakeBuildConfig }}
       
       - name: run test
+        shell: bash
         run: |
           cd build/
 
