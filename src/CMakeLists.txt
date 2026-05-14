@@ -4,6 +4,7 @@ set(BINARY "test")
 file(GLOB cpp_lib_files
     "./utils/utils.cpp"
     "./code_nodes/*.cpp"
+    "./code_nodes/nodes/*.cpp"
     "./script_runtime/*.cpp"
 )
 
