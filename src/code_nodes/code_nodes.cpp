@@ -79,7 +79,7 @@ namespace smart
     int handleComments(ParseContext* context, int32_t i, void**commentNode
         , int32_t& whitespace_startpos, void* parentNode, LineBreakNodeStruct**prevLineBreak)
     {
-        int commendEndIndex = -1;
+        int commentEndIndex = -1;
         bool isLineComment = false;
 
         char *tagText = nullptr; // name of named block comment
@@ -87,7 +87,7 @@ namespace smart
 
         // line comment with "//"
         if ('/' == context->chars[i + 1]) {
-            commendEndIndex = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, i);
+            commentEndIndex = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, i);
             isLineComment = true;
 
         } // block comment /* */
@@ -117,7 +117,7 @@ namespace smart
 
                 if (endCommentPos == -1) {
                     // the end of block comment not found, treat the rest of chars as comment
-                    commendEndIndex = context->length;
+                    commentEndIndex = context->length;
                     break;
                 }
 
@@ -127,7 +127,7 @@ namespace smart
                         && context->chars[endCommentPos - tagLength - 2] == '['
                         && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
                         // the end tag of the named block comment found
-                        commendEndIndex = endCommentPos + 2;
+                        commentEndIndex = endCommentPos + 2;
                         break;
                     }
                     else {
@@ -138,24 +138,24 @@ namespace smart
                 }
                 else {
                     // not a named block comment, the first */ is the end of the block comment
-                    commendEndIndex = endCommentPos + 2;
+                    commentEndIndex = endCommentPos + 2;
                     break;
                 }
                 break;
             }
         }
 
-        if (commendEndIndex > -1) {
+        if (commentEndIndex > -1) {
             auto* prevCommentNode = *commentNode;
 
             if (isLineComment) {
                 auto* comment = Alloc::newLineCommentNode(context, Cast::upcast(parentNode));
-                Init::assignText_SimpleTextNode(comment, context, i, commendEndIndex - i);
+                Init::assignText_SimpleTextNode(comment, context, i, commentEndIndex - i);
 
                 *commentNode = comment;
             }
             else {
-                *commentNode = Scanner::generateBlockCommentFragments(parentNode, context, i, commendEndIndex, tagText, tagLength);
+                *commentNode = Scanner::generateBlockCommentFragments(parentNode, context, i, commentEndIndex, tagText, tagLength);
             }
 
             NodeBase* comment2 = Cast::upcast(*commentNode);
@@ -174,12 +174,12 @@ namespace smart
             }
         }
 
-        return commendEndIndex;
+        return commentEndIndex;
     }
 
     
     inline void *Scanner::generateBlockCommentFragments(void *parentNode, ParseContext *context,
-                                           const int32_t &i, int commendEndIndex, char* tagText, int tagLength) {
+                                           const int32_t &i, int commentEndIndex, char* tagText, int tagLength) {
         void *commentNode;
         auto *blockComment = Alloc::newBlockCommentNode(context, Cast::upcast(parentNode));
         blockComment->tagText = tagText;
@@ -190,32 +190,30 @@ namespace smart
         LineBreakNodeStruct *lastBreakLine = nullptr;
 
         // split block comment into fragments by line break, and create LineBreakNodeStruct for each line break
-        while (currentIndex <= commendEndIndex) { // NOLINT(altera-id-dependent-backward-branch,altera-unroll-loops)
-            int idxOfCommentEnd = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, currentIndex);
+        while (currentIndex < commentEndIndex) {
+            int lineEndIndex = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, currentIndex);
+            int endIndex = commentEndIndex < lineEndIndex ? commentEndIndex : lineEndIndex;
 
-            if (commendEndIndex < idxOfCommentEnd) {
-                idxOfCommentEnd = commendEndIndex;
-            }
+            if (endIndex > -1 && currentIndex < endIndex) {
+                auto *commentFragment = Alloc::newBlockCommentFragmentNode(context, Cast::upcast(parentNode));
 
-            if (idxOfCommentEnd > -1 && currentIndex <= idxOfCommentEnd) {
-                auto *commentFragment = Alloc::newBlockCommentFragmentNode(context,
-                                                          Cast::upcast(parentNode));
-
+                // link with previous line break node
                 commentFragment->prevLineBreakNode = lastBreakLine;
 
-                int commentLength = idxOfCommentEnd - currentIndex;
+                int commentLength = endIndex - currentIndex;
                 Init::assignText_SimpleTextNode(commentFragment, context, currentIndex, commentLength);
 
+                // create a line break node for the line break after the comment fragment
                 auto *newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
-                bool rn = context->chars[idxOfCommentEnd] == '\r' && context->chars[idxOfCommentEnd+1] == '\n';
+                bool rn = context->chars[endIndex] == '\r' && context->chars[endIndex+1] == '\n';
                 if (rn) { // \r\n
                     newLineBreak->text[0] = '\r';
                     newLineBreak->text[1] = '\n';
                     newLineBreak->text[2] = '\0';
-                    currentIndex = idxOfCommentEnd + 2;
+                    currentIndex = endIndex + 2;
                 }
                 else {
-                    currentIndex = idxOfCommentEnd + 1;
+                    currentIndex = endIndex + 1;
                 }
 
                 lastBreakLine = newLineBreak;
@@ -300,9 +298,9 @@ namespace smart
             ch = context->chars[i];
 
             if (ch == '/') { // comment
-                int commendEndIndex = handleComments(context, i, &commentNode, whitespace_startpos, parentNode, &prevLineBreak);
-                if (commendEndIndex > -1) {
-                    i = commendEndIndex;
+                int commentEndIndex = handleComments(context, i, &commentNode, whitespace_startpos, parentNode, &prevLineBreak);
+                if (commentEndIndex > -1) {
+                    i = commentEndIndex;
                     returnResult = i;
                     continue;
                 }
