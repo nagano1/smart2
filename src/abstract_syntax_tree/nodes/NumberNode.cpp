@@ -297,7 +297,7 @@ namespace smart {
         if (currentCodeLine != openCodeLine) {
             bool hasNonBracketEntity = false;
             auto *node = currentCodeLine->firstNode;
-            while (node) { // NOLINT(altera-id-dependent-backward-branch,altera-unroll-loops)
+            while (node) {
                 if (node->vtable == VTables::SymbolVTable) {
                     auto *symbol = Cast::downcast<SymbolStruct *>(node);
                     bool end = symbol->symbol[0] == ')' || symbol->symbol[0] == '}';

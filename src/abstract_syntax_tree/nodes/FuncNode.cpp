@@ -124,7 +124,7 @@ namespace smart {
         self->context->parentDepth += 1;
 
         auto *item = self->firstArgumentItem;
-        while (item != nullptr) { // NOLINT(altera-unroll-loops,altera-id-dependent-backward-branch)
+        while (item != nullptr) {
             currentCodeLine = VTableCall::callAppendToLine(item, currentCodeLine);
             item = Cast::downcast<FuncArgumentItemStruct *>(item->nextNode);
         }

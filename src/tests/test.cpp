@@ -1,0 +1,171 @@
+#include <cstdio>
+
+#include "parse_util.hpp"
+#include "script_runtime.hpp"
+
+using namespace smart;
+
+void testSimpleCalculation();
+void testNodeTypeEquality();
+void testParsing();
+
+int main()
+{
+    printf("cshort");
+    fflush(stdout);
+
+    testSimpleCalculation();
+    testParsing();
+    testNodeTypeEquality();
+
+    return 0;
+}
+
+constexpr char source[] = R"(
+fn Main()
+{
+    int a = 8
+    int b = 1
+    int c = -9
+    
+    return a - (b + c)
+}
+)";
+
+void testSimpleCalculation()
+{
+    printf("%s", source);
+    int result = ScriptEnv::startScript(source);
+    printf("result: %d", result);
+    assert(result == 16);
+}
+
+
+constexpr auto *text = const_cast<char *>(u8R"(
+class FooClass
+{
+    fn funcB()
+    {
+        let a = 893214
+        let *str = "0jfoiwjoie"
+        int ab = 123412
+
+        float f = 4503
+        ?let *f = null
+        let g = true
+        
+        "abcdefg"
+        3142
+        null
+        false
+        true
+        unknownIdentifier
+        "string sample"
+
+        /*[hoge]
+          block comment test
+          コメントテスト
+        [hoge]*/
+        // line comment test
+        // コメントテスト
+
+        "fjoiiw" // comment test
+
+        let *abc = "joifwjoe01234"
+        $let f = 343214213
+        var g = 1234
+        int a = 3124
+    }
+}
+    )");
+
+
+constexpr auto *testCode3 = const_cast<char *>(u8R"(
+class OuterClass
+{
+    class InnerClass/*[A]this is so nice![A]*/
+    {/**/
+        // awef
+        fn func1()
+        {
+            // jfoiaweoifaw
+            
+            func(true, "jfoiw", 1203)
+            
+            return/*true*/3241//面白すぎ
+            return/**/21241
+            false//tugi ga saigono kyokudesu
+            return 1
+
+        }
+
+
+        fn a()
+        {
+            // afjiowe
+
+        } // afweo
+    } // joiwafjoefwa 
+    //
+    /* fwaei */
+}
+)");
+
+void checkTextEquality(char *code)
+{
+    auto *document = Alloc::newDocument(DocumentType::CodeDocument);
+    DocumentUtils::parseText(document, code, strlen(code));
+    char *treeText = DocumentUtils::getTextFromTree(document);
+
+    assert(strcmp(code, treeText) == 0);
+
+    free(treeText);
+    Alloc::deleteDocument(document);
+}
+
+
+void testParsing()
+{
+    checkTextEquality(text);
+    checkTextEquality(testCode3);
+}
+
+void testNodeTypeEquality() {
+    std::string text = u8R"(
+
+class A
+{
+    class B
+    {
+        class TestCl😂日本語10234ass
+        {
+
+            fn aFunc ()
+            {
+                
+            }
+
+        }
+
+        class C { }
+    }
+}
+)";
+
+    const char *chars = text.c_str();
+    auto *document = Alloc::newDocument(DocumentType::CodeDocument);
+
+    DocumentUtils::parseText(document, chars, text.size());
+
+    char *treeText = DocumentUtils::getTextFromTree(document);
+    assert(std::string(treeText) ==  std::string(chars));
+    assert(strlen(treeText) == strlen(chars));
+
+    assert(document->context->syntaxErrorInfo.hasError == false);
+
+
+    assert(document->firstCodeLine->firstNode->vtable == VTables::LineBreakVTable);
+    assert(document->firstCodeLine->nextLine->firstNode->vtable == VTables::LineBreakVTable);
+
+    Alloc::deleteDocument(document);
+}

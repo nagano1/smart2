@@ -278,7 +278,7 @@ namespace smart
         return result;
     }
 
-    int Scanner::scan_for_root(void *parentNode, // NOLINT(readability-function-cognitive-complexity)
+    int Scanner::scan_for_root(void *parentNode,
         TokenizerFunction tokenizer,
         int start,
         ParseContext *context,
@@ -311,7 +311,7 @@ namespace smart
             }
             else if (ParseUtil::isSpace(ch)) {
                 int spaceEndIndex = i + 1;
-                for (; spaceEndIndex < context->length; spaceEndIndex++) { // NOLINT(altera-id-dependent-backward-branch,altera-unroll-loops)
+                for (; spaceEndIndex < context->length; spaceEndIndex++) {
                     if (!ParseUtil::isSpace(context->chars[spaceEndIndex])) {
                         break;
                     }

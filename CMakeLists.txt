@@ -9,4 +9,4 @@ set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 include_directories(src/include)
 include_directories(src)
 
-add_subdirectory(src)
+add_subdirectory(src/tests)

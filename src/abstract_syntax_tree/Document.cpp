@@ -357,7 +357,7 @@ namespace smart {
 
         int writeBytes = 0;
 
-        for (int i = 0; i <= 1; i++) { // NOLINT(altera-unroll-loops)
+        for (int i = 0; i <= 1; i++) {
             int len = i == 0 ? len0 : len1;
             int utf16len = i == 0 ? utf16Len0 : utf16Len1;
             if (len > 0) {
@@ -403,8 +403,7 @@ namespace smart {
             int currentLineNo = 0;
             bool first = true;
             int prevLine = 0;
-            while (line) { // NOLINT(altera-id-dependent-backward-branch)
-
+            while (line) {
                 bool insideRange = true;
                 if (line0 != -1) {
                     if (currentLineNo < line0 || line1 < currentLineNo) {
@@ -417,7 +416,7 @@ namespace smart {
 
                     int charPos = 0;
                     int prevStart = 0;
-                    while (node) { // NOLINT(altera-id-dependent-backward-branch,altera-unroll-loops)
+                    while (node) {
                         charPos += node->prev_chars;
 
                         char *dst = text != nullptr ? text + totalByteCount : buff;

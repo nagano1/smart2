@@ -152,7 +152,7 @@ namespace smart {
         }
 
         this->stackPointer = this->stackBasePointer;
-        this->stackBasePointer = (st_byte*)this->pop(); // NOLINT(performance-no-int-to-ptr)
+        this->stackBasePointer = (st_byte*)this->pop();
 
         // sub for arguments
         // this->sub(88);
@@ -183,7 +183,7 @@ namespace smart {
             scriptEnv->typeEntryListCapacity = newCapa;
 
             if (oldListPointer) {
-                for (int i = 0; i < scriptEnv->typeEntryListNextIndex; i++) { // NOLINT(altera-unroll-loops)
+                for (int i = 0; i < scriptEnv->typeEntryListNextIndex; i++) {
                     scriptEnv->typeEntryList[i] = (TypeEntry*)oldListPointer[i];
                 }
                 free(oldListPointer);
