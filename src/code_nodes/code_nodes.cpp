@@ -127,7 +127,7 @@ namespace smart
                         && context->chars[endCommentPos - tagLength - 2] == '['
                         && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
                         // the end tag of the named block comment found
-                        commendEndIndex = endCommentPos - tagLength;
+                        commendEndIndex = endCommentPos + 2;
                         break;
                     }
                     else {
