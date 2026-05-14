@@ -205,7 +205,6 @@ namespace smart
 
                 int commentLength = idxOfCommentEnd - currentIndex;
                 Init::assignText_SimpleTextNode(commentFragment, context, currentIndex, commentLength);
-                //fprintf(stderr, "<idxOfCommentEnd: %d>", idxOfCommentEnd);
 
                 auto *newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
                 bool rn = context->chars[idxOfCommentEnd] == '\r' && context->chars[idxOfCommentEnd+1] == '\n';
