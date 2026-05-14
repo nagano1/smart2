@@ -129,6 +129,14 @@ struct ParseUtil {
 
     static inline int indexOfBreakOrEnd(const char *chars, int charsLength, int startIndex)
     {
+        if (startIndex == charsLength) { // end of chars
+            return charsLength;
+        }
+
+        if (startIndex > charsLength) { // invalid start index
+            return -1;
+        }
+
         for (int i = startIndex; i < charsLength; i++) {
             if ('\r' == chars[i] || '\0' == chars[i] || '\n' == chars[i]) {
                 return i;
@@ -141,6 +149,16 @@ struct ParseUtil {
     {
         for (int i = startIndex; i < charsLength; i++) {
             if (ch == chars[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    static inline int indexOf(const char *chars, int charsLength, int startIndex, const char* word, int wordLength)
+    {
+        for (int i = startIndex; i < charsLength - wordLength + 1; i++) {
+            if (ParseUtil::matchWord(chars, charsLength, word, wordLength, i)) {
                 return i;
             }
         }

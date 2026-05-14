@@ -88,28 +88,61 @@ namespace smart
 
         } // block comment /* */
         else if ('*' == context->chars[i + 1]) {
+            int textStartPos = i + 2;
+            char *tagText = nullptr;
+            int tagLength = 0;
+
             if (context->chars[i + 2] == '[') { // /*[hoge] ... [hoge]*/
-                int startPos = i + 3;
-                int lineEndPos = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, startPos);
-
-                int endTagPos = ParseUtil::indexOf(context->chars, context->length, startPos, ']');
-                if (endTagPos > -1) {
-                    int tagLength = endTagPos - startPos;
+                int nameStartPos = i + 3;
+                // finds out the tag name: hoge
+                int endOfStartTagPos = ParseUtil::indexOf(context->chars, context->length, nameStartPos, ']');
+                int lineEndPos = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, nameStartPos);
+                // the name of the named block comment must be in the same line with the start tag
+                if (endOfStartTagPos > -1 && endOfStartTagPos < lineEndPos) {
+                    tagLength = endOfStartTagPos - nameStartPos;
                     if (tagLength > 0) {
-                        char *tagText = context->memBuffer.newMem<char>(tagLength + 1);
-                        TEXT_MEMCPY(tagText, context->chars + startPos, tagLength);
+                        textStartPos = endOfStartTagPos + 1;
+                        tagText = context->memBuffer.newMem<char>(tagLength + 1);
+                        TEXT_MEMCPY(tagText, context->chars + nameStartPos, tagLength);
                         tagText[tagLength] = '\0';
-
-                        int endTagClosePos = ParseUtil::indexOf2(context->chars, context->length, endTagPos + 1,
-                                                                 ']', '*', '/');
-                        if (endTagClosePos > -1) {
-                            commendEndIndex = endTagClosePos + 2;
-                        }
                     }
                 }
             }
-            //  find the correspond "*/"
-            commendEndIndex = searchEndBlockCommentPos(i + 2, context->chars, context->length);
+
+            int searchEndPos = textStartPos;
+            while (true) {
+                int endCommentPos = ParseUtil::indexOf2(context->chars, context->length, searchEndPos, '*', '/');
+                if (endCommentPos > -1 && tagLength > 0) {
+                    // [hoge]*/
+                    if (context->chars[endCommentPos - 1] == ']'
+                        && context->chars[endCommentPos - tagLength - 2] == '['
+                            && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
+                        commendEndIndex = endCommentPos + 2;
+                    }
+                }
+
+                int endTagClosePos = ParseUtil::indexOf(context->chars, context->length, endOfStartTagPos + 1, tagText, tagLength);
+                if (endTagClosePos > -1) {
+                    commendEndIndex = endTagClosePos + 2;
+                }
+
+                if (tagText != nullptr) {
+
+                }
+
+                if (tagLength > 0) {
+                    continue;
+                }
+                break;
+            }
+
+            if (tempCommendEndIndex == -1)
+            {
+                //  find the correspond "*/"
+                tempCommendEndIndex = searchEndBlockCommentPos(i + 2, context->chars, context->length);
+            }
+            commendEndIndex = tempCommendEndIndex;// searchEndBlockCommentPos(i + 2, context->chars, context->length);
+
         }
 
         if (commendEndIndex > -1) {
