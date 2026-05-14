@@ -209,6 +209,8 @@ namespace smart {
         NODE_HEADER;
 
         BlockCommentFragmentStruct *firstCommentFragment;
+        char* tagText; // for named block comment /*[hoge] ... [hoge]*/
+        int tagTextLength;
     };
 
 
@@ -1207,7 +1209,7 @@ namespace smart {
         );
         static void *
         generateBlockCommentFragments(void *parentNode, ParseContext *context, const int32_t &i,
-                                      int commendEndIndex);
+                                      int commendEndIndex, char* tagText, int tagLength);
     };
 }
 
