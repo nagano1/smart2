@@ -15,13 +15,13 @@ jobs:
         config:
           - {
             win: {
-              bin: "src/tests/Release/",
+              testdir: "src/tests/Release/",
               cmakeBuildConfig: "--config Release ",
               cmakeConfig: "-T v143,host=x64",
               prescript: "chcp 65001",
             },
             unix: {
-              bin: "./src/tests/",
+              testdir: "./src/tests/",
               prescript: "export CXX=clang++",
               cmakeConfig: "",
               cmakeBuildConfig: ""
@@ -86,18 +86,16 @@ jobs:
         run: |
           cd build/
 
-          echo ${{ matrix.config.bin }}
-          ls ${{ matrix.config.bin }}
-          ${{ matrix.config.bin }}test_run
+          echo ${{ matrix.config.testdir }}
+          ls ${{ matrix.config.testdir }}
 
-          for SCRIPT in ${{ matrix.config.bin }}*
+          for SCRIPT in ${{ matrix.config.testdir }}*
           do
             if [[ $SCRIPT == *_run* ]]; then
-                echo "File '$SCRIPT' is executable"
+                echo SCRIPT
                 $SCRIPT
             fi
           done
-
 
       - name: Copy artifact
         shell: bash
@@ -105,7 +103,7 @@ jobs:
           cd build;
           clang++ --version;
           mkdir -p deb/${{ matrix.config.name }};
-          cp -r ${{ matrix.config.bin }}* deb/${{ matrix.config.name }}
+          cp -r ${{ matrix.config.testdir }}* deb/${{ matrix.config.name }}
           ls -al deb/${{ matrix.config.name }}
 
 
