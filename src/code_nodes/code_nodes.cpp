@@ -114,6 +114,7 @@ namespace smart
                 int endCommentPos = ParseUtil::indexOf2(context->chars, context->length, searchEndPos, '*', '/');
 
                 if (endCommentPos == -1) {
+                    // the end of block comment not found, treat the rest of chars as comment
                     commendEndIndex = context->length;
                     break;
                 }
@@ -122,15 +123,18 @@ namespace smart
                     // [hoge]*/
                     if (context->chars[endCommentPos - 1] == ']'
                         && context->chars[endCommentPos - tagLength - 2] == '['
-                            && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
+                        && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
+                        // the end tag of the named block comment found
                         commendEndIndex = endCommentPos + 2;
                     }
                     else {
+                        // not the end of the named block comment, continue to search
                         searchEndPos = endCommentPos + 2;
                         continue;;
                     }
                 }
                 else {
+                    // not a named block comment, the first */ is the end of the block comment
                     commendEndIndex = endCommentPos + 2;
                 }
                 break;
