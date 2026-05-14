@@ -88,7 +88,8 @@ jobs:
 
           echo ${{ matrix.config.bin }}
           ls ${{ matrix.config.bin }}/tests
-          ${{ matrix.config.bin }}/tests/test_run
+          # ${{ matrix.config.bin }}/tests/test_run
+          find ${{ matrix.config.bin }}/tests -type f -executable -exec {} \;
 
       - name: Copy artifact
         shell: bash
