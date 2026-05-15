@@ -1,5 +1,5 @@
-set(BINARY_A "test")
-set(BINARY_B "ParseUtilsTest")
+set(BINARY_A "parser_syntax_test")
+set(BINARY_B "ParseUtils_test")
 
 set(SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
