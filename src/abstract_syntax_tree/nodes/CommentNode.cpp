@@ -33,8 +33,7 @@ namespace smart {
         return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
     }
 
-    static int SimpleTextNodeStruct_applyFuncToDescendants(
-            SimpleTextNodeStruct *node, ApplyFunc_params3)
+    static int SimpleTextNodeStruct_applyFuncToDescendants(SimpleTextNodeStruct *node, ApplyFunc_params3)
     {
         if (targetVTable == nullptr || node->vtable == targetVTable) {
             func(Cast::upcast(node), ApplyFunc_pass);
@@ -44,6 +43,8 @@ namespace smart {
     }
 
 
+    // now LineCommentNodeStruct and BlockCommentFragmentStruct are alias of SimpleTextNodeStruct
+    // since they have the same structure and behavior. If we need to add more specific behavior for them, we can change their structure and vtable later.
 
     static node_vtable _lineCommentVTable = CREATE_VTABLE(LineCommentNodeStruct,
                                                            selfTextLength,
