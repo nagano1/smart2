@@ -502,7 +502,7 @@ namespace smart {
         //NodeBase *codeNode;
         NodeBase *leftNode;
         NodeBase *valueNode;
-        NodeBase *generatedMainCodeNode;
+        NodeBase *generatedMainNode;
         int baseIndent;
         utf8byte *chars;
         SyntaxErrorInfo syntaxErrorInfo;
@@ -524,7 +524,7 @@ namespace smart {
 
         void setCodeNode(void* node) {
             this->leftNode = static_cast<NodeBase *>(node);
-            this->generatedMainCodeNode = static_cast<NodeBase *>(node);
+            this->generatedMainNode = static_cast<NodeBase *>(node);
         }
 
         void init() {
@@ -1163,7 +1163,7 @@ namespace smart {
                     boolNode->text[length] = '\0';
 
                     context->leftNode = Cast::upcast(boolNode);
-                    context->generatedMainCodeNode = Cast::upcast(boolNode);
+                    context->generatedMainNode = Cast::upcast(boolNode);
                     return start + length;
                 }
             }

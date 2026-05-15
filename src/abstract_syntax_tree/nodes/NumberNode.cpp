@@ -71,14 +71,14 @@ namespace smart {
                                                 'f', "false");
         }
 
-        if (result > -1) {
-            auto *boolNode = Cast::downcast<BoolNodeStruct*>(context->generatedMainCodeNode);
-            boolNode->found = start;
-            boolNode->boolValue = trueFound;
-            return result;
+        if (result == -1) {
+            return -1;
         }
 
-        return -1;
+        auto *boolNode = Cast::downcast<BoolNodeStruct*>(context->generatedMainNode);
+        boolNode->found = start;
+        boolNode->boolValue = trueFound;
+        return result;
     }
 
     static int BoolNodeStruct_applyFuncToDescendants(
@@ -353,7 +353,7 @@ namespace smart {
                 int result;
                 if (-1 < (result = Tokenizers::expressionTokenizer(Cast::upcast(fnNode), ch, start,
                                                                    context))) {
-                    fnNode->valueNode = context->generatedMainCodeNode;
+                    fnNode->valueNode = context->generatedMainNode;
                     fnNode->valueNode->found = start;
 
                     return result;
@@ -530,7 +530,7 @@ namespace smart {
             auto *binaryOpNode = Alloc::newBinaryOperationNode(context, parent, ch);
 
             context->leftNode = Cast::upcast(&binaryOpNode->opNode);
-            context->generatedMainCodeNode = Cast::upcast(binaryOpNode);
+            context->generatedMainNode = Cast::upcast(binaryOpNode);
             return start + 1;
         }
 
@@ -540,24 +540,24 @@ namespace smart {
 
     int Tokenizers::binaryOperationTokenizer(TokenizerParams_parent_ch_start_context)
     {
-        assert(context->generatedMainCodeNode != nullptr);
+        assert(context->generatedMainNode != nullptr);
 
-        auto *virtualNode = context->generatedMainCodeNode;
+        auto *virtualNode = context->generatedMainNode;
         auto *leftNode = context->leftNode;
 
         int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, start, context);
         context->leftNode = leftNode;
 
         if (resultPos > -1) {
-            auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainCodeNode);
+            auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainNode);
             binaryOpNode->leftExprNode = virtualNode;
             binaryOpNode->leftExprNode->parentNode = Cast::upcast(binaryOpNode);
 
             if (-1 < (resultPos = Scanner::scanOnce(binaryOpNode,
                                                     Tokenizers::expressionTokenizer,
                                                     resultPos, context))) {
-                binaryOpNode->rightExprNode = context->generatedMainCodeNode;
-                context->generatedMainCodeNode = Cast::upcast(binaryOpNode);
+                binaryOpNode->rightExprNode = context->generatedMainNode;
+                context->generatedMainNode = Cast::upcast(binaryOpNode);
                 context->leftNode = leftNode;
                 return resultPos;
             }

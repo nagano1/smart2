@@ -119,7 +119,7 @@ namespace smart {
         int result;
         if (-1 < (result = Tokenizers::expressionTokenizer(Cast::upcast(returnNode), ch,
                                                            start, context))) {
-            returnNode->valueNode = context->generatedMainCodeNode;
+            returnNode->valueNode = context->generatedMainNode;
             context->scanEnd = true;
 
             return result;
@@ -152,11 +152,11 @@ namespace smart {
                                                         currentPos, context))) {
 
                 context->leftNode = Cast::upcast(&returnNode->returnText);
-                context->generatedMainCodeNode = Cast::upcast(returnNode);
+                context->generatedMainNode = Cast::upcast(returnNode);
                 return resultPos;
             } else {
                 context->leftNode = Cast::upcast(&returnNode->returnText);
-                context->generatedMainCodeNode = Cast::upcast(returnNode);
+                context->generatedMainNode = Cast::upcast(returnNode);
                 return currentPos;
             }
         }
