@@ -1,6 +1,6 @@
 #include <string.h>
 #include "common.hpp"
-#include "parse_util.hpp"
+#include "ParseUtil.hpp"
 
 using letterCheckerType = bool(*)(int, char);
 
@@ -36,7 +36,6 @@ int VoidHashMap::calc_hash(const char *key, int keyLength, size_t max)
 
 void VoidHashMap::put(const char *keyA, int keyLength, void* val) const
 {
-
     auto hashInt = calc_hash(keyA, keyLength, this->entries_length);
     VoidHashNode* hashNode = this->entries[hashInt];
 
