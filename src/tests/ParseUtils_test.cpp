@@ -37,7 +37,6 @@ int testA() {
 
     }
 
-    return 0;
 
     {
         static constexpr char chars[] = "return    \n";
@@ -62,6 +61,7 @@ int testA() {
     constexpr char txt[] = "aefvariable aowef \n";
     assert(-1 == ParseUtil::matchAt(txt, sizeof(txt)-1, 2, "false"));
 
+    return 0;
 
     {
         std::string class_text(u8"     \tclassauto * 😂日本語=10234;");
