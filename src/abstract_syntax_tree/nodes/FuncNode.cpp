@@ -179,7 +179,7 @@ namespace smart {
         if (-1 < (result = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
             auto *nextItem = Alloc::newFuncArgumentItem(context, parent);
 
-            nextItem->exprNode = context->generatedCodeNode;
+            nextItem->exprNode = context->generatedMainCodeNode;
             appendRootNode(funcCallNode, nextItem);
             funcCallNode->parsePhase = phase::EXPECT_COMMA;
             return result;
@@ -222,11 +222,11 @@ namespace smart {
     int Tokenizers::funcCallTokenizer(TokenizerParams_parent_ch_start_context)
     {
         if ('(' == ch) {
-            assert(context->generatedCodeNode != nullptr);
+            assert(context->generatedMainCodeNode != nullptr);
 
             auto *funcCallNode = Alloc::newFuncCallNode(context, parent);
 
-            funcCallNode->exprNode = context->generatedCodeNode;
+            funcCallNode->exprNode = context->generatedMainCodeNode;
             funcCallNode->exprNode->parentNode = Cast::upcast(funcCallNode);
 
             auto *leftNode = context->leftNode;
@@ -237,7 +237,7 @@ namespace smart {
                                                      inner_returnStatementTokenizerMulti,
                                                      currentPos, context))) {
 
-                context->generatedCodeNode = Cast::upcast(funcCallNode);
+                context->generatedMainCodeNode = Cast::upcast(funcCallNode);
                 context->leftNode = leftNode;
                 return resultPos;
             }
@@ -433,21 +433,21 @@ namespace smart {
                 int nextPos;
                 // value as a statement
                 if (-1 < (nextPos = Tokenizers::returnStatementTokenizer(parent, ch, start, context))) {
-                    appendChildNode(body, context->generatedCodeNode);
+                    appendChildNode(body, context->generatedMainCodeNode);
                     return nextPos;
                 }
                 else if (-1 < (nextPos = Tokenizers::assignStatementTokenizer(parent, ch, start, context))) {
-                    appendChildNode(body, context->generatedCodeNode);
+                    appendChildNode(body, context->generatedMainCodeNode);
                     return nextPos;
                 }
                 else if (-1 < (nextPos = Tokenizers::assignStatementWithoutLetTokenizer(parent, ch,
                                                                                      start,
                                                                                      context))) {
-                    appendChildNode(body, context->generatedCodeNode);
+                    appendChildNode(body, context->generatedMainCodeNode);
                     return nextPos;
                 }
                 else if (-1 < (nextPos = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
-                    appendChildNode(body, context->generatedCodeNode);
+                    appendChildNode(body, context->generatedMainCodeNode);
                     return nextPos;
                 }
             } else {
@@ -536,7 +536,7 @@ namespace smart {
         auto *nextParam = Alloc::newFuncParameterItem(context, parent);
         int result;
         if (-1 < (result = Tokenizers::assignStatementTokenizer(Cast::upcast(nextParam), ch, start, context))) {
-            nextParam->assignStatementNodeStruct = Cast::downcast<AssignStatementNodeStruct *>(context->generatedCodeNode);
+            nextParam->assignStatementNodeStruct = Cast::downcast<AssignStatementNodeStruct *>(context->generatedMainCodeNode);
                 appendChildParameterNode(funcNode, nextParam);
 
                 funcNode->parameterParsePhase = FuncParamParsePhase::EXPECT_COMMA2;

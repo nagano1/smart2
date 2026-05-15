@@ -64,17 +64,17 @@ namespace smart {
         int result = Tokenizers::WordTokenizer2(TokenizerParams_pass,
                                                 Alloc::newBoolNode
                                                 ,'t', "true");
-        bool isTrue = result > -1;
-        if (!isTrue) {
+        bool trueFound = result > -1;
+        if (!trueFound) {
             result = Tokenizers::WordTokenizer2(TokenizerParams_pass,
                                                 Alloc::newBoolNode,
                                                 'f', "false");
         }
 
         if (result > -1) {
-            auto *boolNode = Cast::downcast<BoolNodeStruct*>(context->generatedCodeNode);
+            auto *boolNode = Cast::downcast<BoolNodeStruct*>(context->generatedMainCodeNode);
             boolNode->found = start;
-            boolNode->boolValue = isTrue;
+            boolNode->boolValue = trueFound;
             return result;
         }
 
@@ -353,7 +353,7 @@ namespace smart {
                 int result;
                 if (-1 < (result = Tokenizers::expressionTokenizer(Cast::upcast(fnNode), ch, start,
                                                                    context))) {
-                    fnNode->valueNode = context->generatedCodeNode;
+                    fnNode->valueNode = context->generatedMainCodeNode;
                     fnNode->valueNode->found = start;
 
                     return result;
@@ -530,7 +530,7 @@ namespace smart {
             auto *binaryOpNode = Alloc::newBinaryOperationNode(context, parent, ch);
 
             context->leftNode = Cast::upcast(&binaryOpNode->opNode);
-            context->generatedCodeNode = Cast::upcast(binaryOpNode);
+            context->generatedMainCodeNode = Cast::upcast(binaryOpNode);
             return start + 1;
         }
 
@@ -540,24 +540,24 @@ namespace smart {
 
     int Tokenizers::binaryOperationTokenizer(TokenizerParams_parent_ch_start_context)
     {
-        assert(context->generatedCodeNode != nullptr);
+        assert(context->generatedMainCodeNode != nullptr);
 
-        auto *virtualNode = context->generatedCodeNode;
+        auto *virtualNode = context->generatedMainCodeNode;
         auto *leftNode = context->leftNode;
 
         int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, start, context);
         context->leftNode = leftNode;
 
         if (resultPos > -1) {
-            auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedCodeNode);
+            auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainCodeNode);
             binaryOpNode->leftExprNode = virtualNode;
             binaryOpNode->leftExprNode->parentNode = Cast::upcast(binaryOpNode);
 
             if (-1 < (resultPos = Scanner::scanOnce(binaryOpNode,
                                                     Tokenizers::expressionTokenizer,
                                                     resultPos, context))) {
-                binaryOpNode->rightExprNode = context->generatedCodeNode;
-                context->generatedCodeNode = Cast::upcast(binaryOpNode);
+                binaryOpNode->rightExprNode = context->generatedMainCodeNode;
+                context->generatedMainCodeNode = Cast::upcast(binaryOpNode);
                 context->leftNode = leftNode;
                 return resultPos;
             }

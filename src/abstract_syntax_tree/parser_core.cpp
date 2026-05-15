@@ -391,13 +391,13 @@ namespace smart
     int Tokenizers::expressionTokenizer(TokenizerParams_parent_ch_start_context) {
         int result = numberTokenizer(TokenizerParams_pass);
 
-        if (result == -1) result = boolTokenizer(TokenizerParams_pass);
-        if (result == -1) result = nullTokenizer(TokenizerParams_pass);
-        if (result == -1) result = parenthesesTokenizer(TokenizerParams_pass);
-        if (result == -1) result = variableTokenizer(TokenizerParams_pass);
-        if (result == -1) result = stringLiteralTokenizer(TokenizerParams_pass);
+        if (result == -1) { result = boolTokenizer(TokenizerParams_pass); }
+        if (result == -1) { result = nullTokenizer(TokenizerParams_pass); }
+        if (result == -1) { result = parenthesesTokenizer(TokenizerParams_pass); }
+        if (result == -1) { result = variableTokenizer(TokenizerParams_pass); }
+        if (result == -1) { result = stringLiteralTokenizer(TokenizerParams_pass); }
 
-        if (result == -1) return -1;
+        if (result == -1) { return -1; }
 
         // access operator
         // pointer->val
