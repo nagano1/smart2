@@ -75,7 +75,6 @@ int testA() {
         assert(-1 == index);
     }
 
-    return 0;
 
     // matchWord
     {
@@ -109,6 +108,7 @@ int testA() {
         assert(result == false);
     }
 
+    return 0;
 
 
     {
