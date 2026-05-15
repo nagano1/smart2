@@ -4,7 +4,7 @@ set(BINARY_B "ParseUtilsTest")
 set(SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
 file(GLOB cpp_lib_files
-    "${SRC_ROOT}/utils/utils.cpp"
+    "${SRC_ROOT}/utils/*.cpp"
     "${SRC_ROOT}/abstract_syntax_tree/*.cpp"
     "${SRC_ROOT}/abstract_syntax_tree/nodes/*.cpp"
     "${SRC_ROOT}/script_runtime/*.cpp"
