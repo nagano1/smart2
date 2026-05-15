@@ -4,7 +4,7 @@
 #include "script_runtime.hpp"
 
 using namespace smart;
-
+void callAllTests();
 int main()
 {
     callAllTests();
