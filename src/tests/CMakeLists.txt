@@ -11,7 +11,7 @@ file(GLOB cpp_lib_files
 )
 
 
-add_executable(${BINARY_A}_run ${cpp_lib_files} "${SRC_ROOT}/tests/test.cpp")
+add_executable(${BINARY_A}_run ${cpp_lib_files} "${SRC_ROOT}/tests/parser_syntax_test.cpp")
 add_executable(${BINARY_B}_run ${cpp_lib_files} "${SRC_ROOT}/tests/ParseUtils_test.cpp")
 
 install(TARGETS ${BINARY_A}_run RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
