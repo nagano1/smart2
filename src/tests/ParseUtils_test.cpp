@@ -27,7 +27,6 @@ int testA() {
         static constexpr char chars3[] = "class\0 A{}";
         assert(10 == ParseUtil::indexOfBreakOrEnd(chars3, sizeof(chars3) - 1, 7));
     }
-    return 0;
 
     {
         static constexpr char chars[] = "class\n A{}";
@@ -38,7 +37,7 @@ int testA() {
 
     }
 
-
+    return 0;
 
     {
         static constexpr char chars[] = "return    \n";
