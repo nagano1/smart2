@@ -69,10 +69,9 @@ namespace smart {
             result = Tokenizers::WordTokenizer2(TokenizerParams_pass,
                                                 Alloc::newBoolNode,
                                                 'f', "false");
-        }
-
-        if (result == -1) {
-            return -1;
+            if (result == -1) {
+                return -1;
+            }
         }
 
         auto *boolNode = Cast::downcast<BoolNodeStruct*>(context->generatedMainNode);
