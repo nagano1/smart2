@@ -523,11 +523,11 @@ namespace smart {
 
         if (-1 < (result = Tokenizers::classTokenizer(parent, ch, start, context))) {
             auto *doc = Cast::downcast<DocumentStruct *>(parent);
-            appendRootNode(doc, context->virtualCodeNode);
+            appendRootNode(doc, context->generatedCodeNode);
             return result;
         } else if (-1 < (result = Tokenizers::fnTokenizer(parent, ch, start, context))) {
             auto *doc = Cast::downcast<DocumentStruct *>(parent);
-            appendRootNode(doc, context->virtualCodeNode);
+            appendRootNode(doc, context->generatedCodeNode);
             return result;
         }
 
@@ -582,7 +582,7 @@ namespace smart {
         context->length = length;
         //context->codeNode = nullptr;
         context->leftNode = nullptr;
-        context->virtualCodeNode = nullptr;
+        context->generatedCodeNode = nullptr;
 
         context->remainedLineBreakNode = nullptr;
         context->remainedCommentNode = nullptr;

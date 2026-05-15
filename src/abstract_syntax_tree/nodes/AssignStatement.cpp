@@ -163,7 +163,7 @@ namespace smart {
             int result;
             if (-1 < (result = Tokenizers::expressionTokenizer(Cast::upcast(assignment), ch,
                                                                start, context))) {
-                assignment->valueNode = context->virtualCodeNode;
+                assignment->valueNode = context->generatedCodeNode;
                 context->scanEnd = true;
                 return result;
             }
@@ -199,7 +199,7 @@ namespace smart {
             assignment->typeOrLet.isLet = false;
 
             context->leftNode = Cast::upcast(&assignment->nameNode);
-            context->virtualCodeNode = Cast::upcast(assignment);
+            context->generatedCodeNode = Cast::upcast(assignment);
 
             return resultPos;
         }
@@ -235,7 +235,7 @@ namespace smart {
                                                      resul, context))
                     ) {
                 context->leftNode = Cast::upcast(&assignStatement->typeOrLet);
-                context->virtualCodeNode = Cast::upcast(assignStatement);
+                context->generatedCodeNode = Cast::upcast(assignStatement);
 
                 return resultPos;
             }
