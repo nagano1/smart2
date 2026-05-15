@@ -1,6 +1,5 @@
 set(BINARY_A "test")
 set(BINARY_B "ParseUtilsTest")
-#set(BINARY ${CMAKE_PROJECT_NAME})
 
 set(SRC_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/..")
 
