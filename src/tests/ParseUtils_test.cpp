@@ -108,7 +108,6 @@ int testA() {
         assert(result == false);
     }
 
-    return 0;
 
 
     {
@@ -130,6 +129,7 @@ int testA() {
             assert(result == false);
         }
     }
+    return 0;
 }
 
 
