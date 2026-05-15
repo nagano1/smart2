@@ -53,29 +53,6 @@ namespace smart
         return nodeBase->vtable->appendToLine(nodeBase, currentCodeLine);
     }
 
-
-    // support nest
-    int searchEndBlockCommentPos(int currentIdx, char *chars, int charLength) {
-        int retPos = charLength;
-
-        // /*
-         /* */
-        // */
-        int commentStartPos = ParseUtil::indexOf2(chars, charLength, currentIdx, '/', '*');
-        int commentEndPos = ParseUtil::indexOf2(chars, charLength, currentIdx, '*', '/');
-        if (commentEndPos > -1) {
-            if (commentStartPos > - 1 && commentStartPos < commentEndPos) { // nested block comment found
-                int nestedClosePos = searchEndBlockCommentPos(commentStartPos + 2, chars, charLength);
-                retPos = searchEndBlockCommentPos(nestedClosePos, chars, charLength);
-
-            } else {
-                retPos = commentEndPos + 2;
-            }
-        }
-
-        return retPos;
-    }
-
     int handleComments(ParseContext* context, int32_t i, void**commentNode
         , int32_t& whitespace_startpos, void* parentNode, LineBreakNodeStruct**prevLineBreak)
     {
@@ -102,12 +79,10 @@ namespace smart
                 // the name of the named block comment must be in the same line with the start tag
                 if (endOfStartTagPos > -1 && endOfStartTagPos < lineEndPos) {
                     tagLength = endOfStartTagPos - nameStartPos;
-                    if (tagLength > 0) {
-                        textStartPos = endOfStartTagPos + 1;
-                        tagText = context->memBuffer.newMem<char>(tagLength + 1);
-                        TEXT_MEMCPY(tagText, context->chars + nameStartPos, tagLength);
-                        tagText[tagLength] = '\0';
-                    }
+                    textStartPos = endOfStartTagPos + 1;
+                    tagText = context->memBuffer.newMem<char>(tagLength + 1);
+                    TEXT_MEMCPY(tagText, context->chars + nameStartPos, tagLength);
+                    tagText[tagLength] = '\0';
                 }
             }
 
