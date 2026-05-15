@@ -20,6 +20,30 @@
 
 namespace smart {
 
+    
+    static const char *self_text(SimpleTextNodeStruct *self) {
+        return self->text;
+    }
+
+    static int selfTextLength(SimpleTextNodeStruct *self) {
+        return self->textLength;
+    }
+
+    static CodeLine *appendToLine(SimpleTextNodeStruct *self, CodeLine *currentCodeLine) {
+        return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
+    }
+
+    static int SimpleTextNodeStruct_applyFuncToDescendants(
+            SimpleTextNodeStruct *node, ApplyFunc_params3)
+    {
+        if (targetVTable == nullptr || node->vtable == targetVTable) {
+            func(Cast::upcast(node), ApplyFunc_pass);
+        }
+
+        return 0;
+    }
+
+
 
     static node_vtable _lineCommentVTable = CREATE_VTABLE(LineCommentNodeStruct,
                                                            selfTextLength,
