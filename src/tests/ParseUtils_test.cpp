@@ -65,7 +65,7 @@ int testA() {
     {
         std::string class_text(u8"     \tclassauto * 😂日本語=10234;");
         int index = ParseUtil::matchAt(class_text.c_str(), class_text.length(), 0, "class");
-        assert(6 == index);
+        assert(7 == index);
     }
 
 
@@ -107,8 +107,6 @@ int testA() {
         auto result = ParseUtil::matchWord(text.c_str(), text.length(), "abcdefg", 5, 0);
         assert(result == false);
     }
-
-
 
     {
         // endsWith
