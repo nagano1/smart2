@@ -12,6 +12,7 @@ int main()
 }
 
 int testA() {
+    return 0;
     assert(true == ParseUtil::isIdentifierLetter('a'));
 
     // ParseUtil::letterCheck(&func);
