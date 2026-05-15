@@ -108,7 +108,7 @@ namespace smart {
         Init::initSimpleTextNode(&returnStatement->returnText, context, returnStatement, returnTextSize);
     }
 
-    // --------------------- Implements Return Sttement Parser ----------------------
+    // --------------------- Implements Return Statement Parser ----------------------
     static int inner_returnStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
 
         if (context->afterLineBreak) {
