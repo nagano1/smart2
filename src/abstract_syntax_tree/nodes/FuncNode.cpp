@@ -537,10 +537,10 @@ namespace smart {
         int result;
         if (-1 < (result = Tokenizers::assignStatementTokenizer(Cast::upcast(nextParam), ch, start, context))) {
             nextParam->assignStatementNodeStruct = Cast::downcast<AssignStatementNodeStruct *>(context->generatedMainNode);
-                appendChildParameterNode(funcNode, nextParam);
+            appendChildParameterNode(funcNode, nextParam);
 
-                funcNode->parameterParsePhase = FuncParamParsePhase::EXPECT_COMMA2;
-                return result;
+            funcNode->parameterParsePhase = FuncParamParsePhase::EXPECT_COMMA2;
+            return result;
         }
         return -1;
     }

@@ -499,7 +499,6 @@ namespace smart {
 
 
         bool afterLineBreak;
-        //NodeBase *codeNode;
         NodeBase *leftNode;
         NodeBase *valueNode;
         NodeBase *generatedMainNode;
