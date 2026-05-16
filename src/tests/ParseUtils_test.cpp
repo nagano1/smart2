@@ -14,9 +14,6 @@ int main()
 int testA() {
     assert(true == ParseUtil::isIdentifierLetter('a'));
 
-    // ParseUtil::letterCheck(&func);
-
-    // static inline int indexOfBreakOrEnd(const char *chars, int charsLength, int startIndex)
     {
         static constexpr char chars[] = "class\n A{}";
         assert(5 == ParseUtil::indexOfBreakOrEnd(chars, sizeof(chars)-1, 0));

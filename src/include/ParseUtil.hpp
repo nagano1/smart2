@@ -1,22 +1,5 @@
 ﻿#pragma once
-/*
-#include <string>
-#include <condition_variable>
-
-#include <cstdlib>
-#include <cassert>
-#include <cstdio>
-#include <chrono>
-#include <unordered_map>
-#include <vector>
-
-#include <cstdint>
-#include <ctime>
-*/
 #include "common.hpp"
-
-using letterCheckerType = bool(*)(int, char);
-
 
 struct ParseUtil {
     // \u8e60
@@ -52,18 +35,6 @@ struct ParseUtil {
 
         return -1;
     };
-
-
-    static inline bool letterCheck(letterCheckerType letterChecker) {
-        return letterChecker(3, 'b');
-    };
-
-    /*
-    static inline int
-        matchFirstWithTrim(const std::string &&class_text, const std::string &&target) {
-        return ParseUtil::matchAt(class_text.c_str(), target.c_str(), 0);
-    };
-*/
 
     static inline bool matchWord(const utf8byte *text,
         st_size text_length,

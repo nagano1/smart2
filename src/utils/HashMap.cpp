@@ -2,8 +2,6 @@
 #include "common.hpp"
 #include "ParseUtil.hpp"
 
-using letterCheckerType = bool(*)(int, char);
-
 
 // --------------------------------------------------------------------------
 // 
