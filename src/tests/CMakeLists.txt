@@ -11,13 +11,15 @@ file(GLOB test_files
     "${SRC_ROOT}/tests/*.cpp"
 )
 
+add_library(common_lib STATIC ${cpp_lib_files})
+
 foreach (file ${test_files})
     get_filename_component(filename ${file} NAME_WE)
-    add_executable(${filename}_run ${cpp_lib_files} ${file})
+    add_executable(${filename}_run ${file})
+    target_link_libraries(${filename}_run common_lib)
     install(TARGETS ${filename}_run RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 endforeach()
 
-# add_library(${BINARY}_lib STATIC ${cpp_files})
 
 #find_package(Threads REQUIRED)
 #target_link_libraries(${BINARY}_run Threads::Threads)
