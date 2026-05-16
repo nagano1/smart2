@@ -221,29 +221,29 @@ namespace smart {
 
     int Tokenizers::funcCallTokenizer(TokenizerParams_parent_ch_start_context)
     {
-        if ('(' == ch) {
-            assert(context->generatedMainNode != nullptr);
-
-            auto *funcCallNode = Alloc::newFuncCallNode(context, parent);
-
-            funcCallNode->exprNode = context->generatedMainNode;
-            funcCallNode->exprNode->parentNode = Cast::upcast(funcCallNode);
-
-            auto *leftNode = context->leftNode;
-
-            int currentPos = start + 1;
-            int resultPos;
-            if (-1 < (resultPos = Scanner::scanMulti(funcCallNode,
-                                                     inner_returnStatementTokenizerMulti,
-                                                     currentPos, context))) {
-
-                context->generatedMainNode = Cast::upcast(funcCallNode);
-                context->leftNode = leftNode;
-                return resultPos;
-            }
+        if ('(' != ch) {
+            return -1;
         }
 
-        return -1;
+        assert(context->generatedMainNode != nullptr);
+
+        auto *funcCallNode = Alloc::newFuncCallNode(context, parent);
+
+        funcCallNode->exprNode = context->generatedMainNode;
+        funcCallNode->exprNode->parentNode = Cast::upcast(funcCallNode);
+
+        auto *leftNode = context->leftNode;
+
+        int currentPos = start + 1;
+        int resultPos;
+        if (-1 < (resultPos = Scanner::scanMulti(funcCallNode,
+                                                    inner_returnStatementTokenizerMulti,
+                                                    currentPos, context))) {
+
+            context->generatedMainNode = Cast::upcast(funcCallNode);
+            context->leftNode = leftNode;
+            return resultPos;
+        }
     }
 
 
@@ -421,38 +421,39 @@ namespace smart {
         body->childCount++;
     }
 
-    static int inner_bodyTokenizerMulti(TokenizerParams_parent_ch_start_context) {
+    static int inner_bodyTokenizerMulti(TokenizerParams_parent_ch_start_context)
+    {
         auto *body = Cast::downcast<BodyNodeStruct *>(parent);
         if (ch == '}') {
             context->scanEnd = true;
             context->setCodeNode(&body->endBodyNode);
             return start + 1;
-        } else {
-            if (!body->firstStatementFound || context->afterLineBreak) {
-                body->firstStatementFound = true;
-                int nextPos;
-                // value as a statement
-                if (-1 < (nextPos = Tokenizers::returnStatementTokenizer(parent, ch, start, context))) {
-                    appendChildNode(body, context->generatedMainNode);
-                    return nextPos;
-                }
-                else if (-1 < (nextPos = Tokenizers::assignStatementTokenizer(parent, ch, start, context))) {
-                    appendChildNode(body, context->generatedMainNode);
-                    return nextPos;
-                }
-                else if (-1 < (nextPos = Tokenizers::assignStatementWithoutLetTokenizer(parent, ch,
-                                                                                     start,
-                                                                                     context))) {
-                    appendChildNode(body, context->generatedMainNode);
-                    return nextPos;
-                }
-                else if (-1 < (nextPos = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
-                    appendChildNode(body, context->generatedMainNode);
-                    return nextPos;
-                }
-            } else {
-                context->setError(ErrorCode::should_break_line, start);
+        }
+        
+        if (!body->firstStatementFound || context->afterLineBreak) {
+            body->firstStatementFound = true;
+            int nextPos;
+            // value as a statement
+            if (-1 < (nextPos = Tokenizers::returnStatementTokenizer(parent, ch, start, context))) {
+                appendChildNode(body, context->generatedMainNode);
+                return nextPos;
             }
+            else if (-1 < (nextPos = Tokenizers::assignStatementTokenizer(parent, ch, start, context))) {
+                appendChildNode(body, context->generatedMainNode);
+                return nextPos;
+            }
+            else if (-1 < (nextPos = Tokenizers::assignStatementWithoutLetTokenizer(parent, ch,
+                                                                                    start,
+                                                                                    context))) {
+                appendChildNode(body, context->generatedMainNode);
+                return nextPos;
+            }
+            else if (-1 < (nextPos = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
+                appendChildNode(body, context->generatedMainNode);
+                return nextPos;
+            }
+        } else {
+            context->setError(ErrorCode::should_break_line, start);
         }
 
         context->setError(ErrorCode::syntax_error2, start);

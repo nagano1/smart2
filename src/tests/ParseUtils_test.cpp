@@ -59,7 +59,6 @@ int testA() {
     constexpr char txt[] = "aefvariable aowef \n";
     assert(-1 == ParseUtil::matchAt(txt, sizeof(txt)-1, 2, "false"));
 
-
     {
         std::string class_text(u8"     \tclassauto * 😂日本語=10234;");
         int index = ParseUtil::matchAt(class_text.c_str(), class_text.length(), 0, "class");
@@ -109,7 +108,7 @@ int testA() {
     {
         // endsWith
         {
-            std::string text(u8"abc");
+            std::string text(u8"ab");
             auto result = ParseUtil::endsWith2(text.c_str(), text.length(), "ab");
             assert(result == true);
         }

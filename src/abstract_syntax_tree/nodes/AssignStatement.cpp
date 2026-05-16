@@ -210,8 +210,9 @@ namespace smart {
     }
 
     // let a = 3
-    // $int m = 5
+    // int m = 5
     // int a
+    // ?string *str = null
     int Tokenizers::assignStatementTokenizer(TokenizerParams_parent_ch_start_context)
     {
         AssignStatementNodeStruct *assignStatement;
