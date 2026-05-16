@@ -4,6 +4,7 @@
 #include "script_runtime.hpp"
 
 using namespace smart;
+
 void callAllTests();
 int main()
 {
@@ -108,7 +109,7 @@ int testA() {
     {
         // endsWith
         {
-            std::string text(u8"ab");
+            std::string text(u8"abc");
             auto result = ParseUtil::endsWith2(text.c_str(), text.length(), "ab");
             assert(result == true);
         }
