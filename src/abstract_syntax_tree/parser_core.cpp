@@ -49,10 +49,7 @@ namespace smart
         int start,
         ParseContext *context
     ) {
-        context->scanEnd = false;
-        int result = Scanner::scanWithTokenizer(parentNode, tokenizer, start, context, false, true);
-        context->scanEnd = false;
-        return result;
+        return Scanner::scanWithTokenizer(parentNode, tokenizer, start, context, false, true);
     }
 
     CodeLine *VTableCall::callAppendToLine(void *node, CodeLine *currentCodeLine) {
@@ -330,9 +327,7 @@ namespace smart
             returnResult = result;
             if (Search::IsTokenized(result)) {
                 context->afterLineBreak = false;
-                //if (Search::DONE_WITH_SAME_POSITION != result) {
-                    context->prevFoundPos = result;
-                //}
+                context->prevFoundPos = result;
 
                 if (context->leftNode != nullptr) {
                     if (whitespace_startpos != -1) {
@@ -348,17 +343,12 @@ namespace smart
                     context->leftNode->prevLineBreakNode = prevLineBreak;
                 }
 
-//                if (Search::DONE_WITH_SAME_POSITION != result) {
-                    i = result;
-                //}
+                i = result;
+
                 prevLineBreak = nullptr;
                 lastLineBreak = nullptr;
 
-                if (context->scanEnd) {
-                    break;
-                }
-
-                if (scanMulti) {
+                if (scanMulti && !context->scanEnd) {
                     continue;
                 }
             }
@@ -384,7 +374,9 @@ namespace smart
                 context->remaindPrevChars = context->length - whitespace_startpos;
             }
         }
-        context->scanEnd = false;
+        if (context->scanEnd) {
+            context->scanEnd = false;
+        }
         return returnResult;
     }
 
