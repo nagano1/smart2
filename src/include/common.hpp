@@ -38,7 +38,7 @@ using st_byte = unsigned char;
 namespace Search {
     // Parse result code
     constexpr int NOTFOUND = -1;
-    constexpr int DONE_WITH_SAME_POSITION = -2;
+    constexpr int DONE_WITH_PREVIUS_POSITION = -2;
 
     static inline bool IsTokenized(int result) {
         return result != NOTFOUND;

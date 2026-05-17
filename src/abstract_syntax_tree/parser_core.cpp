@@ -319,7 +319,7 @@ namespace smart
                 return -1;
             }
 
-            if (result == Search::DONE_WITH_SAME_POSITION) {
+            if (result == Search::DONE_WITH_PREVIUS_POSITION) {
                 returnResult = context->prevFoundPos;
                 break;
             }
