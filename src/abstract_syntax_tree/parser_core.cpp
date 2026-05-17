@@ -321,6 +321,7 @@ namespace smart
 
             if (result == Search::DONE_WITH_PREVIUS_POSITION) {
                 returnResult = context->prevFoundPos;
+                context->scanEnd = false;
                 break;
             }
 
