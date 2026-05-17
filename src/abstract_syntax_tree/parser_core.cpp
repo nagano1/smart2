@@ -322,9 +322,9 @@ namespace smart
             returnResult = result;
             if (Search::IsTokenized(result)) {
                 context->afterLineBreak = false;
-                if (Search::DONE_WITH_SAME_POSITION != result) {
+                //if (Search::DONE_WITH_SAME_POSITION != result) {
                     context->prevFoundPos = result;
-                }
+                //}
 
                 if (context->leftNode != nullptr) {
                     if (whitespace_startpos != -1) {
@@ -340,9 +340,9 @@ namespace smart
                     context->leftNode->prevLineBreakNode = prevLineBreak;
                 }
 
-                if (Search::DONE_WITH_SAME_POSITION != result) {
+//                if (Search::DONE_WITH_SAME_POSITION != result) {
                     i = result;
-                }
+                //}
                 prevLineBreak = nullptr;
                 lastLineBreak = nullptr;
 
