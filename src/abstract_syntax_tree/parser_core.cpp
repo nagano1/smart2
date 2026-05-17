@@ -319,6 +319,11 @@ namespace smart
                 return -1;
             }
 
+            if (result == Search::DONE_WITH_SAME_POSITION) {
+                returnResult = context->prevFoundPos;
+                break;
+            }
+
             returnResult = result;
             if (Search::IsTokenized(result)) {
                 context->afterLineBreak = false;
