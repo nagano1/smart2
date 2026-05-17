@@ -324,6 +324,7 @@ namespace smart
 
             if (result == Search::DONE_WITH_PREVIUS_POSITION) {
                 returnResult = context->prevFoundPos;
+                context->scanEnd = false;
                 break;
             }
 
@@ -355,6 +356,7 @@ namespace smart
                 lastLineBreak = nullptr;
 
                 if (context->scanEnd) {
+                    context->scanEnd = false;
                     break;
                 }
 
