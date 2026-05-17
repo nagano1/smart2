@@ -288,6 +288,8 @@ namespace smart
 
             if (ch == '/') { // comment
                 int commentEndIndex = tryDetectComments(context, i, &commentNode, whitespace_startpos, parentNode, &prevLineBreak, &parsingResult);
+                if (parsingResult.newPosition > -1) {
+                }
                 if (commentEndIndex > -1) {
                     i = commentEndIndex;
                     returnResult = i;
