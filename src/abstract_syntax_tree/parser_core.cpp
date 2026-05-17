@@ -49,7 +49,10 @@ namespace smart
         int start,
         ParseContext *context
     ) {
-        return Scanner::scan_for_root(parentNode, tokenizer, start, context, false, true);
+        context->scanEnd = false;
+        int result = Scanner::scan_for_root(parentNode, tokenizer, start, context, false, true);
+        context->scanEnd = false;
+        return result;
     }
 
     CodeLine *VTableCall::callAppendToLine(void *node, CodeLine *currentCodeLine) {
@@ -321,7 +324,6 @@ namespace smart
 
             if (result == Search::DONE_WITH_PREVIUS_POSITION) {
                 returnResult = context->prevFoundPos;
-                context->scanEnd = false;
                 break;
             }
 
@@ -353,7 +355,6 @@ namespace smart
                 lastLineBreak = nullptr;
 
                 if (context->scanEnd) {
-                    context->scanEnd = false;
                     break;
                 }
 
