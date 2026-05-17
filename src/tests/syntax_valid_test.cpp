@@ -49,6 +49,7 @@ class FooClass
         let a = 893214
         let *str = "0jfoiwjoie"
         int ab = 123412
+        int c // test
 
         float f = 4503
         ?let *f = null

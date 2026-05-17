@@ -146,11 +146,12 @@ namespace smart {
                 assignment->equalSymbol.found = start;
                 context->setCodeNode(&assignment->equalSymbol);
                 return start+1;
-            } else {
+            }
+            else {
                 if (assignment->hasTypeDecl) {
                     context->setCodeNode(nullptr);
                     context->scanEnd = true;
-                    return context->prevFoundPos;// assignment->nameNode.found;
+                    return Search::DONE_WITH_SAME_POSITION;//start;// context->prevFoundPos;// assignment->nameNode.found;
                 }
                 //else {
                     //context->scanEnd = true;
