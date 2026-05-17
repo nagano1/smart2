@@ -517,7 +517,7 @@ namespace smart {
     }
 
 
-    static int tryTokenize(TokenizerParams_parent_ch_start_context)
+    static int tryTokenizeMulti(TokenizerParams_parent_ch_start_context)
     {
         auto *doc = Cast::downcast<DocumentStruct *>(parent);
         int result;
@@ -597,7 +597,8 @@ namespace smart {
 
 
         if (docStruct->documentType == DocumentType::CodeDocument) {
-            Scanner::scan_for_root(docStruct, tryTokenize, 0, context, /*root*/true, true);
+            context->scanEnd = false;
+            Scanner::scan_for_root(docStruct, tryTokenizeMulti, 0, context, /*root*/true, true);
         }
         
         if (!context->syntaxErrorInfo.hasError)
