@@ -25,6 +25,14 @@ namespace smart
     bool ErrorInfo::errorInfoInitialized{false};
     //static int _ab = initErrorInfoList();
 
+    
+    struct InnerParsingResult {
+        int newPosition;
+        NodeBase *createdNode = nullptr;
+        int32_t whitespace_startpos = -1;
+    };
+    
+
 
     int Scanner::scanOnce(void *parentNode,
                       TokenizerFunction tokenizer,
@@ -254,12 +262,6 @@ namespace smart
         return result;
     }
 
-    struct InnerParsingResult {
-        int newPosition;
-        NodeBase *createdNode = nullptr;
-        int32_t whitespace_startpos = -1;
-    };
-    
 
     int Scanner::scan_for_root(void *parentNode,
         TokenizerFunction tokenizer,
