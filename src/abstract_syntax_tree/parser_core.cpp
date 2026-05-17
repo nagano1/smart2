@@ -321,9 +321,6 @@ namespace smart
 
             returnResult = result;
             if (Search::IsTokenized(result)) {
-                if (Search::DONE_WITH_SAME_POSITION == result) {
-                    result = context->prevFoundPos;
-                }
                 context->afterLineBreak = false;
                 context->prevFoundPos = result;
 
@@ -341,8 +338,9 @@ namespace smart
                     context->leftNode->prevLineBreakNode = prevLineBreak;
                 }
 
-                i = result;
-
+                if (Search::DONE_WITH_SAME_POSITION != result) {
+                    i = result;
+                }
                 prevLineBreak = nullptr;
                 lastLineBreak = nullptr;
 

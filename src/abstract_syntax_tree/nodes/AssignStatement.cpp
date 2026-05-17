@@ -115,6 +115,7 @@ namespace smart {
     static int inner_assignStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
 
+        printf("assignStatementTokenizerMulti: %d, %c\n", start, ch);
         if (assignment->nameNode.found == -1) {
              if (assignment->hasTypeDecl && context->afterLineBreak) {
                  return Search::NOTFOUND;
@@ -151,7 +152,7 @@ namespace smart {
                 if (assignment->hasTypeDecl) {
                     context->setCodeNode(nullptr);
                     context->scanEnd = true;
-                    return start;// Search::DONE_WITH_SAME_POSITION;//start;// context->prevFoundPos;// assignment->nameNode.found;
+                    return Search::DONE_WITH_SAME_POSITION;//start;// context->prevFoundPos;// assignment->nameNode.found;
                 }
                 //else {
                     //context->scanEnd = true;
