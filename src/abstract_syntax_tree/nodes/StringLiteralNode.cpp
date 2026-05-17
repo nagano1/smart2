@@ -54,7 +54,7 @@ namespace smart {
             found_count++;
             quote = '`';
         } else {
-            return -1;
+            return Search::NOTFOUND;
         }
 
 
@@ -87,7 +87,7 @@ namespace smart {
 
         if (startsWithQuote &&  !endsWithQuote) {
             context->setError(ErrorCode::missing_closing_quote, start);
-            return -1;
+            return Search::NOTFOUND;
         }
 
 
@@ -168,7 +168,7 @@ namespace smart {
             return start + found_count;
         }
 
-        return -1;
+        return Search::NOTFOUND;
 
     }
 

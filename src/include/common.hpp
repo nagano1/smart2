@@ -35,6 +35,20 @@ using st_byte = unsigned char;
 #endif
 #define assert(expression) static_assert(true, "ok")
 
+namespace Search {
+    // Parse result code
+    constexpr int NOTFOUND = -1;
+    constexpr int DONE_WITH_SAME_POSITION = -2;
+
+    static inline bool IsTokenized(int result) {
+        return result != NOTFOUND;
+    }
+
+    static inline bool IsPositionChanged(int result) {
+        return result > -1;
+}
+}
+
 template<class T>
 static inline T *simpleMalloc2() {
     return (T *) malloc(sizeof(T));

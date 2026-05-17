@@ -63,7 +63,7 @@ namespace smart {
             return start + found_count;
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
 

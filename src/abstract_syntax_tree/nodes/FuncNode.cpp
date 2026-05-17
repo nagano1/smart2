@@ -176,7 +176,7 @@ namespace smart {
     static inline int parseNextValue(TokenizerParams_parent_ch_start_context, CallFuncNodeStruct* funcCallNode)
     {
         int result;
-        if (-1 < (result = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
+        if (Search::IsTokenized(result = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
             auto *nextItem = Alloc::newFuncArgumentItem(context, parent);
 
             nextItem->exprNode = context->generatedMainNode;
@@ -184,7 +184,7 @@ namespace smart {
             funcCallNode->parsePhase = phase::EXPECT_COMMA;
             return result;
         }
-        return -1;
+        return Search::NOTFOUND;
     }
 
 
@@ -213,16 +213,16 @@ namespace smart {
                 // comma is not required after a line break
                 return parseNextValue(TokenizerParams_pass, funcCallNode);
             }
-            return -1;
+            return Search::NOTFOUND;
         }
-        return -1;
+        return Search::NOTFOUND;
     }
 
 
     int Tokenizers::funcCallTokenizer(TokenizerParams_parent_ch_start_context)
     {
         if ('(' != ch) {
-            return -1;
+            return Search::NOTFOUND;
         }
 
         assert(context->generatedMainNode != nullptr);
@@ -236,14 +236,14 @@ namespace smart {
 
         int currentPos = start + 1;
         int resultPos;
-        if (-1 < (resultPos = Scanner::scanMulti(funcCallNode,
+        if (Search::IsTokenized(resultPos = Scanner::scanMulti(funcCallNode,
                                                     inner_returnStatementTokenizerMulti,
                                                     currentPos, context))) {
-
             context->generatedMainNode = Cast::upcast(funcCallNode);
             context->leftNode = leftNode;
             return resultPos;
         }
+        return Search::NOTFOUND;
     }
 
 
@@ -434,21 +434,21 @@ namespace smart {
             body->firstStatementFound = true;
             int nextPos;
             // value as a statement
-            if (-1 < (nextPos = Tokenizers::returnStatementTokenizer(parent, ch, start, context))) {
+            if (Search::IsTokenized(nextPos = Tokenizers::returnStatementTokenizer(parent, ch, start, context))) {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }
-            else if (-1 < (nextPos = Tokenizers::assignStatementTokenizer(parent, ch, start, context))) {
+            else if (Search::IsTokenized(nextPos = Tokenizers::assignStatementTokenizer(parent, ch, start, context))) {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }
-            else if (-1 < (nextPos = Tokenizers::assignStatementWithoutLetTokenizer(parent, ch,
+            else if (Search::IsTokenized(nextPos = Tokenizers::assignStatementWithoutLetTokenizer(parent, ch,
                                                                                     start,
                                                                                     context))) {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }
-            else if (-1 < (nextPos = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
+            else if (Search::IsTokenized(nextPos = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }
@@ -458,7 +458,7 @@ namespace smart {
 
         context->setError(ErrorCode::syntax_error2, start);
         context->scanEnd = true;
-        return -1;
+        return Search::NOTFOUND;
     }
 
     int Tokenizers::bodyTokenizer(TokenizerParams_parent_ch_start_context) {
@@ -471,7 +471,7 @@ namespace smart {
                                             returnPosition,
                                             context);
 
-            if (result > -1) {
+            if (Search::IsTokenized(result)) {
                 context->setCodeNode(bodyNode);
                 return result;
             }
@@ -479,7 +479,7 @@ namespace smart {
         else {
             context->setError(ErrorCode::expect_bracket_for_fn_body, context->prevFoundPos);
         }
-        return -1;
+        return Search::NOTFOUND;
     };
 
 
@@ -536,14 +536,14 @@ namespace smart {
     {
         auto *nextParam = Alloc::newFuncParameterItem(context, parent);
         int result;
-        if (-1 < (result = Tokenizers::assignStatementTokenizer(Cast::upcast(nextParam), ch, start, context))) {
+        if (Search::IsTokenized(result = Tokenizers::assignStatementTokenizer(Cast::upcast(nextParam), ch, start, context))) {
             nextParam->assignStatementNodeStruct = Cast::downcast<AssignStatementNodeStruct *>(context->generatedMainNode);
             appendChildParameterNode(funcNode, nextParam);
 
             funcNode->parameterParsePhase = FuncParamParsePhase::EXPECT_COMMA2;
             return result;
         }
-        return -1;
+        return Search::NOTFOUND;
     }
 
     static int internal_parameterListTokenizerMulti(TokenizerParams_parent_ch_start_context) {
@@ -572,10 +572,10 @@ namespace smart {
                 // comma is not needed after a line break
                 return parseNextValue(TokenizerParams_pass, funcNode);
             }
-            return -1;
+            return Search::NOTFOUND;
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
     // virtual
@@ -750,9 +750,9 @@ namespace smart {
                                                 internal_parameterListTokenizerMulti,
                                                 nextPos,
                                                 context);
-                if (result > -1) {
+                if (Search::IsTokenized(result)) {
                     int result2;
-                    if (-1 < (result2 = Scanner::scanOnce(Cast::upcast(&fnNode->bodyNode), Tokenizers::bodyTokenizer,  result, context))) {
+                    if (Search::IsTokenized(result2 = Scanner::scanOnce(Cast::upcast(&fnNode->bodyNode), Tokenizers::bodyTokenizer,  result, context))) {
                         context->scanEnd = true;
                         context->leftNode = Cast::upcast(&fnNode->parameterStartNode);
                         return result2;
@@ -768,7 +768,7 @@ namespace smart {
         else {
             context->setError(ErrorCode::expect_parenthesis_for_fn_params, context->prevFoundPos);
         }
-        return -1;
+        return Search::NOTFOUND;
     }
 
 
@@ -788,7 +788,7 @@ namespace smart {
                                               currentPos,
                                               context);
 
-                    if (resultPos == -1) {
+                    if (!Search::IsTokenized(resultPos)) {
                         // the fn should have a function name
                         context->setError(ErrorCode::invalid_fn_name, start);
 
@@ -799,7 +799,7 @@ namespace smart {
 
                 // Parse body
                 currentPos = resultPos;
-                if (-1 == (resultPos = Scanner::scanOnce(fnNode, inner_fnParamsAndBodyTokenizer,
+                if (!Search::IsTokenized(resultPos = Scanner::scanOnce(fnNode, inner_fnParamsAndBodyTokenizer,
                                                          currentPos, context))) {
 
                     context->setError(ErrorCode::syntax_error, context->prevFoundPos);
@@ -812,7 +812,7 @@ namespace smart {
                 return resultPos;
             }
         }
-        return -1;
+        return Search::NOTFOUND;
     }
 
 

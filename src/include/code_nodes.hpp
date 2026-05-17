@@ -1167,7 +1167,7 @@ namespace smart {
                 }
             }
 
-            return -1;
+            return Search::NOTFOUND;
         }
 
         // SimpleTextNodeStruct

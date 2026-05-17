@@ -64,13 +64,13 @@ namespace smart {
         int result = Tokenizers::WordTokenizer2(TokenizerParams_pass,
                                                 Alloc::newBoolNode
                                                 ,'t', "true");
-        bool trueFound = result > -1;
+        bool trueFound = Search::IsTokenized(result);
         if (!trueFound) {
             result = Tokenizers::WordTokenizer2(TokenizerParams_pass,
                                                 Alloc::newBoolNode,
                                                 'f', "false");
-            if (result == -1) {
-                return -1;
+            if (!Search::IsTokenized(result)) {
+                return Search::NOTFOUND;
             }
         }
 
@@ -219,7 +219,7 @@ namespace smart {
             return start + charCount;
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
 
@@ -350,7 +350,7 @@ namespace smart {
             }
             else {
                 int result;
-                if (-1 < (result = Tokenizers::expressionTokenizer(Cast::upcast(fnNode), ch, start,
+                if (Search::IsTokenized(result = Tokenizers::expressionTokenizer(Cast::upcast(fnNode), ch, start,
                                                                    context))) {
                     fnNode->valueNode = context->generatedMainNode;
                     fnNode->valueNode->found = start;
@@ -362,7 +362,7 @@ namespace smart {
                 }
             }
         }
-        return -1;
+        return Search::NOTFOUND;
     }
 
 
@@ -372,7 +372,7 @@ namespace smart {
             auto *returnNode = Alloc::newParenthesesNode(context, parent);
             int currentPos = start + 1;
             int resultPos;
-            if (-1 < (resultPos = Scanner::scanMulti(returnNode,
+            if (Search::IsTokenized(resultPos = Scanner::scanMulti(returnNode,
                                                      inner_returnStatementTokenizerMulti,
                                                      currentPos, context))) {
 
@@ -381,7 +381,7 @@ namespace smart {
             }
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
     static int parentheses_applyFuncToDescendants(ParenthesesNodeStruct *node, ApplyFunc_params3)
@@ -533,7 +533,7 @@ namespace smart {
             return start + 1;
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
 
@@ -547,12 +547,12 @@ namespace smart {
         int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, start, context);
         context->leftNode = leftNode;
 
-        if (resultPos > -1) {
+        if (Search::IsTokenized(resultPos)) {
             auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainNode);
             binaryOpNode->leftExprNode = virtualNode;
             binaryOpNode->leftExprNode->parentNode = Cast::upcast(binaryOpNode);
 
-            if (-1 < (resultPos = Scanner::scanOnce(binaryOpNode,
+            if (Search::IsTokenized(resultPos = Scanner::scanOnce(binaryOpNode,
                                                     Tokenizers::expressionTokenizer,
                                                     resultPos, context))) {
                 binaryOpNode->rightExprNode = context->generatedMainNode;
@@ -561,7 +561,7 @@ namespace smart {
                 return resultPos;
             }
         }
-        return -1;
+        return Search::NOTFOUND;
     }
 
 

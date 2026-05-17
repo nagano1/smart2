@@ -117,7 +117,7 @@ namespace smart {
 
         if (assignment->nameNode.found == -1) {
              if (assignment->hasTypeDecl && context->afterLineBreak) {
-                 return -1;
+                 return Search::NOTFOUND;
              }
 
              if (assignment->pointerAsterisk.found == -1) {
@@ -129,7 +129,7 @@ namespace smart {
             }
 
             int result;
-            if (-1 < (result = Tokenizers::nameTokenizer(Cast::upcast(&assignment->nameNode)
+            if (Search::IsTokenized(result = Tokenizers::nameTokenizer(Cast::upcast(&assignment->nameNode)
                                                         , ch, start, context))
             ) {
                 assignment->nameNode.found = result;
@@ -155,13 +155,13 @@ namespace smart {
                 //else {
                     //context->scanEnd = true;
                     //context->setError(ErrorCode::syntax_error, start);
-//                    return -1;
+                    //return -1;
                 //}
             }
         }
         else {
             int result;
-            if (-1 < (result = Tokenizers::expressionTokenizer(Cast::upcast(assignment), ch,
+            if (Search::IsTokenized(result = Tokenizers::expressionTokenizer(Cast::upcast(assignment), ch,
                                                                start, context))) {
                 assignment->valueNode = context->generatedMainNode;
                 context->scanEnd = true;
@@ -173,7 +173,7 @@ namespace smart {
             }
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
 
@@ -193,7 +193,7 @@ namespace smart {
         }
 
         int resultPos;
-        if (-1 < (resultPos = Scanner::scanMulti(assignment, inner_assignStatementTokenizerMulti,
+        if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignment, inner_assignStatementTokenizerMulti,
                                                  start, context))) {
             assignment->hasTypeDecl = false;
             assignment->typeOrLet.isLet = false;
@@ -206,7 +206,7 @@ namespace smart {
 
         context->unusedAssignment = assignment;
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
     // let a = 3
@@ -226,12 +226,12 @@ namespace smart {
         }
 
         int resul = Tokenizers::typeTokenizer(Cast::upcast(&assignStatement->typeOrLet), ch, start, context);
-        if (resul > -1) {
+        if (Search::IsTokenized(resul)) {
             assignStatement->hasTypeDecl = true;
 
             //context->afterLineBreak = false;
             int resultPos;
-            if (-1 < (resultPos = Scanner::scanMulti(assignStatement,
+            if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignStatement,
                                                      inner_assignStatementTokenizerMulti,
                                                      resul, context))
                     ) {
@@ -243,7 +243,7 @@ namespace smart {
         }
 
         context->unusedAssignment = assignStatement;
-        return -1;
+        return Search::NOTFOUND;
     }
 }
 

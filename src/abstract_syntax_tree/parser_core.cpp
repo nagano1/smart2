@@ -320,7 +320,7 @@ namespace smart
             }
 
             returnResult = result;
-            if (result > -1) {
+            if (Search::IsTokenized(result)) {
                 context->afterLineBreak = false;
                 context->prevFoundPos = result;
 
@@ -382,28 +382,27 @@ namespace smart
     int Tokenizers::expressionTokenizer(TokenizerParams_parent_ch_start_context) {
         int result = numberTokenizer(TokenizerParams_pass);
 
-        if (result == -1) { result = boolTokenizer(TokenizerParams_pass); }
-        if (result == -1) { result = nullTokenizer(TokenizerParams_pass); }
-        if (result == -1) { result = parenthesesTokenizer(TokenizerParams_pass); }
-        if (result == -1) { result = variableTokenizer(TokenizerParams_pass); }
-        if (result == -1) { result = stringLiteralTokenizer(TokenizerParams_pass); }
+        if (!Search::IsTokenized(result)) { result = boolTokenizer(TokenizerParams_pass); }
+        if (!Search::IsTokenized(result)) { result = nullTokenizer(TokenizerParams_pass); }
+        if (!Search::IsTokenized(result)) { result = parenthesesTokenizer(TokenizerParams_pass); }
+        if (!Search::IsTokenized(result)) { result = variableTokenizer(TokenizerParams_pass); }
+        if (!Search::IsTokenized(result)) { result = stringLiteralTokenizer(TokenizerParams_pass); }
 
-        if (result == -1) { return -1; }
+        if (!Search::IsTokenized(result)) { return Search::NOTFOUND; }
 
         // access operator
         // pointer->val
         // "jfiowj".length
 
-
         // call func expression: func()
         int extraPos;
-        if (-1 < (extraPos = Tokenizers::funcCallTokenizer(parent, context->chars[result],
+        if (Search::IsTokenized(extraPos = Tokenizers::funcCallTokenizer(parent, context->chars[result],
                                                            result, context))) {
             result = extraPos;
         }
 
         //  binary operator expression: calc() + 421431
-        if (-1 < (extraPos = Tokenizers::binaryOperationTokenizer(parent, context->chars[result],
+        if (Search::IsTokenized(extraPos = Tokenizers::binaryOperationTokenizer(parent, context->chars[result],
                                                                   result, context))) {
             result = extraPos;
         }

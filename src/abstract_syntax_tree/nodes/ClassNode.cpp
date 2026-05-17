@@ -157,13 +157,13 @@ namespace smart {
         }
         else {
             int result;
-            if (-1 < (result = Tokenizers::classTokenizer(parent, ch, start, context))) {
+            if (Search::IsTokenized(result = Tokenizers::classTokenizer(parent, ch, start, context))) {
                 auto *innerClassNode = Cast::downcast<ClassNodeStruct *>(parent);
                 appendChildNode(innerClassNode, context->generatedMainNode);
                 return result;
             }
 
-            if (-1 < (result = Tokenizers::fnTokenizer(parent, ch, start, context))) {
+            if (Search::IsTokenized(result = Tokenizers::fnTokenizer(parent, ch, start, context))) {
                 auto* innerClassNode = Cast::downcast<ClassNodeStruct*>(parent);
                 appendChildNode(innerClassNode, context->generatedMainNode);
                 return result;
@@ -173,7 +173,7 @@ namespace smart {
             context->setError2(ErrorCode::no_brace_of_end_for_class, classNode->found, start);
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
 
@@ -199,28 +199,28 @@ namespace smart {
                                               currentPos,
                                               context);
 
-                    if (resultPos == -1) {
+                    if (!Search::IsTokenized(resultPos)) {
                         // the class should have a class name
                         context->setError(ErrorCode::invalid_class_name, start);
-                        return -1;
+                        return Search::NOTFOUND;
                     }
                 }
 
 
                 // Parse body
                 currentPos = resultPos;
-                if (-1 == (resultPos = Scanner::scanMulti(classNode, inner_classBodyTokenizer,
+                if (!Search::IsTokenized(resultPos = Scanner::scanMulti(classNode, inner_classBodyTokenizer,
                                                      currentPos, context))) {
                     //context->codeNode = Cast::upcast(classNode);
                     //return currentPos;
-                    return -1;
+                    return Search::NOTFOUND;
                 }
 
                 context->setCodeNode(classNode);
                 return resultPos;
             }
         }
-        return -1;
+        return Search::NOTFOUND;
     }
 }
 

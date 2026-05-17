@@ -14,12 +14,12 @@ struct ParseUtil {
     static inline int detectOne(const T &tokenizer, const utf8byte *chars, utf8byte ch, int i) {
         if (tokenizer.first_char == ch) {
             auto idx = tokenizer.tryTokenize(chars, i);
-            if (idx > -1) {
+            if (Search::IsTokenized(idx)) {
                 return idx;
             }
         }
 
-        return -1;
+        return Search::NOTFOUND;
     };
 
     template<class T>
@@ -27,13 +27,13 @@ struct ParseUtil {
         for (int k = 0; k < tokenizer.first_chars_length; k++) {
             if (tokenizer.first_chars[k] == ch) {
                 auto idx = tokenizer.tryTokenize(chars, i);
-                if (idx > -1) {
+                if (Search::IsTokenized(idx)) {
                     return idx;
                 }
             }
         }
 
-        return -1;
+        return Search::NOTFOUND;
     };
 
     static inline bool matchWord(const utf8byte *text,

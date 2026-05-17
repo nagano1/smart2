@@ -522,11 +522,11 @@ namespace smart {
         auto *doc = Cast::downcast<DocumentStruct *>(parent);
         int result;
 
-        if (-1 < (result = Tokenizers::classTokenizer(parent, ch, start, context))) {
+        if (Search::IsTokenized(result = Tokenizers::classTokenizer(parent, ch, start, context))) {
             appendRootNode(doc, context->generatedMainNode);
             return result;
         }
-        else if (-1 < (result = Tokenizers::fnTokenizer(parent, ch, start, context))) {
+        else if (Search::IsTokenized(result = Tokenizers::fnTokenizer(parent, ch, start, context))) {
             appendRootNode(doc, context->generatedMainNode);
             return result;
         }
@@ -539,7 +539,7 @@ namespace smart {
             //throw 3;
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
     static void callAllLineEvent(DocumentStruct *docStruct, CodeLine *line, ParseContext *context) {

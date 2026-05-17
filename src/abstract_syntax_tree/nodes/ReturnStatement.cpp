@@ -112,12 +112,12 @@ namespace smart {
     static int inner_returnStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
 
         if (context->afterLineBreak) {
-            return -1;
+            return Search::NOTFOUND;
         }
 
         auto *returnNode = Cast::downcast<ReturnStatementNodeStruct *>(parent);
         int result;
-        if (-1 < (result = Tokenizers::expressionTokenizer(Cast::upcast(returnNode), ch,
+        if (Search::IsTokenized(result = Tokenizers::expressionTokenizer(Cast::upcast(returnNode), ch,
                                                            start, context))) {
             returnNode->valueNode = context->generatedMainNode;
             context->scanEnd = true;
@@ -129,14 +129,14 @@ namespace smart {
             context->setError(ErrorCode::no_value_for_return, start);
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 
     // return 1234
     int Tokenizers::returnStatementTokenizer(TokenizerParams_parent_ch_start_context) {
         // return
         if ('r' != ch) {
-            return -1;
+            return Search::NOTFOUND;
         }
 
         auto idx = ParseUtil::matchAt(context->chars, context->length, start, returnText);
@@ -147,7 +147,7 @@ namespace smart {
             //context->afterLineBreak = false;
             int currentPos = idx + returnTextSize;
             int resultPos;
-            if (-1 < (resultPos = Scanner::scanMulti(returnNode,
+            if (Search::IsTokenized(resultPos = Scanner::scanMulti(returnNode,
                                                         inner_returnStatementTokenizerMulti,
                                                         currentPos, context))) {
 
@@ -161,7 +161,7 @@ namespace smart {
             }
         }
 
-        return -1;
+        return Search::NOTFOUND;
     }
 }
 
