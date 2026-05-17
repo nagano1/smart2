@@ -40,10 +40,7 @@ namespace smart
                       ParseContext *context
     ) {
 
-        context->scanEnd = false;
-        int k = Scanner::scanWithTokenizer(parentNode, tokenizer, start, context, false, false);
-        context->scanEnd = false;
-        return k;
+        return Scanner::scanWithTokenizer(parentNode, tokenizer, start, context, false, false);
     }
 
     // scan until scanEnd==true, tokenizer should set scanEnd to true when it wants to stop scanning
@@ -327,7 +324,6 @@ namespace smart
 
             if (result == Search::DONE_WITH_PREVIUS_POSITION) {
                 returnResult = context->prevFoundPos;
-                //context->scanEnd = false;
                 break;
             }
 
@@ -359,7 +355,6 @@ namespace smart
                 lastLineBreak = nullptr;
 
                 if (context->scanEnd) {
-                    //context->scanEnd = false;
                     break;
                 }
 
@@ -389,7 +384,7 @@ namespace smart
                 context->remaindPrevChars = context->length - whitespace_startpos;
             }
         }
-        //context->scanEnd = false;
+        context->scanEnd = false;
         return returnResult;
     }
 
