@@ -356,7 +356,7 @@ namespace smart
                 lastLineBreak = nullptr;
 
                 if (context->scanEnd) {
-                    //context->scanEnd = false;
+                    context->scanEnd = false;
                     break;
                 }
 
@@ -386,7 +386,7 @@ namespace smart
                 context->remaindPrevChars = context->length - whitespace_startpos;
             }
         }
-        //context->scanEnd = false;
+        context->scanEnd = false;
         return returnResult;
     }
 
