@@ -40,17 +40,17 @@ namespace smart
                       ParseContext *context
     ) {
 
-        return Scanner::scan_for_root(parentNode, tokenizer, start, context, false, false);
+        return Scanner::scanWithTokenizer(parentNode, tokenizer, start, context, false, false);
     }
 
-    // scan until scanEnd==true
+    // scan until scanEnd==true, tokenizer should set scanEnd to true when it wants to stop scanning
     int Scanner::scanMulti(void *parentNode,
         TokenizerFunction tokenizer,
         int start,
         ParseContext *context
     ) {
         context->scanEnd = false;
-        int result = Scanner::scan_for_root(parentNode, tokenizer, start, context, false, true);
+        int result = Scanner::scanWithTokenizer(parentNode, tokenizer, start, context, false, true);
         context->scanEnd = false;
         return result;
     }
@@ -266,7 +266,7 @@ namespace smart
     }
 
 
-    int Scanner::scan_for_root(void *parentNode,
+    int Scanner::scanWithTokenizer(void *parentNode,
         TokenizerFunction tokenizer,
         int start,
         ParseContext *context,
@@ -356,7 +356,7 @@ namespace smart
                 lastLineBreak = nullptr;
 
                 if (context->scanEnd) {
-                    context->scanEnd = false;
+                    //context->scanEnd = false;
                     break;
                 }
 
