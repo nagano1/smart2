@@ -330,19 +330,17 @@ namespace smart
                 context->prevFoundPos = result;
 
                 assert(context->leftNode != nullptr);
-                //if (context->leftNode != nullptr) {
-                    if (whitespace_startpos != -1) {
-                        context->leftNode->prev_chars = i - whitespace_startpos;
-                        whitespace_startpos = -1;
-                    }
+                if (whitespace_startpos != -1) {
+                    context->leftNode->prev_chars = i - whitespace_startpos;
+                    whitespace_startpos = -1;
+                }
 
-                    if (commentNode != nullptr) {
-                        context->leftNode->prevCommentNode = commentNode;
-                        commentNode = nullptr;
-                    }
+                if (commentNode != nullptr) {
+                    context->leftNode->prevCommentNode = commentNode;
+                    commentNode = nullptr;
+                }
 
-                    context->leftNode->prevLineBreakNode = prevLineBreak;
-                //}
+                context->leftNode->prevLineBreakNode = prevLineBreak;
 
                 i = result;
 

@@ -150,7 +150,7 @@ namespace smart {
             }
             else {
                 if (assignment->hasTypeDecl) {
-                    context->setCodeNode(nullptr);
+                    //context->setCodeNode(nullptr);
                     context->scanEnd = true;
                     return Search::DONE_WITH_PREVIUS_POSITION;//start;// context->prevFoundPos;// assignment->nameNode.found;
                 }
