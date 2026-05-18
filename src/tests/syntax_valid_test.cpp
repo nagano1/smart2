@@ -46,22 +46,7 @@ class FooClass
 {
     fn funcB()
     {
-        let a = 893214
-        let *str = "0jfoiwjoie"
-        int ab = 123412
-        int c // test
 
-        float f = 4503
-        ?let *f = null
-        let g = true
-        
-        "abcdefg"
-        3142
-        null
-        false
-        true
-        unknownIdentifier
-        "string sample"
 
         /*[hoge]
           block comment test
