@@ -113,11 +113,6 @@ class OuterClass
 )");
 
 constexpr auto *testCode4 = u8R"(
-class fjawioejap
-{
-
-}
-
 )";
 
 const char commentTestText[] = " /* \r\n /**/ bck\r\n\n*/";
