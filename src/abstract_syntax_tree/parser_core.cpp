@@ -149,13 +149,12 @@ namespace smart
 
         // split block comment into fragments by line break, and create LineBreakNodeStruct for each line break
         while (currentIndex <= commentEndIndex) {
-            int lineEndIndex = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, currentIndex);
-            //int endIndex = lineEndIndex;// commentEndIndex < lineEndIndex ? commentEndIndex : lineEndIndex;
-                        int endIndex = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, currentIndex);
+                        int idxOfCommentEnd = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, currentIndex);
 
-            if (lineEndIndex < endIndex) {
-                endIndex = lineEndIndex;
+            if (commentEndIndex < idxOfCommentEnd) {
+                idxOfCommentEnd = commentEndIndex;
             }
+            int endIndex = idxOfCommentEnd;
 
             if (endIndex > -1 && currentIndex < endIndex) {
                 auto *commentFragment = Alloc::newBlockCommentFragmentNode(context, Cast::upcast(parentNode));
