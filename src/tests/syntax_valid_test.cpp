@@ -115,7 +115,11 @@ class OuterClass
 constexpr auto *testCode4 = u8R"(
 class fjawioejap
 {
+    fn funcB(int a)
+    {
+        
 
+    }
 }
 
 class/**/A/**/{
