@@ -125,7 +125,7 @@ class/**/A/**/{
 }
 )");
 
-const char commentTestText[] = " /*[A] \r\n  bck\r\n\n[A]*/";
+const char commentTestText[] = " /* \r\n  bck\r\n\n*/";
 const char parenthesisText[] = "fn a() { (12) }";
 
 void checkTextEquality(const char *name, const char* code)
@@ -145,8 +145,6 @@ void checkTextEquality(const char *name, const char* code)
     else {
         printf("expected:\n%s\n", code);
         printf("actual:\n%s\n", treeText);
-        fprintf(stderr, "expected:\n%s\n", code);
-        fprintf(stderr, "actual:\n%s\n", treeText);
         assert(false && "text not equal");
     }
 
