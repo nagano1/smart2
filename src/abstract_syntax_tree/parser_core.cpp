@@ -149,7 +149,9 @@ namespace smart
             if (tagLength > 0)
             {
                 // [hoge]*/
-                if (context->chars[endCommentPos - 1] == ']' && context->chars[endCommentPos - tagLength - 2] == '[' && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1))
+                if (context->chars[endCommentPos - 1] == ']'
+                     && context->chars[endCommentPos - tagLength - 2] == '['
+                     && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1))
                 {
                     // the end tag of the named block comment found
                     return endCommentPos + 2;
