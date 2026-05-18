@@ -168,8 +168,11 @@ class/**/A/**/{
 const char commentTestText[] = " /* \r\n /**/ bck\r\n\n*/";
 const char parenthesisText[] = "fn a() { (12) }";
 
-void checkTextEquality(const char *code)
+void checkTextEquality(const char *name, const char* code)
 {
+    printf("checking: %s\n", name);
+    fprintf(stderr, "checking: %s\n", name);
+
     auto *document = Alloc::newDocument(DocumentType::CodeDocument);
     DocumentUtils::parseText(document, code, strlen(code));
     char *treeText = DocumentUtils::getTextFromTree(document);
@@ -180,16 +183,16 @@ void checkTextEquality(const char *code)
     Alloc::deleteDocument(document);
 }
 
-
+#define FUNC(x) checkTextEquality(#x, x)
 void testParsing()
 {
-    checkTextEquality(text);
-    checkTextEquality(testCode3);
-    checkTextEquality(testCode4);
-    checkTextEquality(commentTestText);
-    checkTextEquality(parenthesisText);
-    checkTextEquality(""); // empty text
-    checkTextEquality(" \r\n \n\n  ");
+    FUNC(text);
+    FUNC(testCode3);
+    FUNC(testCode4);
+    FUNC(commentTestText);
+    FUNC(parenthesisText);
+    FUNC(""); // empty text
+    FUNC(" \r\n \n\n  ");
 
 
 }
