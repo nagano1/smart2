@@ -46,20 +46,6 @@ class FooClass
 {
     fn funcB()
     {
-
-
-        /*[hoge]
-          block comment test
-          コメントテスト
-        [hoge]*/
-        // line comment test
-        // コメントテスト
-
-        "fjoiiw" // comment test
-
-        let *abc = "joifwjoe01234"
-        let f = 343214213
-        var g = 1234
         int a = 3124
     }
 }
