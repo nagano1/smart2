@@ -221,7 +221,7 @@ void testTypeTreeTest() {
         {
             fn func()
             {
-                $let aw = 242
+                let aw = 242
                 true
                 null
                 printf(214)
@@ -247,7 +247,7 @@ void testTypeTreeTest() {
 <Symbol>        {<lineBreak>
 <fn>            fn<Name> func<Symbol>(<Symbol>)<lineBreak>
 <body>            {<lineBreak>
-<Type>                $let<Name> aw<Symbol> =<number> 242<lineBreak>
+<Type>                let<Name> aw<Symbol> =<number> 242<lineBreak>
 <bool>                true<lineBreak>
 <NULL>                null<lineBreak>
 <Variable>                printf<Symbol>(<FuncArgument><number>214<Symbol>)<lineBreak>
