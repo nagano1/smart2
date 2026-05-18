@@ -112,7 +112,7 @@ class OuterClass
 }
 )");
 
-constexpr char testCode4[] = R"(
+constexpr auto *testCode4 = u8R"(
 class fjawioejap
 {
     fn funcB(int a, int *k = 31)
@@ -164,7 +164,10 @@ class/**/A/**/{
 
 }
 )";
-void checkTextEquality(char *code)
+
+const char commentTestText[] = " /* \r\n /**/ bck\r\n\n*/";
+
+void checkTextEquality(const char *code)
 {
     auto *document = Alloc::newDocument(DocumentType::CodeDocument);
     DocumentUtils::parseText(document, code, strlen(code));
@@ -182,6 +185,7 @@ void testParsing()
     checkTextEquality(text);
     checkTextEquality(testCode3);
     checkTextEquality(testCode4);
+    checkTextEquality(commentTestText);
 }
 
 void testNodeTypeEquality() {
