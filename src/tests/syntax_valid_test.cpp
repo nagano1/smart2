@@ -149,14 +149,7 @@ class fjawioejap
         let f = 3
 
         
-        (true) + false + (
-            241
-        )
-        
-        funcA(true, "jfiwo")
 
-        return
-        return 3421
     }
 }
 
@@ -193,8 +186,6 @@ void testParsing()
     FUNC(parenthesisText);
     FUNC(""); // empty text
     FUNC(" \r\n \n\n  ");
-
-
 }
 
 void testNodeTypeEquality() {
