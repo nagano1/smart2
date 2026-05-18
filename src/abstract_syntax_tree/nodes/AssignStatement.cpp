@@ -58,8 +58,7 @@ namespace smart {
 
     static constexpr const char assignTypeText[] = "<AssignStatement>";
 
-    static
-    int applyFuncToDescendants(AssignStatementNodeStruct *node, ApplyFunc_params3)
+    static int applyFuncToDescendants(AssignStatementNodeStruct *node, ApplyFunc_params3)
     {
         if (parentIsFirst) {
             if (targetVTable == nullptr || node->vtable == targetVTable) {

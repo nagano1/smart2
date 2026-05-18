@@ -273,16 +273,15 @@ namespace smart
         else {
             result = position + 1;
         }
-        context->afterLineBreak = true;
         return result;
     }
 
 
     int Scanner::scanWithTokenizer(void *parentNode,
-        TokenizerFunction tokenizer,
-        int start,
-        ParseContext *context,
-        bool root, bool scanMulti
+                                   TokenizerFunction tokenizer,
+                                   int start,
+                                   ParseContext *context,
+                                   bool root, bool scanMulti
     ) {
         LineBreakNodeStruct *prevLineBreak = nullptr;
         LineBreakNodeStruct *lastLineBreak = nullptr;
@@ -313,6 +312,7 @@ namespace smart
             }
             else if (ParseUtil::isBreakLine(ch)) {
                 i = createLineBreakNode(context, parentNode, &prevLineBreak, &lastLineBreak, whitespace_startpos, i, &commentNode, ch);
+                context->afterLineBreak = true;
                 continue;
             }
             else if (ParseUtil::isSpace(ch)) {
