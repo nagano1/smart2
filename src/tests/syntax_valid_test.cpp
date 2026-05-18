@@ -111,11 +111,60 @@ class OuterClass
     /* fwaei */
 }
 )");
-
 constexpr auto *testCode4 = const_cast<char*>( u8R"(
+class fjawioejap
+{
+    fn funcB(int a, int *k = 31)
+    {
+        // comment
+        let a = 893214 // fawoiefjiawo
+        let *str = "0jfoiwjoie" // comment
+        int a = 123412
+        float test = 3214
+
+        float f = 4503
+        ?let *f = null
+        let g = true
+        a = 5
+        varibleAjoawiefjaipo
+        
+        "jfoiwjeioaf"
+            /*
+                /*fajowefjao 
+                    /*
+                    */
+                */
+
+
+                 /*ajowiefaiow  
+                 joafwieコメント張りさん
+                 */
+            */
+
+            /*
+            comment here
+            */
+
+        let f = 3
+
+        
+        (true) + false + (
+            241
+        )
+        
+        funcA(true, "jfiwo")
+
+        return
+        return 3421
+    }
+}
+
+class/**/A/**/{
+
+}
 )");
 
-const char commentTestText[] = " /* \r\n /**/ bck\r\n\n*/";
+//const char commentTestText[] = " /* \r\n /**/ bck\r\n\n*/";
 const char parenthesisText[] = "fn a() { (12) }";
 
 void checkTextEquality(const char *name, const char* code)
@@ -143,6 +192,7 @@ void testParsing()
     FUNC(parenthesisText);
     FUNC(""); // empty text
     FUNC(" \r\n \n\n  ");
+
 }
 
 void testNodeTypeEquality() {
