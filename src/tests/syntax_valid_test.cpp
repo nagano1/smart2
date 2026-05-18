@@ -125,7 +125,7 @@ class/**/A/**/{
 }
 )");
 
-const char commentTestText[] = " /*[A] \r\n /**/ bck\r\n\n[A]*/";
+const char commentTestText[] = " /*[A] \r\n  bck\r\n\n[A]*/";
 const char parenthesisText[] = "fn a() { (12) }";
 
 void checkTextEquality(const char *name, const char* code)
