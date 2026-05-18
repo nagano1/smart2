@@ -112,8 +112,8 @@ class OuterClass
 }
 )");
 
-constexpr auto *testCode4 = u8R"(
-)";
+constexpr auto *testCode4 = const_cast<char*>( u8R"(
+)");
 
 const char commentTestText[] = " /* \r\n /**/ bck\r\n\n*/";
 const char parenthesisText[] = "fn a() { (12) }";
