@@ -129,26 +129,6 @@ class fjawioejap
         a = 5
         varibleAjoawiefjaipo
         
-        "jfoiwjeioaf"
-            /*
-                /*fajowefjao 
-                    /*
-                    */
-                */
-
-
-                 /*ajowiefaiow  
-                 joafwieコメント張りさん
-                 */
-            */
-
-            /*
-            comment here
-            */
-
-        let f = 3
-
-        
 
     }
 }
