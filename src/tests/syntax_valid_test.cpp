@@ -125,7 +125,7 @@ class/**/A/**/{
 }
 )");
 
-const char commentTestText[] = u8" /* \r\n  bck\r\n\r\n*/";
+const char commentTestText[] = u8" /* \r\n  bck\r\n\n*/";
 const char parenthesisText[] = "fn a() { (12) }";
 
 void checkTextEquality(const char *name, const char* code)
