@@ -21,7 +21,6 @@
 
 namespace smart
 {
-    void detectBlockCommentEnd(int32_t i, smart::ParseContext *context, int &tagLength, char *&tagText, int &commentEndIndex);
     ErrorInfo ErrorInfo::ErrorInfoList[errorListSize];
     bool ErrorInfo::errorInfoInitialized{false};
     //static int _ab = initErrorInfoList();
@@ -62,59 +61,8 @@ namespace smart
         return nodeBase->vtable->appendToLine(nodeBase, currentCodeLine);
     }
 
-    int tryDetectComments(ParseContext* context, int32_t i, void**commentNode
-        , int32_t& whitespace_startpos, void* parentNode, LineBreakNodeStruct**prevLineBreak, InnerParsingResult* parsingResult)
-    {
-        int commentEndIndex = -1;
-        bool isLineComment = false;
-
-        char *tagText = nullptr; // name of named block comment
-        int tagLength = 0;
-
-        // line comment with "//"
-        if ('/' == context->chars[i + 1]) {
-            commentEndIndex = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, i);
-            isLineComment = true;
-
-        } // block comment /* */
-        else if ('*' == context->chars[i + 1]) {
-            commentEndIndex = detectBlockCommentEnd(i, context, tagLength, tagText);
-        }
-
-        if (commentEndIndex > -1) {
-            auto* prevCommentNode = *commentNode;
-
-            if (isLineComment) {
-                auto* comment = Alloc::newLineCommentNode(context, Cast::upcast(parentNode));
-                Init::assignText_SimpleTextNode(comment, context, i, commentEndIndex - i);
-
-                *commentNode = comment;
-            }
-            else {
-                *commentNode = Scanner::generateBlockCommentFragments(parentNode, context, i, commentEndIndex, tagText, tagLength);
-            }
-
-            NodeBase* comment2 = Cast::upcast(*commentNode);
-            if (whitespace_startpos != -1 && whitespace_startpos < i) {
-                comment2->prev_chars = i - whitespace_startpos;
-                whitespace_startpos = -1;
-            }
-
-            if (prevCommentNode != nullptr) {
-                comment2->prevCommentNode = prevCommentNode;
-            }
-
-            if (*prevLineBreak != nullptr) {
-                comment2->prevLineBreakNode = *prevLineBreak;
-                *prevLineBreak = nullptr;
-            }
-        }
-
-        parsingResult->newPosition = commentEndIndex;
-        return commentEndIndex;
-    }
-
-    int detectBlockCommentEnd(int32_t i, smart::ParseContext *context, int &tagLength, char *&tagText)
+    
+    static inline int detectBlockCommentEnd(int32_t i, smart::ParseContext *context, int &tagLength, char *&tagText)
     {
         int textStartPos = i + 2;
 
@@ -172,6 +120,59 @@ namespace smart
         }
 
         return -1;
+    }
+
+
+    int tryDetectComments(ParseContext* context, int32_t i, void**commentNode
+        , int32_t& whitespace_startpos, void* parentNode, LineBreakNodeStruct**prevLineBreak, InnerParsingResult* parsingResult)
+    {
+        int commentEndIndex = -1;
+        bool isLineComment = false;
+
+        char *tagText = nullptr; // name of named block comment
+        int tagLength = 0;
+
+        // line comment with "//"
+        if ('/' == context->chars[i + 1]) {
+            commentEndIndex = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, i);
+            isLineComment = true;
+
+        } // block comment /* */
+        else if ('*' == context->chars[i + 1]) {
+            commentEndIndex = detectBlockCommentEnd(i, context, tagLength, tagText);
+        }
+
+        if (commentEndIndex > -1) {
+            auto* prevCommentNode = *commentNode;
+
+            if (isLineComment) {
+                auto* comment = Alloc::newLineCommentNode(context, Cast::upcast(parentNode));
+                Init::assignText_SimpleTextNode(comment, context, i, commentEndIndex - i);
+
+                *commentNode = comment;
+            }
+            else {
+                *commentNode = Scanner::generateBlockCommentFragments(parentNode, context, i, commentEndIndex, tagText, tagLength);
+            }
+
+            NodeBase* comment2 = Cast::upcast(*commentNode);
+            if (whitespace_startpos != -1 && whitespace_startpos < i) {
+                comment2->prev_chars = i - whitespace_startpos;
+                whitespace_startpos = -1;
+            }
+
+            if (prevCommentNode != nullptr) {
+                comment2->prevCommentNode = prevCommentNode;
+            }
+
+            if (*prevLineBreak != nullptr) {
+                comment2->prevLineBreakNode = *prevLineBreak;
+                *prevLineBreak = nullptr;
+            }
+        }
+
+        parsingResult->newPosition = commentEndIndex;
+        return commentEndIndex;
     }
 
     inline void *Scanner::generateBlockCommentFragments(void *parentNode, ParseContext *context,
