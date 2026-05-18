@@ -137,6 +137,8 @@ void checkTextEquality(const char *name, const char* code)
     DocumentUtils::parseText(document, code, strlen(code));
     char *treeText = DocumentUtils::getTextFromTree(document);
 
+    assert(document->context->syntaxErrorInfo.hasError == false);
+
     assert(strcmp(code, treeText) == 0);
 
     free(treeText);
