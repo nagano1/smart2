@@ -73,7 +73,7 @@ class FooClass
         "fjoiiw" // comment test
 
         let *abc = "joifwjoe01234"
-        $let f = 343214213
+        let f = 343214213
         var g = 1234
         int a = 3124
     }
@@ -123,9 +123,9 @@ class fjawioejap
         int a = 123412
         float test = 3214
 
-        $float f = 4503
+        float f = 4503
         ?let *f = null
-        $let g = true
+        let g = true
         a = 5
         varibleAjoawiefjaipo
         
@@ -188,6 +188,10 @@ void testParsing()
     checkTextEquality(testCode4);
     checkTextEquality(commentTestText);
     checkTextEquality(parenthesisText);
+    checkTextEquality(""); // empty text
+    checkTextEquality(" \r\n \n\n  ");
+
+
 }
 
 void testNodeTypeEquality() {
