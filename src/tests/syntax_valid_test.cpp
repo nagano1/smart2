@@ -100,17 +100,7 @@ class fjawioejap
         varibleAjoawiefjaipo
         
         "jfoiwjeioaf"
-            /*
-                /*fajowefjao 
-                    /*
-                    */
-                */
-
-
-                 /*ajowiefaiow  
-                 joafwieコメント張りさん
-                 */
-            */
+            
 
             /*
             comment here
