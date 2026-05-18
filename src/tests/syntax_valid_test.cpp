@@ -85,7 +85,10 @@ class OuterClass
 constexpr auto *testCode4 = const_cast<char*>( u8R"(
 class fjawioejap
 {
-
+    fn funcB(int a, int *k = 31)
+    {
+       
+    }
 }
 
 class/**/A/**/{
