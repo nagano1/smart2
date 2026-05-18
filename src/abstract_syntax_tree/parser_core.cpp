@@ -61,6 +61,27 @@ namespace smart
         return nodeBase->vtable->appendToLine(nodeBase, currentCodeLine);
     }
 
+        // support nest
+    int searchEndBlockCommentPos(int currentIdx, char *chars, int charLength) {
+        int retPos = charLength;
+
+        // /*
+         /* */
+        // */
+        int commentStartPos = ParseUtil::indexOf2(chars, charLength, currentIdx, '/', '*');
+        int commentEndPos = ParseUtil::indexOf2(chars, charLength, currentIdx, '*', '/');
+        if (commentEndPos > -1) {
+            if (commentStartPos > - 1 && commentStartPos < commentEndPos) { // nested block comment found
+                int nestedClosePos = searchEndBlockCommentPos(commentStartPos + 2, chars, charLength);
+                retPos = searchEndBlockCommentPos(nestedClosePos, chars, charLength);
+
+            } else {
+                retPos = commentEndPos + 2;
+            }
+        }
+
+        return retPos;
+    }
     int tryDetectComments(ParseContext* context, int32_t i, void**commentNode
         , int32_t& whitespace_startpos, void* parentNode, LineBreakNodeStruct**prevLineBreak, InnerParsingResult* parsingResult)
     {
@@ -77,55 +98,8 @@ namespace smart
 
         } // block comment /* */
         else if ('*' == context->chars[i + 1]) {
-            int textStartPos = i + 2;
+                        commentEndIndex = searchEndBlockCommentPos(i + 2, context->chars, context->length);
 
-            if (context->chars[i + 2] == '[') { // /*[hoge] ... [hoge]*/
-                int nameStartPos = i + 3;
-                // finds out the tag name: hoge
-                int endOfStartTagPos = ParseUtil::indexOf(context->chars, context->length, nameStartPos, ']');
-                int lineEndPos = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, nameStartPos);
-                // the name of the named block comment must be in the same line with the start tag
-                if (endOfStartTagPos > -1 && endOfStartTagPos < lineEndPos) {
-                    tagLength = endOfStartTagPos - nameStartPos;
-                    textStartPos = endOfStartTagPos + 1;
-                    tagText = context->memBuffer.newMem<char>(tagLength + 1);
-                    TEXT_MEMCPY(tagText, context->chars + nameStartPos, tagLength);
-                    tagText[tagLength] = '\0';
-                }
-            }
-
-            int searchEndPos = textStartPos;
-            while (true) {
-                int endCommentPos = ParseUtil::indexOf2(context->chars, context->length, searchEndPos, '*', '/');
-
-                if (endCommentPos == -1) {
-                    // the end of block comment not found, treat the rest of chars as comment
-                    commentEndIndex = context->length;
-                    break;
-                }
-
-                if (tagLength > 0) {
-                    // [hoge]*/
-                    if (context->chars[endCommentPos - 1] == ']'
-                        && context->chars[endCommentPos - tagLength - 2] == '['
-                        && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
-                        // the end tag of the named block comment found
-                        commentEndIndex = endCommentPos + 2;
-                        break;
-                    }
-                    else {
-                        // not the end of the named block comment, continue to search
-                        searchEndPos = endCommentPos + 2;
-                        continue;;
-                    }
-                }
-                else {
-                    // not a named block comment, the first */ is the end of the block comment
-                    commentEndIndex = endCommentPos + 2;
-                    break;
-                }
-                break;
-            }
         }
 
         if (commentEndIndex > -1) {
