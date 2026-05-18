@@ -112,6 +112,58 @@ class OuterClass
 }
 )");
 
+constexpr char testCode4[] = R"(
+class fjawioejap
+{
+    fn funcB(int a, int *k = 31)
+    {
+        // comment
+        let a = 893214 // fawoiefjiawo
+        let *str = "0jfoiwjoie" // comment
+        int a = 123412
+        float test = 3214
+
+        $float f = 4503
+        ?let *f = null
+        $let g = true
+        a = 5
+        varibleAjoawiefjaipo
+        
+        "jfoiwjeioaf"
+            /*
+                /*fajowefjao 
+                    /*
+                    */
+                */
+
+
+                 /*ajowiefaiow  
+                 joafwieコメント張りさん
+                 */
+            */
+
+            /*
+            comment here
+            */
+
+        let f = 3
+
+        
+        (true) + false + (
+            241
+        )
+        
+        funcA(true, "jfiwo")
+
+        return
+        return 3421
+    }
+}
+
+class/**/A/**/{
+
+}
+)";
 void checkTextEquality(char *code)
 {
     auto *document = Alloc::newDocument(DocumentType::CodeDocument);
@@ -129,6 +181,7 @@ void testParsing()
 {
     checkTextEquality(text);
     checkTextEquality(testCode3);
+    checkTextEquality(testCode4);
 }
 
 void testNodeTypeEquality() {
