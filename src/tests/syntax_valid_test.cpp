@@ -243,7 +243,7 @@ void testTypeTreeTest() {
 
 
     auto&& typeTree = u8R"(<lineBreak>
-<Class>        class<Name> TestCl😂日本語10234ass<lineBreak>
+<Class>    class<Name> TestCl😂日本語10234ass<lineBreak>
 <Symbol>        {<lineBreak>
 <fn>            fn<Name> func<Symbol>(<Symbol>)<lineBreak>
 <body>            {<lineBreak>
