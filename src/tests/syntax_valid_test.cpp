@@ -139,7 +139,14 @@ void checkTextEquality(const char *name, const char* code)
 
     assert(document->context->syntaxErrorInfo.hasError == false);
 
-    assert(strcmp(code, treeText) == 0);
+    if (strcmp(code, treeText) == 0) {
+
+    }
+    else {
+        assert(false && "text not equal");
+        printf("expected:\n%s\n", code);
+        printf("actual:\n%s\n", treeText);
+    }
 
     free(treeText);
     Alloc::deleteDocument(document);
@@ -151,7 +158,7 @@ void testParsing()
     FUNC(text);
     FUNC(testCode3);
     FUNC(testCode4);
-    //FUNC(commentTestText);
+    FUNC(commentTestText);
     FUNC(parenthesisText);
     FUNC(""); // empty text
     FUNC(" \r\n \n\n  ");
