@@ -195,27 +195,6 @@ class A
 
 
 
-
-void testCodeEquality(const char* codeText, int length) {
-    auto* document = Alloc::newDocument(DocumentType::CodeDocument, nullptr);
-    DocumentUtils::parseText(document, codeText, length);
-
-
-    EXPECT_EQ(document->context->syntaxErrorInfo.errorItem.errorId, 10000);
-    EXPECT_EQ(document->context->syntaxErrorInfo.hasError, false);
-    EXPECT_EQ(document->context->syntaxErrorInfo.errorItem.errorCode, ErrorCode::no_syntax_error);
-
-    char* treeText = DocumentUtils::getTextFromTree(document);
-
-    EXPECT_EQ(treeText != nullptr, true);
-    EXPECT_EQ(std::string{ treeText }, std::string{ codeText });
-    EXPECT_EQ(strlen(treeText), length);
-
-    Alloc::deleteDocument(document);
-
-}
-
-
 void aFunc() {
     
     std::string text = "class A \r\n // comment \r\n {}";
