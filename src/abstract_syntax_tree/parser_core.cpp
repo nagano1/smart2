@@ -156,7 +156,7 @@ namespace smart
             }
             int endIndex = idxOfCommentEnd;
 
-            if (endIndex > -1 && currentIndex < endIndex) {
+            if (endIndex > -1 && currentIndex <= endIndex) {
                 auto *commentFragment = Alloc::newBlockCommentFragmentNode(context, Cast::upcast(parentNode));
 
                 // link with previous line break node
