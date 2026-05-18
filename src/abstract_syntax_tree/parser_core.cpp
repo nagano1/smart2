@@ -98,7 +98,56 @@ namespace smart
 
         } // block comment /* */
         else if ('*' == context->chars[i + 1]) {
-                        commentEndIndex = searchEndBlockCommentPos(i + 2, context->chars, context->length);
+            //            commentEndIndex = searchEndBlockCommentPos(i + 2, context->chars, context->length);
+            int textStartPos = i + 2;
+
+            if (context->chars[i + 2] == '[') { // /*[hoge] ... [hoge]*/
+                int nameStartPos = i + 3;
+                // finds out the tag name: hoge
+                int endOfStartTagPos = ParseUtil::indexOf(context->chars, context->length, nameStartPos, ']');
+                int lineEndPos = ParseUtil::indexOfBreakOrEnd(context->chars, context->length, nameStartPos);
+                // the name of the named block comment must be in the same line with the start tag
+                if (endOfStartTagPos > -1 && endOfStartTagPos < lineEndPos) {
+                    tagLength = endOfStartTagPos - nameStartPos;
+                    textStartPos = endOfStartTagPos + 1;
+                    tagText = context->memBuffer.newMem<char>(tagLength + 1);
+                    TEXT_MEMCPY(tagText, context->chars + nameStartPos, tagLength);
+                    tagText[tagLength] = '\0';
+                }
+            }
+
+            int searchEndPos = textStartPos;
+            while (true) {
+                int endCommentPos = ParseUtil::indexOf2(context->chars, context->length, searchEndPos, '*', '/');
+
+                if (endCommentPos == -1) {
+                    // the end of block comment not found, treat the rest of chars as comment
+                    commentEndIndex = context->length;
+                    break;
+                }
+
+                if (tagLength > 0) {
+                    // [hoge]*/
+                    if (context->chars[endCommentPos - 1] == ']'
+                        && context->chars[endCommentPos - tagLength - 2] == '['
+                        && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)) {
+                        // the end tag of the named block comment found
+                        commentEndIndex = endCommentPos + 2;
+                        break;
+                    }
+                    else {
+                        // not the end of the named block comment, continue to search
+                        searchEndPos = endCommentPos + 2;
+                        continue;;
+                    }
+                }
+                else {
+                    // not a named block comment, the first */ is the end of the block comment
+                    commentEndIndex = endCommentPos + 2;
+                    break;
+                }
+                break;
+            }
 
         }
 
