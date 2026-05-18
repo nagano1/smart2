@@ -159,7 +159,7 @@ void testParsing()
     FUNC(text);
     FUNC(testCode3);
     FUNC(testCode4);
-    //FUNC(commentTestText);
+    FUNC(commentTestText);
     //FUNC(parenthesisText);
     //FUNC(""); // empty text
     //FUNC(" \r\n \n\n  ");
