@@ -122,12 +122,6 @@ class fjawioejap
         let *str = "0jfoiwjoie" // comment
         int a = 123412
         float test = 3214
-
-        float f = 4503
-        ?let *f = null
-        let g = true
-        a = 5
-        varibleAjoawiefjaipo
         
 
     }
