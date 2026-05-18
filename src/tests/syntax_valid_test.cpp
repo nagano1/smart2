@@ -122,9 +122,6 @@ class fjawioejap
     }
 }
 
-class/**/A/**/{
-
-}
 )";
 
 const char commentTestText[] = " /* \r\n /**/ bck\r\n\n*/";
