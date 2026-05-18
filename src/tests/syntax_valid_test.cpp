@@ -125,7 +125,7 @@ class/**/A/**/{
 }
 )");
 
-//const char commentTestText[] = " /* \r\n /**/ bck\r\n\n*/";
+const char commentTestText[] = " /*[A] \r\n /**/ bck\r\n\n[A]*/";
 const char parenthesisText[] = "fn a() { (12) }";
 
 void checkTextEquality(const char *name, const char* code)
@@ -151,10 +151,10 @@ void testParsing()
     FUNC(text);
     FUNC(testCode3);
     FUNC(testCode4);
-    //FUNC(commentTestText);
-    //FUNC(parenthesisText);
-    //FUNC(""); // empty text
-    //FUNC(" \r\n \n\n  ");
+    FUNC(commentTestText);
+    FUNC(parenthesisText);
+    FUNC(""); // empty text
+    FUNC(" \r\n \n\n  ");
 
 }
 
