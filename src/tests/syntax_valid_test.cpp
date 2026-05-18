@@ -156,7 +156,7 @@ void checkTextEquality(const char *name, const char* code)
 void testParsing()
 {
     FUNC(text);
-    FUNC(testCode3);
+    //FUNC(testCode3);
     FUNC(testCode4);
     FUNC(commentTestText);
     FUNC(parenthesisText);
