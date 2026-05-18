@@ -143,12 +143,11 @@ void checkTextEquality(const char *name, const char* code)
 
     }
     else {
-        assert(false && "text not equal");
         printf("expected:\n%s\n", code);
         printf("actual:\n%s\n", treeText);
         fprintf(stderr, "expected:\n%s\n", code);
         fprintf(stderr, "actual:\n%s\n", treeText);
-
+        assert(false && "text not equal");
     }
 
     free(treeText);
