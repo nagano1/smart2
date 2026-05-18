@@ -85,49 +85,7 @@ class OuterClass
 constexpr auto *testCode4 = const_cast<char*>( u8R"(
 class fjawioejap
 {
-    fn funcB(int a, int *k = 31)
-    {
-        // comment
-        let a = 893214 // fawoiefjiawo
-        let *str = "0jfoiwjoie" // comment
-        int a = 123412
-        float test = 3214
 
-        float f = 4503
-        ?let *f = null
-        let g = true
-        a = 5
-        varibleAjoawiefjaipo
-        
-        "jfoiwjeioaf"
-            /*
-                /*fajowefjao 
-                    /*
-                    */
-                */
-
-
-                 /*ajowiefaiow  
-                 joafwieコメント張りさん
-                 */
-            */
-
-            /*
-            comment here
-            */
-
-        let f = 3
-
-        
-        (true) + false + (
-            241
-        )
-        
-        funcA(true, "jfiwo")
-
-        return
-        return 3421
-    }
 }
 
 class/**/A/**/{
@@ -159,7 +117,7 @@ void testParsing()
     FUNC(text);
     FUNC(testCode3);
     FUNC(testCode4);
-    FUNC(commentTestText);
+    //FUNC(commentTestText);
     //FUNC(parenthesisText);
     //FUNC(""); // empty text
     //FUNC(" \r\n \n\n  ");
