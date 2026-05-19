@@ -283,12 +283,7 @@ namespace smart
         }
 
         parsingResult->assignWhiteSpaces(Cast::upcast(newLineBreak), position);
-
-        if (parsingResult->commentNode != nullptr) {
-            newLineBreak->prevCommentNode = Cast::upcast(parsingResult->commentNode);
-            parsingResult->commentNode = nullptr;
-        }
-
+        parsingResult->assignCommentNode(Cast::upcast(newLineBreak));
 
         bool rn = ch == '\r' && context->chars[position + 1] == '\n';
         int result;
@@ -377,7 +372,7 @@ namespace smart
 
                 parsingResult.prevLineBreak = nullptr;
                 parsingResult.lastLineBreak = nullptr;
-                
+
                 i = result;
 
                 if (scanMulti && !context->scanEnd) {
