@@ -26,7 +26,7 @@ namespace smart
     //static int _ab = initErrorInfoList();
 
     
-    struct InnerParsingResult {
+    struct InnerParsingData {
         int newPosition;
         NodeBase *createdNode = nullptr;
         int32_t whitespace_startpos = -1;
@@ -35,10 +35,22 @@ namespace smart
         LineBreakNodeStruct *lastLineBreak = nullptr;
 
 
+        void *commentNode = nullptr;
+
+
         void reset() {
             newPosition = -1;
             createdNode = nullptr;
             whitespace_startpos = -1;
+        }
+
+        void assignCommentNode(NodeBase* leftNode) {
+            assert(leftNode != nullptr);
+
+            if (commentNode != nullptr) {
+                leftNode->prevCommentNode = Cast::upcast(commentNode);
+                commentNode = nullptr;
+            }
         }
 
         void assignWhiteSpaces(NodeBase* comment2, int i) {
@@ -149,8 +161,7 @@ namespace smart
     }
 
 
-    int tryDetectComments(ParseContext* context, int32_t i, void**commentNode
-        , void* parentNode, InnerParsingResult* parsingResult)
+    int tryDetectComments(ParseContext* context, int32_t i, void* parentNode, InnerParsingData* parsingResult)
     {
         int commentEndIndex = -1;
         bool isLineComment = false;
@@ -169,19 +180,19 @@ namespace smart
         }
 
         if (commentEndIndex > -1) {
-            auto* prevCommentNode = *commentNode;
+            auto* prevCommentNode = parsingResult->commentNode;
 
             if (isLineComment) {
                 auto* comment = Alloc::newLineCommentNode(context, Cast::upcast(parentNode));
                 Init::assignText_SimpleTextNode(comment, context, i, commentEndIndex - i);
 
-                *commentNode = comment;
+                parsingResult->commentNode = comment;
             }
             else {
-                *commentNode = Scanner::generateBlockCommentFragments(parentNode, context, i, commentEndIndex, tagText, tagLength);
+                parsingResult->commentNode = Scanner::generateBlockCommentFragments(parentNode, context, i, commentEndIndex, tagText, tagLength);
             }
 
-            NodeBase* comment2 = Cast::upcast(*commentNode);
+            NodeBase* comment2 = Cast::upcast(parsingResult->commentNode);
             parsingResult->assignWhiteSpaces(comment2, i);
 
             if (prevCommentNode != nullptr) {
@@ -259,7 +270,7 @@ namespace smart
 
 
     int createLineBreakNode(smart::ParseContext* context, void* parentNode,
-        int32_t& position, void** commentNode, utf8byte ch, InnerParsingResult* parsingResult)
+        int32_t& position, utf8byte ch, InnerParsingData* parsingResult)
     {
         auto* newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
 
@@ -273,9 +284,9 @@ namespace smart
 
         parsingResult->assignWhiteSpaces(Cast::upcast(newLineBreak), position);
 
-        if (*commentNode != nullptr) {
-            newLineBreak->prevCommentNode = *commentNode;
-            *commentNode = nullptr;
+        if (parsingResult->commentNode != nullptr) {
+            newLineBreak->prevCommentNode = Cast::upcast(parsingResult->commentNode);
+            parsingResult->commentNode = nullptr;
         }
 
 
@@ -303,20 +314,20 @@ namespace smart
 
         utf8byte ch;
         int returnResult = -1;
-        void *commentNode = nullptr;
         context->afterLineBreak = false;
-        InnerParsingResult  parsingResult;
+        InnerParsingData  parsingResult;
             
         parsingResult.newPosition = -1;
         parsingResult.createdNode = nullptr;
         parsingResult.whitespace_startpos = -1;
+        parsingResult.commentNode = nullptr;
 
         for (int32_t i = start; i <= context->length;) {
             ch = context->chars[i];
 
 
             if (ch == '/') { // comment
-                tryDetectComments(context, i, &commentNode, parentNode, &parsingResult);
+                tryDetectComments(context, i, parentNode, &parsingResult);
                 if (parsingResult.newPosition > -1) {
                     i = parsingResult.newPosition;
                     returnResult = i;
@@ -324,7 +335,7 @@ namespace smart
                 }
             }
             else if (ParseUtil::isBreakLine(ch)) {
-                i = createLineBreakNode(context, parentNode, i, &commentNode, ch, &parsingResult);
+                i = createLineBreakNode(context, parentNode, i, ch, &parsingResult);
                 context->afterLineBreak = true;
                 continue;
             }
@@ -358,19 +369,16 @@ namespace smart
                 context->prevFoundPos = result;
 
                 assert(context->leftNode != nullptr);
-                parsingResult.assignWhiteSpaces(Cast::upcast(context->leftNode), i);
 
-                if (commentNode != nullptr) {
-                    context->leftNode->prevCommentNode = commentNode;
-                    commentNode = nullptr;
-                }
+                parsingResult.assignWhiteSpaces(Cast::upcast(context->leftNode), i);
+                parsingResult.assignCommentNode(context->leftNode);
 
                 context->leftNode->prevLineBreakNode = parsingResult.prevLineBreak;
 
-                i = result;
-
                 parsingResult.prevLineBreak = nullptr;
                 parsingResult.lastLineBreak = nullptr;
+                
+                i = result;
 
                 if (scanMulti && !context->scanEnd) {
                     continue;
@@ -381,7 +389,7 @@ namespace smart
 
         if (root) {
             context->remainedLineBreakNode = parsingResult.prevLineBreak;
-            context->remainedCommentNode = commentNode;
+            context->remainedCommentNode = parsingResult.commentNode;
             if (parsingResult.whitespace_startpos > -1 && parsingResult.whitespace_startpos < context->length) {
                 context->remaindPrevChars = context->length - parsingResult.whitespace_startpos;
             }
