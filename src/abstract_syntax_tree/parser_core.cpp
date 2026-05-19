@@ -376,8 +376,8 @@ namespace smart
         if (root) {
             context->remainedLineBreakNode = prevLineBreak;
             context->remainedCommentNode = commentNode;
-            if (whitespace_startpos > -1 && whitespace_startpos < context->length) {
-                context->remaindPrevChars = context->length - whitespace_startpos;
+            if (parsingResult.whitespace_startpos > -1 && parsingResult.whitespace_startpos < context->length) {
+                context->remaindPrevChars = context->length - parsingResult.whitespace_startpos;
             }
         }
         if (context->scanEnd) {
