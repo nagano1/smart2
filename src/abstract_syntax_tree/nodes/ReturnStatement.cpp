@@ -109,7 +109,7 @@ namespace smart {
     }
 
     // --------------------- Implements Return Statement Parser ----------------------
-    static int inner_returnStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
+    static int parenthesesTokenizerInternal(TokenizerParams_parent_ch_start_context) {
 
         if (context->afterLineBreak) {
             return Search::NOTFOUND;
@@ -117,7 +117,7 @@ namespace smart {
 
         auto *returnNode = Cast::downcast<ReturnStatementNodeStruct *>(parent);
         int result;
-        if (Search::IsTokenized(result = Tokenizers::expressionTokenizer(Cast::upcast(returnNode), ch,
+        if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(Cast::upcast(returnNode), ch,
                                                            start, context))) {
             returnNode->valueNode = context->generatedMainNode;
             context->scanEnd = true;
@@ -148,7 +148,7 @@ namespace smart {
             int currentPos = idx + returnTextSize;
             int resultPos;
             if (Search::IsTokenized(resultPos = Scanner::scanMulti(returnNode,
-                                                        inner_returnStatementTokenizerMulti,
+                                                        parenthesesTokenizerInternal,
                                                         currentPos, context))) {
 
                 context->leftNode = Cast::upcast(&returnNode->returnText);

@@ -176,7 +176,7 @@ namespace smart {
     static inline int parseNextValue(TokenizerParams_parent_ch_start_context, CallFuncNodeStruct* funcCallNode)
     {
         int result;
-        if (Search::IsTokenized(result = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
+        if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(TokenizerParams_pass))) {
             auto *nextItem = Alloc::newFuncArgumentItem(context, parent);
 
             nextItem->exprNode = context->generatedMainNode;
@@ -188,7 +188,7 @@ namespace smart {
     }
 
 
-    static int inner_returnStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
+    static int parenthesesTokenizerInternal(TokenizerParams_parent_ch_start_context) {
         auto *funcCallNode = Cast::downcast<CallFuncNodeStruct*>(parent);
 
         if (ch == ')') {
@@ -237,7 +237,7 @@ namespace smart {
         int currentPos = start + 1;
         int resultPos;
         if (Search::IsTokenized(resultPos = Scanner::scanMulti(funcCallNode,
-                                                    inner_returnStatementTokenizerMulti,
+                                                    parenthesesTokenizerInternal,
                                                     currentPos, context))) {
             context->generatedMainNode = Cast::upcast(funcCallNode);
             context->leftNode = leftNode;
@@ -448,7 +448,7 @@ namespace smart {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }
-            else if (Search::IsTokenized(nextPos = Tokenizers::expressionTokenizer(TokenizerParams_pass))) {
+            else if (Search::IsTokenized(nextPos = Tokenizers::tokenizeExpression(TokenizerParams_pass))) {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }

@@ -1115,6 +1115,7 @@ namespace smart {
         NodeBase *parent, utf8byte ch, st_int start, ParseContext *context
 
     #define TokenizerParams_pass parent, ch, start, context
+    #define TokenizerParams_pass_3 ch, start, context
 
     using TokenizerFunction = int (*)(TokenizerParams_parent_ch_start_context);
 
@@ -1122,7 +1123,7 @@ namespace smart {
         static int nameTokenizer(TokenizerParams_parent_ch_start_context);
         static int nameTokenizer_ignore(TokenizerParams_parent_ch_start_context, int ignorePos);
         static int variableTokenizer(TokenizerParams_parent_ch_start_context);
-        static int expressionTokenizer(TokenizerParams_parent_ch_start_context);
+        static int tokenizeExpression(TokenizerParams_parent_ch_start_context);
         static int parenthesesTokenizer(TokenizerParams_parent_ch_start_context);
         static int funcCallTokenizer(TokenizerParams_parent_ch_start_context);
         static int binaryOperationTokenizer(TokenizerParams_parent_ch_start_context);

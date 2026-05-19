@@ -336,27 +336,27 @@ namespace smart {
 
     static constexpr const char parenthesesNodeTypeText[] = "<parentheses>";
 
-    static int inner_returnStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
-        auto *fnNode = Cast::downcast<ParenthesesNodeStruct *>(parent);
+    static int parenthesesTokenizerInternal(TokenizerParams_parent_ch_start_context) {
+        auto *parenthesesNode = Cast::downcast<ParenthesesNodeStruct *>(parent);
 
         if (ch == ')') {
-            context->setCodeNode(&fnNode->closeNode);
+            context->setCodeNode(&parenthesesNode->closeNode);
             context->scanEnd = true;
             return start + 1;
-        } else {
-            if (fnNode->valueNode != nullptr && fnNode->valueNode->found > -1) {
-                context->setError(ErrorCode::expect_end_parenthesis,
-                                  context->prevFoundPos);
+        }
+        else {
+            if (parenthesesNode->valueNode != nullptr && parenthesesNode->valueNode->found > -1) {
+                context->setError(ErrorCode::expect_end_parenthesis, context->prevFoundPos);
             }
             else {
-                int result;
-                if (Search::IsTokenized(result = Tokenizers::expressionTokenizer(Cast::upcast(fnNode), ch, start,
-                                                                   context))) {
-                    fnNode->valueNode = context->generatedMainNode;
-                    fnNode->valueNode->found = start;
+                int result = Tokenizers::tokenizeExpression(Cast::upcast(parenthesesNode), TokenizerParams_pass_3);
+                if (Search::IsTokenized(result)) {
+                    parenthesesNode->valueNode = context->generatedMainNode;
+                    parenthesesNode->valueNode->found = start;
 
                     return result;
-                } else {
+                } 
+                else {
                     context->setError(ErrorCode::expect_end_parenthesis_for_fn_params,
                                       context->prevFoundPos);
                 }
@@ -369,14 +369,11 @@ namespace smart {
     int Tokenizers::parenthesesTokenizer(TokenizerParams_parent_ch_start_context)
     {
         if ('(' == ch) {
-            auto *returnNode = Alloc::newParenthesesNode(context, parent);
+            auto *parenthesesNode = Alloc::newParenthesesNode(context, parent);
             int currentPos = start + 1;
-            int resultPos;
-            if (Search::IsTokenized(resultPos = Scanner::scanMulti(returnNode,
-                                                     inner_returnStatementTokenizerMulti,
-                                                     currentPos, context))) {
-
-                context->setCodeNode(returnNode);
+            int resultPos =  Scanner::scanMulti(parenthesesNode, parenthesesTokenizerInternal, currentPos, context);
+            if (Search::IsTokenized(resultPos)) {
+                context->setCodeNode(parenthesesNode);
                 return resultPos;
             }
         }
@@ -553,7 +550,7 @@ namespace smart {
             binaryOpNode->leftExprNode->parentNode = Cast::upcast(binaryOpNode);
 
             if (Search::IsTokenized(resultPos = Scanner::scanOnce(binaryOpNode,
-                                                    Tokenizers::expressionTokenizer,
+                                                    Tokenizers::tokenizeExpression,
                                                     resultPos, context))) {
                 binaryOpNode->rightExprNode = context->generatedMainNode;
                 context->generatedMainNode = Cast::upcast(binaryOpNode);

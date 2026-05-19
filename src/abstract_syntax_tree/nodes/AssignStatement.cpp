@@ -161,7 +161,7 @@ namespace smart {
         }
         else {
             int result;
-            if (Search::IsTokenized(result = Tokenizers::expressionTokenizer(Cast::upcast(assignment), ch,
+            if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(Cast::upcast(assignment), ch,
                                                                start, context))) {
                 assignment->valueNode = context->generatedMainNode;
                 context->scanEnd = true;

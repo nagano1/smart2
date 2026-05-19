@@ -291,6 +291,9 @@ namespace smart
     }
 
 
+    // scan with the given tokenizer, if root is true, it will save the last line break node and comment node to context for later use,
+    // if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
+    // this scanner handles spaces, line breaks and comments, so tokenizer can focus on scanning code tokens without worrying about spaces, line breaks and comments
     int Scanner::scanWithTokenizer(void *parentNode,
                                    TokenizerFunction tokenizer,
                                    int start,
@@ -382,7 +385,7 @@ namespace smart
     }
 
 
-    int Tokenizers::expressionTokenizer(TokenizerParams_parent_ch_start_context) {
+    int Tokenizers::tokenizeExpression(TokenizerParams_parent_ch_start_context) {
         int result = numberTokenizer(TokenizerParams_pass);
 
         if (!Search::IsTokenized(result)) { result = boolTokenizer(TokenizerParams_pass); }
