@@ -27,7 +27,6 @@ namespace smart
 
     
     struct InnerParsingData {
-        int newPosition;
         NodeBase *createdNode = nullptr;
         int32_t whitespace_startpos = -1;
 
@@ -263,7 +262,6 @@ namespace smart
             }
         }
 
-        parsingResult->newPosition = commentEndIndex;
         return commentEndIndex;
     }
 
