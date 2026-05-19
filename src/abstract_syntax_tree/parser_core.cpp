@@ -301,11 +301,9 @@ namespace smart
             parsingResult.whitespace_startpos = -1;
 
             if (ch == '/') { // comment
-                int commentEndIndex = tryDetectComments(context, i, &commentNode, whitespace_startpos, parentNode, &prevLineBreak, &parsingResult);
+                tryDetectComments(context, i, &commentNode, whitespace_startpos, parentNode, &prevLineBreak, &parsingResult);
                 if (parsingResult.newPosition > -1) {
-                }
-                if (commentEndIndex > -1) {
-                    i = commentEndIndex;
+                    i = parsingResult.newPosition;
                     returnResult = i;
                     continue;
                 }
