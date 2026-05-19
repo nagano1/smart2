@@ -312,7 +312,6 @@ namespace smart
         context->afterLineBreak = false;
         InnerParsingData  parsingResult;
             
-        parsingResult.newPosition = -1;
         parsingResult.createdNode = nullptr;
         parsingResult.whitespace_startpos = -1;
         parsingResult.commentNode = nullptr;
@@ -322,10 +321,9 @@ namespace smart
 
 
             if (ch == '/') { // comment
-                tryDetectComments(context, i, parentNode, &parsingResult);
-                if (parsingResult.newPosition > -1) {
-                    i = parsingResult.newPosition;
-                    returnResult = i;
+                int pos = tryDetectComments(context, i, parentNode, &parsingResult);
+                if (pos > -1) {
+                    returnResult = i = pos;
                     continue;
                 }
             }
