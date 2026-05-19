@@ -26,50 +26,7 @@ namespace smart
     //static int _ab = initErrorInfoList();
 
     
-    struct InnerParsingData {
-        NodeBase *createdNode = nullptr;
-        int32_t whitespace_startpos = -1;
-
-        LineBreakNodeStruct *prevLineBreak = nullptr;
-        LineBreakNodeStruct *lastLineBreak = nullptr;
-
-
-        NodeBase *commentNode = nullptr;
-
-
-        void reset() {
-            newPosition = -1;
-            createdNode = nullptr;
-            whitespace_startpos = -1;
-        }
-
-        void assignCommentNode(NodeBase* leftNode) {
-            assert(leftNode != nullptr);
-
-            if (commentNode != nullptr) {
-                leftNode->prevCommentNode = Cast::upcast(commentNode);
-                commentNode = nullptr;
-            }
-        }
-
-        void assignWhiteSpaces(NodeBase* comment2, int i) {
-            if (whitespace_startpos != -1 && whitespace_startpos < i) {
-                comment2->prev_chars = i - whitespace_startpos;
-                whitespace_startpos = -1;
-            }
-            /*
-            if (parsingResult->whitespace_startpos != -1) {
-                if (parsingResult->whitespace_startpos < position) {
-                    (*lastLineBreak)->prev_chars = position - parsingResult->whitespace_startpos;
-                }
-                parsingResult->whitespace_startpos = -1;
-            }
-
-            */
-        }
-    };
-    
-
+    struct InnerParsingData;
 
     int Scanner::scanOnce(void *parentNode,
                       TokenizerFunction tokenizer,
@@ -215,6 +172,43 @@ namespace smart
         return Cast::upcast(blockComment);
     }
 
+
+    struct InnerParsingData
+     {
+        NodeBase *createdNode = nullptr;
+        int32_t whitespace_startpos = -1;
+
+        LineBreakNodeStruct *prevLineBreak = nullptr;
+        LineBreakNodeStruct *lastLineBreak = nullptr;
+
+        NodeBase *commentNode = nullptr;
+
+        void assignCommentNode(NodeBase* leftNode) {
+            assert(leftNode != nullptr);
+
+            if (commentNode != nullptr) {
+                leftNode->prevCommentNode = Cast::upcast(commentNode);
+                commentNode = nullptr;
+            }
+        }
+
+        void assignWhiteSpaces(NodeBase* comment2, int i) {
+            if (whitespace_startpos != -1 && whitespace_startpos < i) {
+                comment2->prev_chars = i - whitespace_startpos;
+                whitespace_startpos = -1;
+            }
+            /*
+            if (parsingResult->whitespace_startpos != -1) {
+                if (parsingResult->whitespace_startpos < position) {
+                    (*lastLineBreak)->prev_chars = position - parsingResult->whitespace_startpos;
+                }
+                parsingResult->whitespace_startpos = -1;
+            }
+
+            */
+        }
+    };
+    
 
 
     int tryDetectComments(ParseContext* context, int32_t i, void* parentNode, InnerParsingData* parsingResult)
