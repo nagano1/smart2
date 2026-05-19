@@ -175,7 +175,6 @@ namespace smart
 
     struct InnerParsingData
      {
-        NodeBase *createdNode = nullptr;
         int32_t whitespace_startpos = -1;
 
         LineBreakNodeStruct *prevLineBreak = nullptr;
@@ -304,13 +303,11 @@ namespace smart
         context->afterLineBreak = false;
         InnerParsingData  parsingResult;
             
-        parsingResult.createdNode = nullptr;
         parsingResult.whitespace_startpos = -1;
         parsingResult.commentNode = nullptr;
 
         for (int32_t i = start; i <= context->length;) {
             ch = context->chars[i];
-
 
             if (ch == '/') { // comment
                 int pos = tryDetectComments(context, i, parentNode, &parsingResult);
@@ -338,17 +335,16 @@ namespace smart
             }
 
             int result = tokenizer(Cast::upcast(parentNode), ch, i, context);
+            returnResult = result;
 
             if (context->syntaxErrorInfo.hasError) {
                 return -1;
             }
 
             if (result == Search::DONE_WITH_PREVIUS_POSITION) {
-                returnResult = context->prevFoundPos;
                 break;
             }
 
-            returnResult = result;
             if (Search::IsTokenized(result)) {
                 context->afterLineBreak = false;
                 context->prevFoundPos = result;
