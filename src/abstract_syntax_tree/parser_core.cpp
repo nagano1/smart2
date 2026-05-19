@@ -36,6 +36,22 @@ namespace smart
             createdNode = nullptr;
             whitespace_startpos = -1;
         }
+
+        void assignWhiteSpaces(NodeBase* comment2, int i) {
+            if (whitespace_startpos != -1 && whitespace_startpos < i) {
+                comment2->prev_chars = i - whitespace_startpos;
+                whitespace_startpos = -1;
+            }
+            /*
+            if (parsingResult->whitespace_startpos != -1) {
+                if (parsingResult->whitespace_startpos < position) {
+                    (*lastLineBreak)->prev_chars = position - parsingResult->whitespace_startpos;
+                }
+                parsingResult->whitespace_startpos = -1;
+            }
+
+            */
+        }
     };
     
 
@@ -162,10 +178,7 @@ namespace smart
             }
 
             NodeBase* comment2 = Cast::upcast(*commentNode);
-            if (parsingResult->whitespace_startpos != -1 && parsingResult->whitespace_startpos < i) {
-                comment2->prev_chars = i - parsingResult->whitespace_startpos;
-                parsingResult->whitespace_startpos = -1;
-            }
+            parsingResult->assignWhiteSpaces(comment2, i);
 
             if (prevCommentNode != nullptr) {
                 comment2->prevCommentNode = prevCommentNode;
@@ -255,12 +268,7 @@ namespace smart
             *lastLineBreak = newLineBreak;
         }
 
-        if (parsingResult->whitespace_startpos != -1) {
-            if (parsingResult->whitespace_startpos < position) {
-                (*lastLineBreak)->prev_chars = position - parsingResult->whitespace_startpos;
-            }
-            parsingResult->whitespace_startpos = -1;
-        }
+        parsingResult->assignWhiteSpaces(Cast::upcast(newLineBreak), position);
 
         if (*commentNode != nullptr) {
             newLineBreak->prevCommentNode = *commentNode;
@@ -349,10 +357,7 @@ namespace smart
                 context->prevFoundPos = result;
 
                 assert(context->leftNode != nullptr);
-                if (parsingResult.whitespace_startpos != -1) {
-                    context->leftNode->prev_chars = i - parsingResult.whitespace_startpos;
-                    parsingResult.whitespace_startpos = -1;
-                }
+                parsingResult.assignWhiteSpaces(Cast::upcast(context->leftNode), i);
 
                 if (commentNode != nullptr) {
                     context->leftNode->prevCommentNode = commentNode;
