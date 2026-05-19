@@ -1206,9 +1206,6 @@ namespace smart {
                 int start,
                 ParseContext *context
         );
-        static void *
-        generateBlockCommentFragments(void *parentNode, ParseContext *context, const int32_t &i,
-                                      int commendEndIndex, char* tagText, int tagLength);
     };
 }
 
