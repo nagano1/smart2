@@ -31,6 +31,10 @@ namespace smart
         NodeBase *createdNode = nullptr;
         int32_t whitespace_startpos = -1;
 
+        LineBreakNodeStruct *prevLineBreak = nullptr;
+        LineBreakNodeStruct *lastLineBreak = nullptr;
+
+
         void reset() {
             newPosition = -1;
             createdNode = nullptr;
@@ -146,7 +150,7 @@ namespace smart
 
 
     int tryDetectComments(ParseContext* context, int32_t i, void**commentNode
-        , void* parentNode, LineBreakNodeStruct**prevLineBreak, InnerParsingResult* parsingResult)
+        , void* parentNode, InnerParsingResult* parsingResult)
     {
         int commentEndIndex = -1;
         bool isLineComment = false;
@@ -184,9 +188,9 @@ namespace smart
                 comment2->prevCommentNode = prevCommentNode;
             }
 
-            if (*prevLineBreak != nullptr) {
-                comment2->prevLineBreakNode = *prevLineBreak;
-                *prevLineBreak = nullptr;
+            if (parsingResult->prevLineBreak != nullptr) {
+                comment2->prevLineBreakNode = parsingResult->prevLineBreak;
+                parsingResult->prevLineBreak = nullptr;
             }
         }
 
@@ -255,17 +259,16 @@ namespace smart
 
 
     int createLineBreakNode(smart::ParseContext* context, void* parentNode,
-        smart::LineBreakNodeStruct** prevLineBreak, smart::LineBreakNodeStruct** lastLineBreak,
         int32_t& position, void** commentNode, utf8byte ch, InnerParsingResult* parsingResult)
     {
         auto* newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
 
-        if (*prevLineBreak == nullptr) {
-            (*lastLineBreak) = (*prevLineBreak) = newLineBreak;
+        if (parsingResult->prevLineBreak == nullptr) {
+            parsingResult->lastLineBreak = parsingResult->prevLineBreak = newLineBreak;
         }
         else {
-            (*lastLineBreak)->nextLineBreakNode = newLineBreak;
-            *lastLineBreak = newLineBreak;
+            parsingResult->lastLineBreak->nextLineBreakNode = newLineBreak;
+            parsingResult->lastLineBreak = newLineBreak;
         }
 
         parsingResult->assignWhiteSpaces(Cast::upcast(newLineBreak), position);
@@ -297,8 +300,6 @@ namespace smart
                                    ParseContext *context,
                                    bool root, bool scanMulti
     ) {
-        LineBreakNodeStruct *prevLineBreak = nullptr;
-        LineBreakNodeStruct *lastLineBreak = nullptr;
 
         utf8byte ch;
         int returnResult = -1;
@@ -315,7 +316,7 @@ namespace smart
 
 
             if (ch == '/') { // comment
-                tryDetectComments(context, i, &commentNode, parentNode, &prevLineBreak, &parsingResult);
+                tryDetectComments(context, i, &commentNode, parentNode, &parsingResult);
                 if (parsingResult.newPosition > -1) {
                     i = parsingResult.newPosition;
                     returnResult = i;
@@ -323,7 +324,7 @@ namespace smart
                 }
             }
             else if (ParseUtil::isBreakLine(ch)) {
-                i = createLineBreakNode(context, parentNode, &prevLineBreak, &lastLineBreak, i, &commentNode, ch, &parsingResult);
+                i = createLineBreakNode(context, parentNode, i, &commentNode, ch, &parsingResult);
                 context->afterLineBreak = true;
                 continue;
             }
@@ -364,12 +365,12 @@ namespace smart
                     commentNode = nullptr;
                 }
 
-                context->leftNode->prevLineBreakNode = prevLineBreak;
+                context->leftNode->prevLineBreakNode = parsingResult.prevLineBreak;
 
                 i = result;
 
-                prevLineBreak = nullptr;
-                lastLineBreak = nullptr;
+                parsingResult.prevLineBreak = nullptr;
+                parsingResult.lastLineBreak = nullptr;
 
                 if (scanMulti && !context->scanEnd) {
                     continue;
@@ -379,7 +380,7 @@ namespace smart
         }
 
         if (root) {
-            context->remainedLineBreakNode = prevLineBreak;
+            context->remainedLineBreakNode = parsingResult.prevLineBreak;
             context->remainedCommentNode = commentNode;
             if (parsingResult.whitespace_startpos > -1 && parsingResult.whitespace_startpos < context->length) {
                 context->remaindPrevChars = context->length - parsingResult.whitespace_startpos;
