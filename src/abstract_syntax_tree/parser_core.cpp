@@ -359,9 +359,9 @@ namespace smart
                 parsingResult.prevLineBreak = nullptr;
                 parsingResult.lastLineBreak = nullptr;
 
-                i = result;
 
                 if (scanMulti && !context->scanEnd) {
+                    i = result;
                     continue;
                 }
             }
