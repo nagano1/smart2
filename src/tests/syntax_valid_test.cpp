@@ -44,7 +44,7 @@ void testSimpleCalculation()
 constexpr auto *text = const_cast<char *>(u8R"(
 class FooClass
 {
-    fnfuncB()
+    fn funcB()
     {
         int a = 3124
     }
