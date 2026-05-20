@@ -19,7 +19,12 @@
 
 namespace smart
 {
-
+    const constexpr char immutableMarkChar = '#';
+    const constexpr char nullableMarkChar = '?';
+    
+    static constexpr const char let_chars[] = "let";
+    static constexpr int size_of_let = sizeof(let_chars) - 1;
+    
     static CodeLine *appendToLine(TypeNodeStruct *self, CodeLine *currentCodeLine) {
         currentCodeLine = currentCodeLine->addPrevLineBreakNode(self);
         currentCodeLine->appendNode(self);
@@ -47,11 +52,7 @@ namespace smart
     }
 
 
-    const constexpr char immutableMarkChar = '#';
-    const constexpr char nullableMarkChar = '?';
-    
-    static constexpr const char let_chars[] = "let";
-    static constexpr int size_of_let = sizeof(let_chars) - 1;
+
 
     int Tokenizers::typeTokenizer(TokenizerParams_parent_ch_start_context) {
         auto *typeNode  = Cast::downcast<TypeNodeStruct*>(parent); // Alloc::newTypeNode(context, parent);
