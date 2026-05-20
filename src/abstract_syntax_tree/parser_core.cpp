@@ -206,6 +206,20 @@ namespace smart
 
             */
         }
+
+        void assignLineBreak(NodeBase* node) {
+            /*
+                            context->leftNode->prevLineBreakNode = parsingResult.prevLineBreak;
+
+                parsingResult.prevLineBreak = nullptr;
+                parsingResult.lastLineBreak = nullptr;
+            */
+            if (prevLineBreak != nullptr) {
+                node->prevLineBreakNode = prevLineBreak;
+                prevLineBreak = nullptr;
+                lastLineBreak = nullptr;
+            }
+        }
     };
     
 
@@ -249,10 +263,7 @@ namespace smart
                 newCommentNode->prevCommentNode = prevCommentNode;
             }
 
-            if (parsingResult->prevLineBreak != nullptr) {
-                newCommentNode->prevLineBreakNode = parsingResult->prevLineBreak;
-                parsingResult->prevLineBreak = nullptr;
-            }
+            parsingResult->assignLineBreak(newCommentNode);
         }
 
         return commentEndIndex;
@@ -300,7 +311,6 @@ namespace smart
                                    ParseContext *context,
                                    bool root, bool scanMulti
     ) {
-
         utf8byte ch;
         int returnResult = -1;
         context->afterLineBreak = false;
@@ -350,8 +360,7 @@ namespace smart
             }
 
             if (Search::IsTokenized(result)) {
-                afterLineBreak = false;
-                context->afterLineBreak = false;
+                context->afterLineBreak = afterLineBreak = false;
 
                 context->prevFoundPos = result;
 
@@ -359,11 +368,7 @@ namespace smart
 
                 parsingResult.assignWhiteSpaces(Cast::upcast(context->leftNode), i);
                 parsingResult.assignCommentNode(context->leftNode);
-
-                context->leftNode->prevLineBreakNode = parsingResult.prevLineBreak;
-
-                parsingResult.prevLineBreak = nullptr;
-                parsingResult.lastLineBreak = nullptr;
+                parsingResult.assignLineBreak(context->leftNode);
 
                 if (scanMulti && !context->scanEnd) {
                     i = result;
