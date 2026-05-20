@@ -498,7 +498,7 @@ namespace smart {
         int prevFoundPos;
 
 
-        bool afterLineBreak;
+        bool isAfterLineBreak; // for multiScan tokenizer
         NodeBase *leftNode;
         NodeBase *valueNode;
         NodeBase *generatedMainNode;
@@ -1189,12 +1189,11 @@ namespace smart {
      */
     struct Scanner {
         static int scanWithTokenizer(
-                void *parentNode,
-                TokenizerFunction tokenizer,
-                int start,
-                ParseContext *context,
-                bool root, bool multi
-        );
+            void *parentNode,
+            TokenizerFunction tokenizer,
+            int start,
+            ParseContext *context,
+            bool root, bool multi);
 
         static int scanOnce(
                 void *parentNode,

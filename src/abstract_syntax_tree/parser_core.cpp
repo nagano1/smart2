@@ -243,7 +243,6 @@ namespace smart
         }
 
         if (commentEndIndex > -1) {
-            auto* prevCommentNode = parsingResult->commentNode;
 
             NodeBase *newCommentNode;
             if (isLineComment) {
@@ -258,6 +257,7 @@ namespace smart
 
             parsingResult->assignWhiteSpaces(newCommentNode, i);
 
+            auto* prevCommentNode = parsingResult->commentNode;
             parsingResult->commentNode = newCommentNode;
             if (prevCommentNode != nullptr) {
                 newCommentNode->prevCommentNode = prevCommentNode;
@@ -301,6 +301,19 @@ namespace smart
         return result;
     }
 
+    int detectSpaceEndIndex(int32_t i, smart::ParseContext *context)
+    {
+        int spaceEndIndex = i + 1;
+        for (; spaceEndIndex < context->length; spaceEndIndex++)
+        {
+            if (!ParseUtil::isSpace(context->chars[spaceEndIndex]))
+            {
+                break;
+            }
+        }
+        return spaceEndIndex;
+    }
+
 
     // scan with the given tokenizer, if root is true, it will save the last line break node and comment node to context for later use,
     // if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
@@ -313,7 +326,7 @@ namespace smart
     ) {
         utf8byte ch;
         int returnResultPos = -1;
-         context->afterLineBreak = false;
+        context->isAfterLineBreak = false;
         InnerParsingData parsingResult;
 
         for (int32_t i = start; i <= context->length;) {
@@ -328,21 +341,15 @@ namespace smart
             }
             else if (ParseUtil::isBreakLine(ch)) {
                 i = createLineBreakNode(context, parentNode, i, ch, &parsingResult);
-                context->afterLineBreak = true;
+                context->isAfterLineBreak = true;
                 continue;
             }
             else if (ParseUtil::isSpace(ch)) {
-                int spaceEndIndex = i + 1;
-                for (; spaceEndIndex < context->length; spaceEndIndex++) {
-                    if (!ParseUtil::isSpace(context->chars[spaceEndIndex])) {
-                        break;
-                    }
-                }
-
                 parsingResult.whitespace_startpos = i;
-                i = spaceEndIndex;
+                i = detectSpaceEndIndex(i, context);
                 continue;
             }
+
 
             int result = tokenizer(Cast::upcast(parentNode), ch, i, context);
             returnResultPos = result;
@@ -351,16 +358,11 @@ namespace smart
                 return -1;
             }
 
-            if (result == Search::DONE_WITH_PREVIUS_POSITION) {
-                break;
-            }
-
-            if (Search::IsTokenized(result)) {
-                context->afterLineBreak = false;
+            if (result > -1) {
+                context->isAfterLineBreak = false;
                 context->prevFoundPos = result;
 
                 assert(context->leftNode != nullptr);
-
                 parsingResult.assignWhiteSpaces(Cast::upcast(context->leftNode), i);
                 parsingResult.assignCommentNode(context->leftNode);
                 parsingResult.assignLineBreak(context->leftNode);
@@ -383,7 +385,6 @@ namespace smart
         context->scanEnd = false; // reset scanEnd for the next scan
         return returnResultPos;
     }
-
 
     int Tokenizers::tokenizeExpression(TokenizerParams_parent_ch_start_context) {
         int result = numberTokenizer(TokenizerParams_pass);

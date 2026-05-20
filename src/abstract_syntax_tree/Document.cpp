@@ -592,7 +592,7 @@ namespace smart {
         context->baseIndent = 4;
         context->parentDepth = -1;
         context->arithmeticBaseDepth = -1;
-        context->afterLineBreak = false;
+        context->isAfterLineBreak = false;
 
         context->unusedAssignment = nullptr;
         context->unusedClassNode = nullptr;

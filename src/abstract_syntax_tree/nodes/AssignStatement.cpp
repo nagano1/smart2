@@ -115,9 +115,11 @@ namespace smart {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
 
         if (assignment->nameNode.found == -1) {
+            /*
              if (assignment->hasTypeDecl && context->afterLineBreak) {
                  return Search::NOTFOUND;
              }
+            */
 
              if (assignment->pointerAsterisk.found == -1) {
                 if (ch == '*') {
@@ -229,12 +231,10 @@ namespace smart {
         if (Search::IsTokenized(resul)) {
             assignStatement->hasTypeDecl = true;
 
-            //context->afterLineBreak = false;
             int resultPos;
             if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignStatement,
                                                      inner_assignStatementTokenizerMulti,
-                                                     resul, context))
-                    ) {
+                                                     resul, context))) {
                 context->leftNode = Cast::upcast(&assignStatement->typeOrLet);
                 context->generatedMainNode = Cast::upcast(assignStatement);
 

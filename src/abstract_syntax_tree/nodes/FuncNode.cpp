@@ -209,7 +209,8 @@ namespace smart {
                 context->setCodeNode(&currentKeyValueItem->follwingComma);
                 funcCallNode->parsePhase = phase::EXPECT_VALUE;
                 return start + 1;
-            } else if (context->afterLineBreak) {
+            }
+            else if (context->isAfterLineBreak) {
                 // comma is not required after a line break
                 return parseNextValue(TokenizerParams_pass, funcCallNode);
             }
@@ -430,7 +431,7 @@ namespace smart {
             return start + 1;
         }
         
-        if (!body->firstStatementFound || context->afterLineBreak) {
+        if (!body->firstStatementFound || context->isAfterLineBreak) {
             body->firstStatementFound = true;
             int nextPos;
             // value as a statement
@@ -568,7 +569,7 @@ namespace smart {
                 funcNode->parameterParsePhase = FuncParamParsePhase::EXPECT_Type;
                 return start + 1;
             }
-            else if (context->afterLineBreak) {
+            else if (context->isAfterLineBreak) {
                 // comma is not needed after a line break
                 return parseNextValue(TokenizerParams_pass, funcNode);
             }
