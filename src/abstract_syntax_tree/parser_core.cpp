@@ -256,9 +256,9 @@ namespace smart
                 newCommentNode = generateBlockCommentFragments(parentNode, context, i, commentEndIndex, tagText, tagLength);
             }
 
-            parsingResult->commentNode = newCommentNode;
             parsingResult->assignWhiteSpaces(newCommentNode, i);
-
+            
+            parsingResult->commentNode = newCommentNode;
             if (prevCommentNode != nullptr) {
                 newCommentNode->prevCommentNode = prevCommentNode;
             }
