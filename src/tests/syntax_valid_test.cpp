@@ -163,7 +163,7 @@ class A
         class TestCl😂日本語10234ass
         {
 
-            fn aFunc ()
+            fnaFunc ()
             {
                 
             }

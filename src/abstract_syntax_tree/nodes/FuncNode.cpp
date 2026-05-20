@@ -219,7 +219,7 @@ namespace smart {
     }
 
 
-    int Tokenizers::funcCallTokenizer(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::tokenizeFuncCall(TokenizerParams_parent_ch_start_context)
     {
         if ('(' != ch) {
             return Search::NOTFOUND;
@@ -814,26 +814,4 @@ namespace smart {
         }
         return Search::NOTFOUND;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-} // ok
+}

@@ -402,7 +402,7 @@ namespace smart
 
         // call func expression: func()
         int extraPos;
-        if (Search::IsTokenized(extraPos = Tokenizers::funcCallTokenizer(parent, context->chars[result],
+        if (Search::IsTokenized(extraPos = Tokenizers::tokenizeFuncCall(parent, context->chars[result],
                                                            result, context))) {
             result = extraPos;
         }

@@ -1125,7 +1125,7 @@ namespace smart {
         static int variableTokenizer(TokenizerParams_parent_ch_start_context);
         static int tokenizeExpression(TokenizerParams_parent_ch_start_context);
         static int parenthesesTokenizer(TokenizerParams_parent_ch_start_context);
-        static int funcCallTokenizer(TokenizerParams_parent_ch_start_context);
+        static int tokenizeFuncCall(TokenizerParams_parent_ch_start_context);
         static int binaryOperationTokenizer(TokenizerParams_parent_ch_start_context);
 
 
