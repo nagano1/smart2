@@ -188,7 +188,7 @@ namespace smart {
     }
 
 
-    static int parenthesesTokenizerInternal(TokenizerParams_parent_ch_start_context) {
+    static int tokenizeFuncCallInternal(TokenizerParams_parent_ch_start_context) {
         auto *funcCallNode = Cast::downcast<CallFuncNodeStruct*>(parent);
 
         if (ch == ')') {
@@ -237,7 +237,7 @@ namespace smart {
         int currentPos = start + 1;
         int resultPos;
         if (Search::IsTokenized(resultPos = Scanner::scanMulti(funcCallNode,
-                                                    parenthesesTokenizerInternal,
+                                                    tokenizeFuncCallInternal,
                                                     currentPos, context))) {
             context->generatedMainNode = Cast::upcast(funcCallNode);
             context->leftNode = leftNode;
