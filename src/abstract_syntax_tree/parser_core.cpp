@@ -313,7 +313,7 @@ namespace smart
     ) {
         utf8byte ch;
         int returnResultPos = -1;
-        // context->afterLineBreak = false;
+         context->afterLineBreak = false;
         InnerParsingData parsingResult;
         bool afterLineBreak = context->afterLineBreak;
 
