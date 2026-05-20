@@ -44,6 +44,9 @@ void testSimpleCalculation()
 constexpr auto *textC = const_cast<char *>(u8R"(
 class FooClass
 {
+    fn funcA()
+    {
+    }    
 }
 )");
 
