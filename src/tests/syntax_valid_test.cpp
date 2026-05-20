@@ -46,6 +46,7 @@ class FooClass
 {
     fn funcA()
     {
+        int a = 3124
     }    
 }
 )");
