@@ -257,7 +257,7 @@ namespace smart
             }
 
             parsingResult->assignWhiteSpaces(newCommentNode, i);
-            
+
             parsingResult->commentNode = newCommentNode;
             if (prevCommentNode != nullptr) {
                 newCommentNode->prevCommentNode = prevCommentNode;
@@ -312,12 +312,9 @@ namespace smart
                                    bool root, bool scanMulti
     ) {
         utf8byte ch;
-        int returnResult = -1;
-        context->afterLineBreak = false;
-        InnerParsingData  parsingResult;
-            
-        parsingResult.whitespace_startpos = -1;
-        parsingResult.commentNode = nullptr;
+        int returnResultPos = -1;
+        // context->afterLineBreak = false;
+        InnerParsingData parsingResult;
         bool afterLineBreak = context->afterLineBreak;
 
         for (int32_t i = start; i <= context->length;) {
@@ -326,7 +323,7 @@ namespace smart
             if (ch == '/') { // comment
                 int pos = tryDetectComments(context, i, parentNode, &parsingResult);
                 if (pos > -1) {
-                    i = pos; // returnResult 
+                    i = pos; // returnResultPos
                     continue;
                 }
             }
@@ -349,7 +346,7 @@ namespace smart
             }
 
             int result = tokenizer(Cast::upcast(parentNode), ch, i, context);
-            returnResult = result;
+            returnResultPos = result;
 
             if (context->syntaxErrorInfo.hasError) {
                 return -1;
@@ -388,10 +385,8 @@ namespace smart
                 context->remaindPrevChars = context->length - parsingResult.whitespace_startpos;
             }
         }
-        if (context->scanEnd) {
-            context->scanEnd = false;
-        }
-        return returnResult;
+        context->scanEnd = false; // reset scanEnd for the next scan
+        return returnResultPos;
     }
 
 
