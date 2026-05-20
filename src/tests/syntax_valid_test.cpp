@@ -41,16 +41,6 @@ void testSimpleCalculation()
 }
 
 
-constexpr auto *textC = const_cast<char *>(u8R"(
-class FooClass
-{
-    fn funcA()
-    {
-        int a = 3124
-    }    
-}
-)");
-
 constexpr auto *text = const_cast<char *>(u8R"(
 class FooClass
 {
@@ -468,16 +458,15 @@ class AABC  {  }
 #define FUNC(x) checkTextEquality(#x, x)
 void testParsing()
 {
-    FUNC(textC);
-    // FUNC(text);
-    // FUNC(testCode3);
-    // FUNC(testCode4);
-    // FUNC(commentTestText);
-    // FUNC(parenthesisText);
-    // FUNC(""); // empty text
-    // FUNC(" \r\n \n\n  ");
+    FUNC(text);
+    FUNC(testCode3);
+    FUNC(testCode4);
+    FUNC(commentTestText);
+    FUNC(parenthesisText);
+    FUNC(""); // empty text
+    FUNC(" \r\n \n\n  ");
 
-    // NodeTypeEqualityTest();
-    // DepthTest();
-    // testTypeTreeTest();
+    NodeTypeEqualityTest();
+    DepthTest();
+    testTypeTreeTest();
 }
