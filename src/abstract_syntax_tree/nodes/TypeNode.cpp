@@ -24,7 +24,7 @@ namespace smart
     
     static constexpr const char let_chars[] = "let";
     static constexpr int size_of_let = sizeof(let_chars) - 1;
-    
+
     static CodeLine *appendToLine(TypeNodeStruct *self, CodeLine *currentCodeLine) {
         currentCodeLine = currentCodeLine->addPrevLineBreakNode(self);
         currentCodeLine->appendNode(self);
@@ -42,7 +42,7 @@ namespace smart
             buf[0] = nullableMarkChar;
         }
 
-        VTableCall::copySelfText(&self->nameNode, buf + 1);
+        VTableCall::copySelfText(&self->nameNode, buf + (hasImmutableOrNullableMark ? 1 : 0));
     }
 
     static int selfTextLength(TypeNodeStruct *self)
