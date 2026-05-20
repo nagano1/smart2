@@ -316,7 +316,7 @@ namespace smart
             if (ch == '/') { // comment
                 int pos = tryDetectComments(context, i, parentNode, &parsingResult);
                 if (pos > -1) {
-                    returnResult = i = pos;
+                    i = pos; // returnResult 
                     continue;
                 }
             }
@@ -364,7 +364,6 @@ namespace smart
 
                 parsingResult.prevLineBreak = nullptr;
                 parsingResult.lastLineBreak = nullptr;
-
 
                 if (scanMulti && !context->scanEnd) {
                     i = result;
