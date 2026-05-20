@@ -1145,7 +1145,7 @@ namespace smart {
 
         // SimpleTextNodeStruct
         template<typename TYPE, std::size_t SIZE, typename GENTYPE>
-        static inline int WordTokenizer2(TokenizerParams_parent_ch_start_context
+        static inline int tokenizeWord(TokenizerParams_parent_ch_start_context
                       , GENTYPE* (*genereater)(ParseContext *, NodeBase*)
                       , utf8byte capitalLetter
                       , const TYPE(&word)[SIZE])
@@ -1177,7 +1177,7 @@ namespace smart {
                 , utf8byte capitalLetter
                 , const TYPE(&word)[SIZE])
         {
-            return WordTokenizer2(TokenizerParams_pass, Alloc::newSimpleTextNode, capitalLetter, word);
+            return tokenizeWord(TokenizerParams_pass, Alloc::newSimpleTextNode, capitalLetter, word);
         }
     };
 
