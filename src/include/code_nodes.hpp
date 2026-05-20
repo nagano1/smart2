@@ -269,7 +269,7 @@ namespace smart {
     using TypeNodeStruct = struct _TypeNodeStruct {
         NODE_HEADER;
 
-        bool hasConstMark; // # const
+        bool hasImmutableMark; // # immutable
         bool hasNullableMark; // ?
         bool isLet; // or has type
 
