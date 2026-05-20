@@ -44,7 +44,7 @@ void testSimpleCalculation()
 constexpr auto *text = const_cast<char *>(u8R"(
 class FooClass
 {
-    fn funcB()
+    fnfuncB()
     {
         int a = 3124
     }
@@ -163,7 +163,7 @@ class A
         class TestCl😂日本語10234ass
         {
 
-            fnaFunc ()
+            fn aFunc ()
             {
                 
             }
