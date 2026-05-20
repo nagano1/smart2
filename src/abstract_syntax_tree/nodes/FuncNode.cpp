@@ -788,6 +788,12 @@ namespace smart {
                                               currentPos,
                                               context);
 
+
+                    // nameNode should have spaces/comments/lineBreaks before between "fn" and function name,
+
+
+
+
                     if (!Search::IsTokenized(resultPos)) {
                         // the fn should have a function name
                         context->setError(ErrorCode::invalid_fn_name, start);
