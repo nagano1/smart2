@@ -63,15 +63,15 @@ namespace smart
         return 0;
     }
 
-    static constexpr const char lineBreakTypeText[] = "<lineBreak>";
+    static constexpr const char LineBreakTypeText[] = "<LineBreak>";
 
     static node_vtable _lineBreakVTable = CREATE_VTABLE(LineBreakNodeStruct,
-                                                              selfTextLength,
-                                                              copySelfText,
-                                                              appendToLine,
-                                                              applyFuncToDescendants,
-                                                              lineBreakTypeText,
-                                                              NodeTypeId::LineBreak);
+                                                        selfTextLength,
+                                                        copySelfText,
+                                                        appendToLine,
+                                                        applyFuncToDescendants,
+                                                        LineBreakTypeText,
+                                                        NodeTypeId::LineBreak);
 
     const node_vtable *VTables::LineBreakVTable = &_lineBreakVTable;
 
