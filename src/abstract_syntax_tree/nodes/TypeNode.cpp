@@ -29,7 +29,9 @@ namespace smart
 
     static const char *self_text(TypeNodeStruct *self)
     {
-        return VTableCall::selfText(&self->nameNode);
+        bool hasImmutableOrNullableMark = self->hasImmutableMark || self->hasNullableMark;
+        
+        return VTableCall::selfText(&self->nameNode) ;
     }
 
     static int selfTextLength(TypeNodeStruct *self)

@@ -194,6 +194,9 @@ namespace smart {
             return nullptr;
         }
 
+        char *textA = (char *) malloc(sizeof(char) * totalCount + 1);
+        char textB[256] = {0};
+        
         // malloc and copy text
         auto *text = (char *) malloc(sizeof(char) * totalCount + 1);
         {

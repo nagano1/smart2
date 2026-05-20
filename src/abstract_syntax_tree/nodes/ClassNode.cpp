@@ -37,8 +37,8 @@ namespace smart {
         return 5;
     }
 
-    static const utf8byte *selfText(ClassNodeStruct *) {
-        return "class";
+    static const void selfText(ClassNodeStruct * classNode, char *buf, int bufSize, int currentPos) {
+        TEXT_MEMCPY(buf + currentPos, "class", selfTextLength(classNode)); 
     }
 
     static CodeLine *appendToLine(ClassNodeStruct *classNode, CodeLine *currentCodeLine) {

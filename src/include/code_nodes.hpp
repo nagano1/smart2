@@ -762,7 +762,8 @@ namespace smart {
 
     #define VTABLE_DEF(T) \
         int (*selfTextLength)(T *self); \
-        const utf8byte *(*selfText)(T *self); \
+        /* no need to add null terminator, caller will add it using selfTextLength() */ \
+        const utf8byte *(*copySelfText)(T *self, char *buf, int bufSize, int currentPos); \
         CodeLine *(*appendToLine)(T *self, CodeLine *line); \
         int (*applyFuncToDescendants)(T *Node, ApplyFunc_params3); \
         const char *typeChars; \
@@ -868,12 +869,12 @@ namespace smart {
         }
 
 
-        static inline const utf8byte *selfText(void *node) {
+        static inline const utf8byte *selfText(void *node, char *buf, int bufSize, int currentPos) {
             if (node == nullptr) {
                 return "";
             } else {
                 auto *nodeBase = Cast::upcast(node);
-                return nodeBase->vtable->selfText(nodeBase);
+                return nodeBase->vtable->selfText(nodeBase, buf, bufSize, currentPos);
             }
         }
 

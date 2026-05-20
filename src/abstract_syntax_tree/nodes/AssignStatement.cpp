@@ -26,7 +26,7 @@ namespace smart {
         return 0;
     }
 
-    static const utf8byte *selfText(AssignStatementNodeStruct *self)
+    static const utf8byte *selfText(AssignStatementNodeStruct *self, char *buf, int bufSize, int currentPos)
     {
         return "";
     }
