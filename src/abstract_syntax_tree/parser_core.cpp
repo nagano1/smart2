@@ -358,10 +358,6 @@ namespace smart
                 return -1;
             }
 
-            if (result == Search::DONE_WITH_PREVIUS_POSITION) {
-                break;
-            }
-
             if (result > -1) {
                 context->isAfterLineBreak = false;
                 context->prevFoundPos = result;
