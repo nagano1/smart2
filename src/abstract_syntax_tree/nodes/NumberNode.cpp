@@ -50,8 +50,8 @@ namespace smart {
         return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
     }
 
-    static const char *selfText2(BoolNodeStruct*self) {
-        return self->text;
+    static void copySelfText2(BoolNodeStruct *self, utf8byte *buf) {
+        TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
     static int selfTextLength2(BoolNodeStruct*self) {
@@ -94,7 +94,7 @@ namespace smart {
 
     static constexpr const char boolNodeTypeText[] = "<bool>";
     static node_vtable _boolVTable = CREATE_VTABLE(BoolNodeStruct, selfTextLength2,
-                                                         selfText2, appendToLine2,
+                                                         copySelfText2, appendToLine2,
                                                    BoolNodeStruct_applyFuncToDescendants,
                                                          boolNodeTypeText, NodeTypeId::Bool);
 
@@ -135,9 +135,9 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static const char *selfText(NumberNodeStruct *self)
+    static void copySelfText(NumberNodeStruct *self, utf8byte *buf)
     {
-        return self->text;
+        TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
     static int selfTextLength(NumberNodeStruct *self)
@@ -235,7 +235,7 @@ namespace smart {
 
 
     static node_vtable _numberVTable_ = CREATE_VTABLE(NumberNodeStruct, selfTextLength,
-                                                            selfText,
+                                                            copySelfText,
                                                             appendToLine,
                                                       NumberNodeStruct_applyFuncToDescendants,
                                                             numberNodeTypeText,
@@ -323,9 +323,9 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static const char *parentheses_selfText(ParenthesesNodeStruct *self)
+    static void copySelfText3(ParenthesesNodeStruct *self, utf8byte *buf)
     {
-        return "(";
+        buf[0] = '(';
     }
 
     static int parentheses_selfTextLength(ParenthesesNodeStruct *self)
@@ -403,7 +403,7 @@ namespace smart {
 
     static node_vtable _parenthesesVTable = CREATE_VTABLE(ParenthesesNodeStruct,
                                                                 parentheses_selfTextLength,
-                                                                parentheses_selfText,
+                                                                copySelfText3,
                                                                 parentheses_appendToLine,
                                                           parentheses_applyFuncToDescendants,
                                                                 parenthesesNodeTypeText,
@@ -467,9 +467,8 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static const char *binaryop_selfText(BinaryOperationNodeStruct *self)
+    static void copySelfText_binaryOp(BinaryOperationNodeStruct *self, utf8byte *buf)
     {
-        return "";
     }
 
     static int binaryop_selfTextLength(BinaryOperationNodeStruct *self)
@@ -508,7 +507,7 @@ namespace smart {
 
     static node_vtable binaryop_VTable = CREATE_VTABLE(BinaryOperationNodeStruct ,
                                                              binaryop_selfTextLength,
-                                                             binaryop_selfText,
+                                                             copySelfText_binaryOp,
                                                              binaryop_appendToLine,
                                                        BinaryOperationNodeStruct_applyFuncToDescendants,
                                                              binaryop_NodeTypeText,

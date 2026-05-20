@@ -609,7 +609,7 @@ namespace smart {
         return returnNode;
     }
 
-
+/*
     // return: utf16
     static int getPosInLine(NodeBase *node, bool beginningPos)
     {
@@ -643,10 +643,12 @@ namespace smart {
 
         return utf16Pos;
     }
+*/
 
 
     void ScriptEngineContext::setErrorPositions()
     {
+        /*
         reassignLineNumbers(this->scriptEnv->document);
 
         auto *context = this->scriptEnv->document->context;
@@ -678,8 +680,8 @@ namespace smart {
 
         // DocumentUtils::regenerateCodeLines(docStruct);
         static_assert(true, "not implemented");
+        */
     }
-
     // //int32_t *int32ptr;
     //            //auto *value = this->context->genValueBase(BuiltInTypeIndex::int32, sizeof(int32_t), &int32ptr);
     //            //*int32ptr = numberNode->num;

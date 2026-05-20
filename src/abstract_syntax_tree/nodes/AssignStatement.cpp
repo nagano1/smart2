@@ -26,9 +26,9 @@ namespace smart {
         return 0;
     }
 
-    static const utf8byte *selfText(AssignStatementNodeStruct *self, char *buf, int bufSize, int currentPos)
+    static void copySelfText(AssignStatementNodeStruct *self, utf8byte *buf)
     {
-        return "";
+        return;
     }
 
 
@@ -81,7 +81,7 @@ namespace smart {
 
     static node_vtable _assignVTable = CREATE_VTABLE(AssignStatementNodeStruct,
                                                      selfTextLength,
-                                                     selfText,
+                                                     copySelfText,
                                                      appendToLine, applyFuncToDescendants,
                                                      assignTypeText,
                                                      NodeTypeId::AssignStatement);

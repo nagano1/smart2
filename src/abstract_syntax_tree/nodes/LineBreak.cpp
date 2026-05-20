@@ -26,8 +26,14 @@ namespace smart
         return self->text[1] == '\0' ? 1 : 2;
     }
 
-    static const char *self_text(LineBreakNodeStruct *self) {
-        return self->text;
+    static void copySelfText(LineBreakNodeStruct *self, utf8byte *buf) {
+        if (self->text[1] == '\0') {
+            buf[0] = self->text[0];
+        }
+        else {
+            buf[0] = self->text[0];
+            buf[1] = self->text[1];
+        }
     }
 
     static CodeLine *appendToLine(LineBreakNodeStruct *self, CodeLine *currentCodeLine) {
@@ -66,7 +72,7 @@ namespace smart
 
     static node_vtable _lineBreakVTable = CREATE_VTABLE(LineBreakNodeStruct,
                                                               selfTextLength,
-                                                              self_text,
+                                                              copySelfText,
                                                               appendToLine,
                                                               applyFuncToDescendants,
                                                               lineBreakTypeText,

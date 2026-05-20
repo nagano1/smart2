@@ -26,8 +26,8 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static const utf8byte *self_text(StringLiteralNodeStruct *self) {
-        return self->text;
+    static void copySelfText(StringLiteralNodeStruct *self, utf8byte *buf) {
+        TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
     static int selfTextLength(StringLiteralNodeStruct *self) {
@@ -184,7 +184,7 @@ namespace smart {
     }
 
     static node_vtable _stringVTable = CREATE_VTABLE(StringLiteralNodeStruct, selfTextLength,
-                                                          self_text,
+                                                          copySelfText,
                                                           appendToLine, applyFuncToDescendants, nameTypeText, NodeTypeId::StringLiteral);
     const node_vtable *VTables::StringLiteralVTable = &_stringVTable;
 

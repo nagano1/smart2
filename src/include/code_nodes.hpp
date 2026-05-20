@@ -763,7 +763,7 @@ namespace smart {
     #define VTABLE_DEF(T) \
         int (*selfTextLength)(T *self); \
         /* no need to add null terminator, caller will add it using selfTextLength() */ \
-        const utf8byte *(*copySelfText)(T *self, char *buf, int bufSize, int currentPos); \
+        void (*copySelfText)(T *self, utf8byte *buf); \
         CodeLine *(*appendToLine)(T *self, CodeLine *line); \
         int (*applyFuncToDescendants)(T *Node, ApplyFunc_params3); \
         const char *typeChars; \
@@ -788,14 +788,14 @@ namespace smart {
     };
 
     using selfTextLengthFunction = decltype(std::declval<NodeVTable>().selfTextLength);
-    using selfTextFunction = decltype(std::declval<NodeVTable>().selfText);
+    using selfTextFunction = decltype(std::declval<NodeVTable>().copySelfText);
     using appendToLineFunction = decltype(std::declval<NodeVTable>().appendToLine);
     using applyFuncToDescendantsFunction = decltype(std::declval<NodeVTable>().applyFuncToDescendants);
 
     template<typename T, std::size_t SIZE>
     static int vtable_type_check(
             decltype(std::declval<vtableT<T>>().selfTextLength) f1,
-            decltype(std::declval<vtableT<T>>().selfText) f2,
+            decltype(std::declval<vtableT<T>>().copySelfText) f2,
             decltype(std::declval<vtableT<T>>().appendToLine) f3,
             decltype(std::declval<vtableT<T>>().applyFuncToDescendants) f4,
             const char(&f5)[SIZE],
@@ -869,12 +869,12 @@ namespace smart {
         }
 
 
-        static inline const utf8byte *selfText(void *node, char *buf, int bufSize, int currentPos) {
+        static inline void copySelfText(void *node, char *buf) {
             if (node == nullptr) {
-                return "";
+                return;
             } else {
                 auto *nodeBase = Cast::upcast(node);
-                return nodeBase->vtable->selfText(nodeBase, buf, bufSize, currentPos);
+                nodeBase->vtable->copySelfText(nodeBase, buf);
             }
         }
 

@@ -26,9 +26,8 @@ namespace smart {
         return 0;
     }
 
-    static const utf8byte *selfText(ReturnStatementNodeStruct*) {
+    static void copySelfText(ReturnStatementNodeStruct *self, utf8byte *buf) {
         // virtual node
-        return "";
     }
 
     static CodeLine *appendToLine(ReturnStatementNodeStruct*self, CodeLine *currentCodeLine) {
@@ -78,7 +77,7 @@ namespace smart {
      */
     static node_vtable _returnVTable = CREATE_VTABLE(ReturnStatementNodeStruct,
                                                           selfTextLength,
-                                                          selfText,
+                                                          copySelfText,
                                                           appendToLine,
                                                           ReturnStatementNodeStruct_applyFuncToDescendants,
                                                           assignTypeText

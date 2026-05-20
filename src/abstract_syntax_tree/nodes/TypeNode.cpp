@@ -27,11 +27,17 @@ namespace smart
         return currentCodeLine;
     }
 
-    static const char *self_text(TypeNodeStruct *self)
+    static void copySelfText(TypeNodeStruct *self, utf8byte *buf)
     {
         bool hasImmutableOrNullableMark = self->hasImmutableMark || self->hasNullableMark;
-        
-        return VTableCall::selfText(&self->nameNode) ;
+
+        if (self->hasImmutableMark) {
+            buf[0] = immutableMarkChar;
+        } else if (self->hasNullableMark) {
+            buf[0] = nullableMarkChar;
+        }
+
+        VTableCall::copySelfText(&self->nameNode, buf + 1);
     }
 
     static int selfTextLength(TypeNodeStruct *self)
@@ -123,7 +129,7 @@ namespace smart
     static constexpr const char typeTypeText[] = "<Type>";
 
     static node_vtable _typeVTable = CREATE_VTABLE(TypeNodeStruct, selfTextLength,
-                                                         self_text,
+                                                         copySelfText,
                                                          appendToLine,
                                                          applyFuncToDescendants,
                                                          typeTypeText,
