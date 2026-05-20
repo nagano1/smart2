@@ -278,7 +278,7 @@ namespace smart {
 
     static node_vtable _callfuncVTable = CREATE_VTABLE(CallFuncNodeStruct,
                                                              callfun_selfTextLength,
-                                                             callfunc_selfText,
+                                                             copySelfText_CallFunc,
                                                              callfunc_appendToLine,
                                                        callfunc_applyFuncToDescendants,
                                                              callfuncNodeTypeText,
@@ -708,7 +708,7 @@ namespace smart {
  */
     static node_vtable _fnVTable = CREATE_VTABLE(FuncNodeStruct,
                                                        selfTextLength,
-                                                       selfText,
+                                                       copySelfText,
                                                        appendToLine,
                                                  FuncNodeStruct_applyFuncToDescendants,
                                                        fnTypeText, NodeTypeId::Func);
