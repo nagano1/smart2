@@ -242,17 +242,17 @@ void testTypeTreeTest() {
     assert(strlen(treeText) == strlen(chars));
 
 
-    auto&& typeTree = u8R"(<lineBreak>
-<Class>        class<Name> TestCl😂日本語10234ass<lineBreak>
-<Symbol>        {<lineBreak>
-<fn>            fn<Name> func<Symbol>(<Symbol>)<lineBreak>
-<body>            {<lineBreak>
-<Type>                let<Name> aw<Symbol> =<number> 242<lineBreak>
-<bool>                true<lineBreak>
-<NULL>                null<lineBreak>
-<Variable>                printf<Symbol>(<FuncArgument><number>214<Symbol>)<lineBreak>
-<Symbol>            }<lineBreak>
-<Symbol>        }<lineBreak>
+    auto&& typeTree = u8R"(<LineBreak>
+<Class>        class<Name> TestCl😂日本語10234ass<LineBreak>
+<Symbol>        {<LineBreak>
+<fn>            fn<Name> func<Symbol>(<Symbol>)<LineBreak>
+<body>            {<LineBreak>
+<Type>                let<Name> aw<Symbol> =<number> 242<LineBreak>
+<bool>                true<LineBreak>
+<NULL>                null<LineBreak>
+<Variable>                printf<Symbol>(<FuncArgument><number>214<Symbol>)<LineBreak>
+<Symbol>            }<LineBreak>
+<Symbol>        }<LineBreak>
 <EndOfFile>)";
 
     assert(std::string{ typeTreeText } == std::string{ typeTree });
