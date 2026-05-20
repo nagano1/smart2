@@ -59,7 +59,7 @@ namespace smart {
 
     static node_vtable _blockCommentFragmentVTable = CREATE_VTABLE(BlockCommentFragmentStruct,
                                                                  selfTextLength,
-                                                                 self_text,
+                                                                 copySelfText,
                                                                  appendToLine,
                                                                                 SimpleTextNodeStruct_applyFuncToDescendants,
                                                                  "<Comment Fragment>",
