@@ -42,18 +42,19 @@ namespace smart {
         bool startsWithQuote = false;
         bool endsWithQuote = false;
 
-
         char quote;
 
         if (ch == '"') {
             startsWithQuote = true;
             found_count++;
             quote = '"';
-        } else if (ch == '`'){
+        }
+        else if (ch == '`'){
             startsWithQuote = true;
             found_count++;
             quote = '`';
-        } else {
+        }
+        else {
             return Search::NOTFOUND;
         }
 
@@ -151,7 +152,8 @@ namespace smart {
 
                 if (strLiteralNode->text[i] == '\\') {
                     escapeMode = true;
-                } else {
+                }
+                else {
                     strLength++;
                     str[currentStrIndex++] = strLiteralNode->text[i];
                 }

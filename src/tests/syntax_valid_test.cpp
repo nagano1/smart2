@@ -190,6 +190,7 @@ class A
     assert(document->firstCodeLine->firstNode->vtable == VTables::LineBreakVTable);
     assert(document->firstCodeLine->nextLine->firstNode->vtable == VTables::LineBreakVTable);
 
+    free(treeText);
     Alloc::deleteDocument(document);
 }
 
@@ -209,6 +210,7 @@ void aFunc() {
     assert(std::string{ treeText } == std::string{ chars });
     assert(strlen(treeText) == strlen(chars));
 
+    free(treeText);
     Alloc::deleteDocument(document);
 }
 
@@ -257,6 +259,8 @@ void testTypeTreeTest() {
 
     assert(std::string{ typeTreeText } == std::string{ typeTree });
 
+    free(treeText);
+    free(typeTreeText);
     Alloc::deleteDocument(document);
 }
 
@@ -410,7 +414,7 @@ class A
     assert(document->firstCodeLine->firstNode->vtable == VTables::LineBreakVTable);
     assert(document->firstCodeLine->nextLine->firstNode->vtable == VTables::LineBreakVTable);
 
-
+    free(treeText);
     Alloc::deleteDocument(document);
 }
 
@@ -452,6 +456,7 @@ class AABC  {  }
     assert(std::string(treeText) == std::string(chars));
     assert(strlen(treeText) == strlen(chars));
 
+    free(treeText);
     Alloc::deleteDocument(document);
 }
 
