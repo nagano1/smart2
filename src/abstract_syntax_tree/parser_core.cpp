@@ -203,7 +203,6 @@ namespace smart
                 }
                 parsingResult->whitespace_startpos = -1;
             }
-
             */
         }
 
