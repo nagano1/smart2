@@ -899,7 +899,11 @@ namespace smart {
 
     };
 
-
+    // Generally AST keeps only nodes for executing, they usually exclude spaces, parentheses etc....
+    // but in our system, in order to develop dedicated UI for coding, AST-nodes should preserve code formats like spaces/comments/line-breaks.
+    // even after editing a code part in CodeLine, there's need to output entire file code with formats.
+    // To achive it, we let AST-nodes have spaces/comments/line-breaks information.
+    // and We build CodeLine list from AST nodes.
     struct CodeLine {
         CodeLine *nextLine;
         int lineNumber;
@@ -922,6 +926,7 @@ namespace smart {
             this->depth = 0;
         }
 
+        // insert node into this line, if prev is null, insert it into top of the line
         CodeLine *insertNode(NodeBase *node, NodeBase *prev) {
             if (firstNode == nullptr) {
                 assert(prev == nullptr);
@@ -945,6 +950,7 @@ namespace smart {
             return this;
         }
 
+        // append node to the end of the line
         CodeLine *appendNode(void *node) {
             if (firstNode == nullptr) {
                 firstNode = (NodeBase *) node;
@@ -965,23 +971,18 @@ namespace smart {
             return this;
         }
 
+        // append line break node and comment node before the line
         CodeLine *addPrevLineBreakNode(void *node) {
-
             CodeLine *currentCodeLine = this;
 
             if (this->context->appendLineMode == AppendLineMode::Normal) {
-                currentCodeLine = VTableCall::callAppendToLine(
-                        ((NodeBase *) node)->prevLineBreakNode,
-                        currentCodeLine);
+                currentCodeLine = VTableCall::callAppendToLine(((NodeBase *) node)->prevLineBreakNode, currentCodeLine);
             }
 
-            currentCodeLine = VTableCall::callAppendToLine(((NodeBase *) node)->prevCommentNode,
-                                                           currentCodeLine);
-
+            currentCodeLine = VTableCall::callAppendToLine(((NodeBase *) node)->prevCommentNode, currentCodeLine);
 
             return currentCodeLine;
         }
-
     };
 
 
