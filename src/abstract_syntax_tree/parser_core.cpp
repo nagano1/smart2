@@ -308,6 +308,7 @@ namespace smart
             
         parsingResult.whitespace_startpos = -1;
         parsingResult.commentNode = nullptr;
+        bool afterLineBreak = context->afterLineBreak;
 
         for (int32_t i = start; i <= context->length;) {
             ch = context->chars[i];
@@ -349,7 +350,9 @@ namespace smart
             }
 
             if (Search::IsTokenized(result)) {
+                afterLineBreak = false;
                 context->afterLineBreak = false;
+
                 context->prevFoundPos = result;
 
                 assert(context->leftNode != nullptr);
@@ -367,6 +370,9 @@ namespace smart
                     i = result;
                     continue;
                 }
+            }
+            else {
+                context->afterLineBreak = afterLineBreak;
             }
             break;
         }
