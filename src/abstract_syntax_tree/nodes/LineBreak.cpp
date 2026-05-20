@@ -27,26 +27,21 @@ namespace smart
     }
 
     static void copySelfText(LineBreakNodeStruct *self, utf8byte *buf) {
-        if (self->text[1] == '\0') {
-            buf[0] = self->text[0];
-        }
-        else {
-            buf[0] = self->text[0];
+        buf[0] = self->text[0];
+        if (self->text[1] != '\0') { // if it's "\r\n"
             buf[1] = self->text[1];
         }
     }
 
     static CodeLine *appendToLine(LineBreakNodeStruct *self, CodeLine *currentCodeLine) {
-        auto *lineBreakNode = self; // Cast::downcast<LineBreakNodeStruct *>(self);
-
-        auto* next = lineBreakNode;
+        auto *next = self;
         while (next) {
             currentCodeLine = currentCodeLine->addPrevLineBreakNode(next); // add space before break
 
             currentCodeLine->appendNode(Cast::upcast(next));
             
-            auto *newNextLine = lineBreakNode->context->newCodeLine();
-            newNextLine->init(lineBreakNode->context);
+            auto *newNextLine = self->context->newCodeLine();
+            newNextLine->init(self->context);
 
             currentCodeLine->nextLine = newNextLine;
             currentCodeLine = newNextLine;
