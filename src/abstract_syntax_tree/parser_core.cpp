@@ -61,36 +61,29 @@ namespace smart
         while (true)
         {
             int endCommentPos = ParseUtil::indexOf2(context->chars, context->length, searchEndPos, '*', '/');
-
             if (endCommentPos == -1)
             {
                 // the end of block comment not found, treat the rest of chars as comment
                 return context->length;
             }
 
-            if (tagLength > 0)
-            {
-                // [hoge]*/
-                if (context->chars[endCommentPos - 1] == ']'
-                     && context->chars[endCommentPos - tagLength - 2] == '['
-                     && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1))
-                {
-                    // the end tag of the named block comment found
+            // [hoge]*/
+            if (context->chars[endCommentPos - 1] == ']') {
+                if (tagLength > 0
+                    && context->chars[endCommentPos - tagLength - 2] == '['
+                    && ParseUtil::matchWord(context->chars, context->length, tagText, tagLength, endCommentPos - tagLength - 1)
+                ) {
                     return endCommentPos + 2;
                 }
-                else
-                {
-                    // not the end of the named block comment, continue to search
-                    searchEndPos = endCommentPos + 2;
-                    continue;
+
+                continue; // if the block comment has tag, it must be closed with the same tag, so skip if the tag doesn't match
+            }
+            else {
+                if (tagLength == 0) { // comments of /* needs to be closed with */ (not named block comment)
+                    return endCommentPos + 2;
                 }
+                continue;
             }
-            else
-            {
-                // not a named block comment, the first */ is the end of the block comment
-                return endCommentPos + 2;
-            }
-            break;
         }
 
         return -1;
