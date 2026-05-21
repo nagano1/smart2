@@ -291,7 +291,7 @@ namespace smart
     /// it will also link the found token with the nearest line break and comment nodes before it, so that the found token can be correctly formatted and
     /// the comments can be attached to the correct code nodes in later formatting and attaching phase
     static InternalParsingData scanWithTokenizer(void *parentNode, TokenizerFunction tokenizer,
-                                                 int start, ParseContext *context, bool scanMulti) {
+                                                 ParseContext *context, int start, bool scanMulti) {
         utf8byte ch;
         InternalParsingData parsingData;
         context->isAfterLineBreak = false;
@@ -351,16 +351,16 @@ namespace smart
 
     // scan once with the given tokenizer, it will return when a token is found or the end of chars is reached
     int Scanner::scanOnce(void *parentNode, TokenizerFunction tokenizer,ParseContext *context,  int start) {
-        return scanWithTokenizer(parentNode, tokenizer, start, context, false).returnPos;
+        return scanWithTokenizer(parentNode, tokenizer, context, start, false).returnPos;
     }
 
     // scan until scanEnd==true, tokenizer should set scanEnd to true when it wants to stop scanning
     int Scanner::scanMulti(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start) {
-        return scanWithTokenizer(parentNode, tokenizer, start, context, true).returnPos;
+        return scanWithTokenizer(parentNode, tokenizer, context, start, true).returnPos;
     }
 
     int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, ParseContext *context) {
-        InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, 0, context, /* multiScan */ true);
+        InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, context, 0, /* multiScan */ true);
 
         context->remainedLineBreakNode = parsingData.prevLineBreak;
         context->remainedCommentNode = parsingData.commentNode;
