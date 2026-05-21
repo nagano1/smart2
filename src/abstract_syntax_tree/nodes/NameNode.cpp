@@ -48,7 +48,7 @@ namespace smart {
 
         if (found_count > 0) {
             // ban keywords
-            constexpr char* keywords[] = {"return", "class", "fn", "false", "true", "null", "let"};
+            constexpr char* keywords[] = {"return", "class", "fn", "false", "true", "null"};
             for (auto &&keyword : keywords) {
                 if (ParseUtil::matchWord(context->chars, context->length, keyword, st_size_of(keyword) - 1, start)) {
                     return Search::NOTFOUND;
