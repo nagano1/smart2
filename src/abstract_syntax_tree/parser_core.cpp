@@ -22,7 +22,7 @@
 namespace smart
 {
     ErrorInfo ErrorInfo::ErrorInfoList[errorListSize];
-    //bool ErrorInfo::errorInfoInitialized{false};
+    bool ErrorInfo::errorInfoInitialized{false};
     struct InternalParsingData;
 
     
@@ -285,9 +285,10 @@ namespace smart
     }
 
 
-    /// scan with the given tokenizer, if root is true, it will save the last line break node and comment node to context for later use,
-    /// if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
-    /// this scanner handles spaces, line breaks and comments, so tokenizer can focus on scanning code tokens without worrying about spaces, line breaks and comments
+    /// scan with the given tokenizer. if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
+    /// this scanning handles spaces, line breaks and comments, so tokenizer can focus on scanning code tokens without worrying about spaces, line breaks and comments
+    /// it will also link the found token with the nearest line break and comment nodes before it, so that the found token can be correctly formatted and
+    /// the comments can be attached to the correct code nodes in later formatting and attaching phase
     static InternalParsingData scanWithTokenizer(void *parentNode, TokenizerFunction tokenizer,
                                                  int start, ParseContext *context, bool scanMulti) {
         utf8byte ch;
