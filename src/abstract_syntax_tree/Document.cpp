@@ -599,7 +599,7 @@ namespace smart {
 
 
         if (docStruct->documentType == DocumentType::CodeDocument) {
-            Scanner::scanWithTokenizer(docStruct, tryTokenizeMulti, 0, context, /*root*/true, true);
+            Scanner::scanRoot(docStruct, tryTokenizeMulti, 0, context);
         }
         
         if (!context->syntaxErrorInfo.hasError)
