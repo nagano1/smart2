@@ -868,7 +868,7 @@ namespace smart {
                 context->addErrorWithNode(ErrorCode::no_variable_defined, &assign->typeOrLet);
             }
         }
-        assign->typeAtHeap = assign->pointerAsterisk.found > -1;
+        assign->typeAtHeap = assign->pointerAsterisk.foundPos > -1;
 
         if (assign->hasTypeDecl) {
             if (assign->valueNode) { // int b = 8, let b = 8
@@ -878,7 +878,7 @@ namespace smart {
                 if (assign->typeOrLet.isLet) { // let b = 8
                     assign->typeIndex = childTypeIndex;
 
-                    if (assign->pointerAsterisk.found > -1) {
+                    if (assign->pointerAsterisk.foundPos > -1) {
                         if (assign->valueNode->typeAtHeap) {
                         }
                         else {
@@ -897,7 +897,7 @@ namespace smart {
                 }
                 else { // int b = 8
                     if (typeEntry) {
-                        if (assign->pointerAsterisk.found > -1) { // int *b = null
+                        if (assign->pointerAsterisk.foundPos > -1) { // int *b = null
                             if (typeEntry->typeIndex != childTypeIndex) {
                                 if (childTypeIndex == BuiltInTypeIndex::null){
                                     if (assign->typeOrLet.hasNullableMark) {
