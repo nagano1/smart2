@@ -35,7 +35,11 @@ namespace smart
         return nodeBase->vtable->appendToLine(nodeBase, currentCodeLine);
     }
 
-    
+    // Nested block comments are not supported, instead, we support named block comments which can be closed with the corresponding tag,
+    // for example: /*[A] ... [A]*/.
+    // It's more explicit and easier to use than nested block comments, and it can also avoid the problem of accidentally
+    // closing the wrong block comment when there are multiple block comments.
+    // It also allows block comments to be nested in a way, for example: /*[A] ... /*[B] ... [B]*/ ... [A]*/.
     static inline int detectBlockCommentEnd(int32_t i, smart::ParseContext *context, int &tagLength, char *&tagText)
     {
         int textStartPos = i + 2;
@@ -121,7 +125,7 @@ namespace smart
                 Init::assignText_SimpleTextNode(commentFragment, context, currentIndex, commentLength);
 
                 // create a line break node for the line break after the comment fragment
-                auto *newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
+                LineBreakNodeStruct *newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
                 bool rn = context->chars[endIndex] == '\r' && context->chars[endIndex+1] == '\n';
                 if (rn) { // \r\n
                     newLineBreak->text[0] = '\r';
@@ -159,8 +163,8 @@ namespace smart
         LineBreakNodeStruct *prevLineBreak = nullptr;
         LineBreakNodeStruct *lastLineBreak = nullptr;
 
-        NodeBase *commentNode = nullptr;
-
+        NodeBase *commentNode = nullptr; // LineCommentNodeStruct or BlockCommentNodeStruct
+        
         void assignCommentNode(NodeBase* leftNode)
         {
             assert(leftNode != nullptr);
@@ -175,7 +179,7 @@ namespace smart
         {
             if (whitespace_startpos != -1) {
                 assert(whitespace_startpos < endIndex);
-                // prev_chars allows only ascii whitespace and japanese whitespaces are not allowed.
+                // prev_chars allows only ascii whitespace. Japanese whitespaces are not allowed.
                 commentNode->prev_chars = endIndex - whitespace_startpos;
                 whitespace_startpos = -1;
             }
@@ -226,7 +230,7 @@ namespace smart
 
             parsingData->assignWhiteSpaces(newCommentNode, i);
 
-            auto* prevCommentNode = parsingData->commentNode;
+            NodeBase* prevCommentNode = parsingData->commentNode;
             parsingData->commentNode = newCommentNode;
             if (prevCommentNode != nullptr) {
                 newCommentNode->prevCommentNode = prevCommentNode;
