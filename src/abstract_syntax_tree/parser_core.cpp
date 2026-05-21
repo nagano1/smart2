@@ -359,8 +359,8 @@ namespace smart
         return scanWithTokenizer(parentNode, tokenizer, start, context, true).returnPos;
     }
 
-    int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start) {
-        InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, start, context, /* multiScan */ true);
+    int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, ParseContext *context) {
+        InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, 0, context, /* multiScan */ true);
 
         context->remainedLineBreakNode = parsingData.prevLineBreak;
         context->remainedCommentNode = parsingData.commentNode;

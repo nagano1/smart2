@@ -1189,7 +1189,7 @@ namespace smart {
      * Implements common scanning and parsing method
      */
     struct Scanner {
-        static int scanRoot(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start);
+        static int scanRoot(void *parentNode, TokenizerFunction tokenizer, ParseContext *context);
 
         static int scanOnce(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start);
 
