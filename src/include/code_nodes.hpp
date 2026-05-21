@@ -153,9 +153,10 @@ namespace smart {
         st_byte *calcReg;                 \
         int typeIndex;                \
         bool typeAtHeap;                \
-        int found; \
+        int foundPos; \
         /* prev_chars holds number of chars before this node, used for error reporting and code generation. */ \
-        /* this reduces memory usage and keeps AST simple by avoid creating additional nodes for all spaces and comments. */ \
+        /* this reduces memory usage and keeps AST simple by avoid creating additional nodes for all spaces. */ \
+        /* Note: prevCommentNode or prevLineBreakNode is   */ \
         int prev_chars; \
         void *prevCommentNode; \
         struct _LineBreakNodeStruct *prevLineBreakNode; \
@@ -171,7 +172,7 @@ namespace smart {
         (node)->context = (context); \
         (node)->parentNode = (NodeBase*)(parent); \
         (node)->codeLine = nullptr; \
-        (node)->found = -1; \
+        (node)->foundPos = -1; \
         (node)->typeIndex = -1; \
         (node)->typeAtHeap = false; \
         (node)->nextNode = nullptr; \

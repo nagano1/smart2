@@ -147,7 +147,7 @@ namespace smart {
                 return start + 1;
             }
             else {
-                context->setError(ErrorCode::no_brace_for_class, classNode->found);
+                context->setError(ErrorCode::no_brace_for_class, classNode->foundPos);
             }
         }
         else if (ch == '}') {
@@ -170,7 +170,7 @@ namespace smart {
             }
 
             context->scanEnd = true;
-            context->setError2(ErrorCode::no_brace_of_end_for_class, classNode->found, start);
+            context->setError2(ErrorCode::no_brace_of_end_for_class, classNode->foundPos, start);
         }
 
         return Search::NOTFOUND;
@@ -191,7 +191,7 @@ namespace smart {
 
                 // "class " came here
                 auto *classNode = Alloc::newClassNode(context, parent);
-                classNode->found = start;
+                classNode->foundPos = start;
 
                 {
                     resultPos = Scanner::scanOnce(&classNode->nameNode,

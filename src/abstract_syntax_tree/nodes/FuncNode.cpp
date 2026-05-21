@@ -740,9 +740,9 @@ namespace smart {
     static int inner_fnParamsAndBodyTokenizer(TokenizerParams_parent_ch_start_context) {
         auto *fnNode = Cast::downcast<FuncNodeStruct *>(parent);
 
-        if (fnNode->parameterStartNode.found == -1) {
+        if (fnNode->parameterStartNode.foundPos == -1) {
             if (ch == '(') {
-                fnNode->parameterStartNode.found = start;
+                fnNode->parameterStartNode.foundPos = start;
                 context->setCodeNode(&fnNode->parameterStartNode);
                 int nextPos =  start + 1;
                 int result = Scanner::scanMulti(fnNode,

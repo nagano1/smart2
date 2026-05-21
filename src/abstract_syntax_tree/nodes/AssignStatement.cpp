@@ -38,13 +38,13 @@ namespace smart {
             currentCodeLine = VTableCall::callAppendToLine(&self->typeOrLet, currentCodeLine);
         }
 
-        if (self->pointerAsterisk.found > -1) {
+        if (self->pointerAsterisk.foundPos > -1) {
             currentCodeLine = VTableCall::callAppendToLine(&self->pointerAsterisk, currentCodeLine);
         }
 
         currentCodeLine = VTableCall::callAppendToLine(&self->nameNode, currentCodeLine);
 
-        if (self->equalSymbol.found > -1) {
+        if (self->equalSymbol.foundPos > -1) {
             currentCodeLine = VTableCall::callAppendToLine(&self->equalSymbol, currentCodeLine);
 
             if (self->valueNode) {
@@ -114,16 +114,16 @@ namespace smart {
     static int inner_assignStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
 
-        if (assignment->nameNode.found == -1) {
+        if (assignment->nameNode.foundPos == -1) {
             if (assignment->hasTypeDecl && context->isAfterLineBreak) {
                 printf("-----------------------TEST-------------------------------------------");
                 printf("\n%s", assignment->typeOrLet.nameNode.name);
                 return Search::NOTFOUND;
             }
 
-             if (assignment->pointerAsterisk.found == -1) {
+             if (assignment->pointerAsterisk.foundPos == -1) {
                 if (ch == '*') {
-                    assignment->pointerAsterisk.found = start;
+                    assignment->pointerAsterisk.foundPos = start;
                     context->setCodeNode(&assignment->pointerAsterisk);
                     return start + 1;
                 }
@@ -131,7 +131,7 @@ namespace smart {
 
             int result = Tokenizers::nameTokenizer(Cast::upcast(&assignment->nameNode), ch, start, context);
             if (Search::IsTokenized(result)) {
-                assignment->nameNode.found = result;
+                assignment->nameNode.foundPos = result;
                 context->setCodeNode(&assignment->nameNode);
                 return result;
             }
@@ -140,9 +140,9 @@ namespace smart {
                 //context->setError(ErrorCode::syntax_error, start);
             }
         }
-        else if (assignment->equalSymbol.found == -1) {
+        else if (assignment->equalSymbol.foundPos == -1) {
             if (ch == '=') {
-                assignment->equalSymbol.found = start;
+                assignment->equalSymbol.foundPos = start;
                 context->setCodeNode(&assignment->equalSymbol);
                 return start+1;
             }

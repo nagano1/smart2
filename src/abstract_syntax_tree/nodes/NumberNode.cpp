@@ -75,7 +75,7 @@ namespace smart {
         }
 
         auto *boolNode = Cast::downcast<BoolNodeStruct*>(context->generatedMainNode);
-        boolNode->found = start;
+        boolNode->foundPos = start;
         boolNode->boolValue = trueFound;
         return result;
     }
@@ -345,14 +345,14 @@ namespace smart {
             return start + 1;
         }
         else {
-            if (parenthesesNode->valueNode != nullptr && parenthesesNode->valueNode->found > -1) {
+            if (parenthesesNode->valueNode != nullptr && parenthesesNode->valueNode->foundPos > -1) {
                 context->setError(ErrorCode::expect_end_parenthesis, context->lastTokenizedPos);
             }
             else {
                 int result = Tokenizers::tokenizeExpression(Cast::upcast(parenthesesNode), TokenizerParams_pass_3);
                 if (Search::IsTokenized(result)) {
                     parenthesesNode->valueNode = context->generatedMainNode;
-                    parenthesesNode->valueNode->found = start;
+                    parenthesesNode->valueNode->foundPos = start;
 
                     return result;
                 } 
