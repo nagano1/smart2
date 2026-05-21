@@ -19,20 +19,20 @@
 
 namespace smart {
 
-    // --------------------- Implements AssignStatement VTable ---------------------- //
+    // --------------------- AssignStatement VTable ---------------------- //
 
     static int selfTextLength(AssignStatementNodeStruct *)
     {
         return 0;
     }
 
+    // virtual node does not have self text. underlying nodes will be appended to code line.
     static void copySelfText(AssignStatementNodeStruct *self, utf8byte *buf)
     {
-        return;
     }
 
 
-    static CodeLine *appendToLine(AssignStatementNodeStruct *self, CodeLine *currentCodeLine)
+    static CodeLine *appendToCodeLine(AssignStatementNodeStruct *self, CodeLine *currentCodeLine)
     {
         if (self->hasTypeDecl) {
             currentCodeLine = VTableCall::callAppendToLine(&self->typeOrLet, currentCodeLine);
@@ -82,7 +82,7 @@ namespace smart {
     static node_vtable _assignVTable = CREATE_VTABLE(AssignStatementNodeStruct,
                                                      selfTextLength,
                                                      copySelfText,
-                                                     appendToLine, applyFuncToDescendants,
+                                                     appendToCodeLine, applyFuncToDescendants,
                                                      assignTypeText,
                                                      NodeTypeId::AssignStatement);
 
@@ -115,9 +115,11 @@ namespace smart {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
 
         if (assignment->nameNode.found == -1) {
+            /*
              if (assignment->hasTypeDecl && context->isAfterLineBreak) {
                  return Search::NOTFOUND;
              }
+            */
 
              if (assignment->pointerAsterisk.found == -1) {
                 if (ch == '*') {
