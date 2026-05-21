@@ -41,11 +41,20 @@ namespace smart {
                 found_count++;
             }
             else {
+                int/**/a = 3;
                 break;
             }
         }
 
         if (found_count > 0) {
+            // ban keywords
+            constexpr char* keywords[] = {"return", "class", "fn"};
+            for (auto keyword : keywords) {
+                if (ParseUtil::matchWord(context->chars, context->length, keyword, st_size_of(keyword) - 1, start)) {
+                    return Search::NOTFOUND;
+                }
+            }
+
             auto *nameNode = Cast::downcast<NameNodeStruct *>(parent);
 
             context->setCodeNode(nameNode);
