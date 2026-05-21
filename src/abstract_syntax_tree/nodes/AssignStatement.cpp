@@ -117,7 +117,7 @@ namespace smart {
         if (assignment->nameNode.found == -1) {
             if (assignment->hasTypeDecl && context->isAfterLineBreak) {
                 printf("-----------------------TEST-------------------------------------------");
-                printf("%s", assignment->nameNode.name);
+                printf("\n%s", assignment->typeOrLet.nameNode.name);
                 return Search::NOTFOUND;
             }
 
