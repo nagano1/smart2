@@ -175,24 +175,27 @@ int ParseUtil::_matchFirstWithTrim(const char *chars, int charsLength, const cha
             else if (ch == '\t' || ch == '\n' || ch == '\r') { // allow trim
                 continue;
             }
-            else { // first non-trim char, determine if it's the first char of target
+            else { // trim finished, start to match target
                 matchStartIndex = i;
                 currentTargetIndex = 0;
             }
         }
 
         if (target[currentTargetIndex] == '\0') {
-            // match success, but need to ensure the char after target is terminatable char
+            // match success and target has been fully matched, return the start index of match
             break;
         }
 
         assert(matchStartIndex != -1);
-        if (target[currentTargetIndex] == chars[i]) {
+        if (target[currentTargetIndex] == chars[i]) { // continue to match next char in target
             currentTargetIndex++;
+        }
+        else {
+            return -1;
         }
     }
 
-    if (currentTargetIndex == 0) {
+    if (currentTargetIndex == 0) { // no char in target has been matched, match failed
         return -1;
     }
     else {
