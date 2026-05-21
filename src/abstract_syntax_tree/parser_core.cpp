@@ -22,9 +22,7 @@
 namespace smart
 {
     ErrorInfo ErrorInfo::ErrorInfoList[errorListSize];
-    bool ErrorInfo::errorInfoInitialized{false};
-    //static int _ab = initErrorInfoList();
-
+    //bool ErrorInfo::errorInfoInitialized{false};
     struct InternalParsingData;
 
     
@@ -157,7 +155,7 @@ namespace smart
 
     struct InternalParsingData
     {
-        int32_t returnPos = -1;
+        int32_t returnPos = Search::NOTFOUND;
         int32_t whitespace_startpos = -1;
 
         LineBreakNodeStruct *prevLineBreak = nullptr;
@@ -290,20 +288,19 @@ namespace smart
     /// scan with the given tokenizer, if root is true, it will save the last line break node and comment node to context for later use,
     /// if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
     /// this scanner handles spaces, line breaks and comments, so tokenizer can focus on scanning code tokens without worrying about spaces, line breaks and comments
-    static InternalParsingData scanWithTokenizer(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context, bool scanMulti
-    ) {
+    static InternalParsingData scanWithTokenizer(void *parentNode, TokenizerFunction tokenizer,
+                                                 int start, ParseContext *context, bool scanMulti) {
         utf8byte ch;
-        int returnResultPos = Search::NOTFOUND;
-        context->isAfterLineBreak = false;
         InternalParsingData parsingData;
+        context->isAfterLineBreak = false;
 
         for (int32_t i = start; i <= context->length;) {
             ch = context->chars[i];
 
-            if (ch == '/') { // comment
-                int pos = tryDetectComments(context, i, parentNode, &parsingData);
-                if (pos > -1) {
-                    i = pos; // returnResultPos
+            if (ch == '/') {
+                int endPos = tryDetectComments(context, i, parentNode, &parsingData);
+                if (endPos > -1) {
+                    i = endPos;
                     continue;
                 }
             }
@@ -320,7 +317,7 @@ namespace smart
 
 
             int result = tokenizer(Cast::upcast(parentNode), ch, i, context);
-            returnResultPos = result;
+            parsingData.returnPos = result;
 
             if (context->syntaxErrorInfo.hasError) {
                 parsingData.returnPos = Search::NOTFOUND;
@@ -345,7 +342,6 @@ namespace smart
         }
 
         context->scanEnd = false; // reset scanEnd for the next scan
-        parsingData.returnPos = returnResultPos;
         return parsingData;
     }
 
