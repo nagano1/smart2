@@ -55,7 +55,7 @@ namespace smart
 
 
     int Tokenizers::typeTokenizer(TokenizerParams_parent_ch_start_context) {
-        auto *typeNode  = Cast::downcast<TypeNodeStruct*>(parent); // Alloc::newTypeNode(context, parent);
+        TypeNodeStruct *typeNode  = Cast::downcast<TypeNodeStruct*>(parent);
 
         int currentPos = start;
 
@@ -81,8 +81,7 @@ namespace smart
 
         typeNode->hasNullableMark = hasNullableMark;
         typeNode->hasImmutableMark = hasImmutableMark;
-        int result = Tokenizers::nameTokenizer(Cast::upcast(&typeNode->nameNode),
-                                     context->chars[currentPos], currentPos, context);
+        int result = Tokenizers::nameTokenizer(Cast::upcast(&typeNode->nameNode), context->chars[currentPos], currentPos, context);
 
         if (Search::IsTokenized(result)) {
             typeNode->isLet = ParseUtil::equals(
@@ -100,21 +99,11 @@ namespace smart
 
     int NodeUtils::getTypeNameLength(TypeNodeStruct *typeNode)
     {
-        /*
-        if (typeNode->hasNullableMark || typeNode->hasImmutableMark) {
-            return typeNode->nameNode.nameLength - 1;
-        }
-        */
         return typeNode->nameNode.nameLength;
     }
 
     char* NodeUtils::getTypeName(TypeNodeStruct *typeNode)
     {
-        /*
-        if (typeNode->hasNullableMark || typeNode->hasImmutableMark) {
-            return typeNode->nameNode.name + 1;
-        }
-        */
         return typeNode->nameNode.name;
     }
 
