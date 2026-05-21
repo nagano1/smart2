@@ -476,7 +476,7 @@ namespace smart {
             }
         }
         else {
-            context->setError(ErrorCode::expect_bracket_for_fn_body, context->prevFoundPos);
+            context->setError(ErrorCode::expect_bracket_for_fn_body, context->lastTokenizedPos);
         }
         return Search::NOTFOUND;
     };
@@ -760,11 +760,11 @@ namespace smart {
 
             }
             else {
-                context->setError(ErrorCode::expect_parenthesis_for_fn_params, context->prevFoundPos);
+                context->setError(ErrorCode::expect_parenthesis_for_fn_params, context->lastTokenizedPos);
             }
         }
         else {
-            context->setError(ErrorCode::expect_parenthesis_for_fn_params, context->prevFoundPos);
+            context->setError(ErrorCode::expect_parenthesis_for_fn_params, context->lastTokenizedPos);
         }
         return Search::NOTFOUND;
     }
@@ -797,7 +797,7 @@ namespace smart {
                 if (!Search::IsTokenized(resultPos = Scanner::scanOnce(fnNode, inner_fnParamsAndBodyTokenizer,
                                                          context, currentPos))) {
 
-                    context->setError(ErrorCode::syntax_error, context->prevFoundPos);
+                    context->setError(ErrorCode::syntax_error, context->lastTokenizedPos);
 
                     context->setCodeNode(fnNode);
                     return currentPos;

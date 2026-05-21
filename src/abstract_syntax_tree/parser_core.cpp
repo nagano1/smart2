@@ -164,7 +164,7 @@ namespace smart
         LineBreakNodeStruct *lastLineBreak = nullptr;
 
         NodeBase *commentNode = nullptr; // LineCommentNodeStruct or BlockCommentNodeStruct
-        
+
         void assignCommentNode(NodeBase* leftNode)
         {
             assert(leftNode != nullptr);
@@ -197,7 +197,7 @@ namespace smart
     
 
 
-    static inline int tryDetectComments(ParseContext* context, int32_t i, void* parentNode, InternalParsingData* parsingData)
+    static inline int tryDetectComments(void* parentNode, ParseContext* context, int32_t i, InternalParsingData* parsingData)
     {
         int commentEndIndex = -1;
         bool isLineComment = false;
@@ -244,8 +244,8 @@ namespace smart
 
     
 
-    static inline int createLineBreakNode(smart::ParseContext* context, void* parentNode,
-        int32_t& position, utf8byte ch, InternalParsingData* parsingData)
+    static inline int createLineBreakNode(void* parentNode, smart::ParseContext* context, 
+                                          int32_t& position, utf8byte ch, InternalParsingData* parsingData)
     {
         auto* newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
 
@@ -297,19 +297,20 @@ namespace smart
         utf8byte ch;
         InternalParsingData parsingData;
         context->isAfterLineBreak = false;
+        int lastTokenizedPos = context->lastTokenizedPos;
 
         for (int32_t i = start; i <= context->length;) {
             ch = context->chars[i];
 
             if (ch == '/') {
-                int endPos = tryDetectComments(context, i, parentNode, &parsingData);
+                int endPos = tryDetectComments(parentNode, context, i, &parsingData);
                 if (endPos > -1) {
                     i = endPos;
                     continue;
                 }
             }
             else if (ParseUtil::isBreakLine(ch)) {
-                i = createLineBreakNode(context, parentNode, i, ch, &parsingData);
+                i = createLineBreakNode(parentNode, context, i, ch, &parsingData);
                 context->isAfterLineBreak = true;
                 continue;
             }
@@ -330,7 +331,7 @@ namespace smart
 
             if (result > -1) {
                 context->isAfterLineBreak = false;
-                context->prevFoundPos = result;
+                context->lastTokenizedPos = result;
 
                 assert(context->leftNode != nullptr);
                 parsingData.assignWhiteSpaces(context->leftNode, i);
@@ -345,6 +346,9 @@ namespace smart
             break;
         }
 
+        if (parsingData.returnPos == Search::NOTFOUND) {
+            context->lastTokenizedPos = lastTokenizedPos; // reset lastTokenizedPos if not found
+        }
         context->scanEnd = false; // reset scanEnd for the next scan
         return parsingData;
     }

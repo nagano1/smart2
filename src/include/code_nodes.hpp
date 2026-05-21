@@ -497,7 +497,7 @@ namespace smart {
         int length;
         bool scanEnd;
         AppendLineMode appendLineMode; // 0:
-        int prevFoundPos;
+        int lastTokenizedPos;
 
 
         bool isAfterLineBreak; // for multiScan tokenizer
