@@ -269,7 +269,7 @@ namespace smart {
     using TypeNodeStruct = struct _TypeNodeStruct {
         NODE_HEADER;
 
-        bool hasConstMark; // # const
+        bool hasImmutableMark; // # immutable
         bool hasNullableMark; // ?
         bool isLet; // or has type
 
@@ -498,7 +498,7 @@ namespace smart {
         int prevFoundPos;
 
 
-        bool afterLineBreak;
+        bool isAfterLineBreak; // for multiScan tokenizer
         NodeBase *leftNode;
         NodeBase *valueNode;
         NodeBase *generatedMainNode;
@@ -762,7 +762,8 @@ namespace smart {
 
     #define VTABLE_DEF(T) \
         int (*selfTextLength)(T *self); \
-        const utf8byte *(*selfText)(T *self); \
+        /* no need to add null terminator, caller will add it using selfTextLength() */ \
+        void (*copySelfText)(T *self, utf8byte *buf); \
         CodeLine *(*appendToLine)(T *self, CodeLine *line); \
         int (*applyFuncToDescendants)(T *Node, ApplyFunc_params3); \
         const char *typeChars; \
@@ -787,14 +788,14 @@ namespace smart {
     };
 
     using selfTextLengthFunction = decltype(std::declval<NodeVTable>().selfTextLength);
-    using selfTextFunction = decltype(std::declval<NodeVTable>().selfText);
+    using selfTextFunction = decltype(std::declval<NodeVTable>().copySelfText);
     using appendToLineFunction = decltype(std::declval<NodeVTable>().appendToLine);
     using applyFuncToDescendantsFunction = decltype(std::declval<NodeVTable>().applyFuncToDescendants);
 
     template<typename T, std::size_t SIZE>
     static int vtable_type_check(
             decltype(std::declval<vtableT<T>>().selfTextLength) f1,
-            decltype(std::declval<vtableT<T>>().selfText) f2,
+            decltype(std::declval<vtableT<T>>().copySelfText) f2,
             decltype(std::declval<vtableT<T>>().appendToLine) f3,
             decltype(std::declval<vtableT<T>>().applyFuncToDescendants) f4,
             const char(&f5)[SIZE],
@@ -868,12 +869,12 @@ namespace smart {
         }
 
 
-        static inline const utf8byte *selfText(void *node) {
+        static inline void copySelfText(void *node, char *buf) {
             if (node == nullptr) {
-                return "";
+                return;
             } else {
                 auto *nodeBase = Cast::upcast(node);
-                return nodeBase->vtable->selfText(nodeBase);
+                nodeBase->vtable->copySelfText(nodeBase, buf);
             }
         }
 
@@ -898,7 +899,11 @@ namespace smart {
 
     };
 
-
+    // Generally AST keeps only nodes for executing, they usually exclude spaces, parentheses etc....
+    // but in our system, in order to develop dedicated UI for coding, AST-nodes should preserve code formats like spaces/comments/line-breaks.
+    // even after editing a code part in CodeLine, there's need to output entire file code with formats.
+    // To achive it, we let AST-nodes have spaces/comments/line-breaks information.
+    // and We build CodeLine list from AST nodes.
     struct CodeLine {
         CodeLine *nextLine;
         int lineNumber;
@@ -921,6 +926,7 @@ namespace smart {
             this->depth = 0;
         }
 
+        // insert node into this line, if prev is null, insert it into top of the line
         CodeLine *insertNode(NodeBase *node, NodeBase *prev) {
             if (firstNode == nullptr) {
                 assert(prev == nullptr);
@@ -944,6 +950,7 @@ namespace smart {
             return this;
         }
 
+        // append node to the end of the line
         CodeLine *appendNode(void *node) {
             if (firstNode == nullptr) {
                 firstNode = (NodeBase *) node;
@@ -964,23 +971,18 @@ namespace smart {
             return this;
         }
 
+        // append line break node and comment node before the line
         CodeLine *addPrevLineBreakNode(void *node) {
-
             CodeLine *currentCodeLine = this;
 
             if (this->context->appendLineMode == AppendLineMode::Normal) {
-                currentCodeLine = VTableCall::callAppendToLine(
-                        ((NodeBase *) node)->prevLineBreakNode,
-                        currentCodeLine);
+                currentCodeLine = VTableCall::callAppendToLine(((NodeBase *) node)->prevLineBreakNode, currentCodeLine);
             }
 
-            currentCodeLine = VTableCall::callAppendToLine(((NodeBase *) node)->prevCommentNode,
-                                                           currentCodeLine);
-
+            currentCodeLine = VTableCall::callAppendToLine(((NodeBase *) node)->prevCommentNode, currentCodeLine);
 
             return currentCodeLine;
         }
-
     };
 
 
@@ -1121,7 +1123,6 @@ namespace smart {
 
     struct Tokenizers {
         static int nameTokenizer(TokenizerParams_parent_ch_start_context);
-        static int nameTokenizer_ignore(TokenizerParams_parent_ch_start_context, int ignorePos);
         static int variableTokenizer(TokenizerParams_parent_ch_start_context);
         static int tokenizeExpression(TokenizerParams_parent_ch_start_context);
         static int parenthesesTokenizer(TokenizerParams_parent_ch_start_context);
@@ -1186,13 +1187,11 @@ namespace smart {
      * Implements common scanning and parsing method
      */
     struct Scanner {
-        static int scanWithTokenizer(
-                void *parentNode,
-                TokenizerFunction tokenizer,
-                int start,
-                ParseContext *context,
-                bool root, bool multi
-        );
+        static int scanRoot(
+            void *parentNode,
+            TokenizerFunction tokenizer,
+            int start,
+            ParseContext *context);
 
         static int scanOnce(
                 void *parentNode,

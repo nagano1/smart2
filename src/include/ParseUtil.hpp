@@ -54,25 +54,24 @@ struct ParseUtil {
     }
 
 
-
-    // EXPECT_EQ(0, Tokenizer::matchAt("class A{}", "class"));
     static int _matchFirstWithTrim(const char *chars, int charsLength, const char *target, int start);
 
+    /// match target at startIndex with trim, and ensure the char after target is terminatable char
+    /// trim means it allows spaces and line breaks before target
     template<int SIZE>
     static int matchAt(const char *chars, int charsLength, int startIndex, const char(&target)[SIZE])
     {
         int pos = _matchFirstWithTrim(chars, charsLength, target, startIndex);
-
         if (pos > -1) {
-            if (startIndex + SIZE - 1 < charsLength
-                && ParseUtil::isTerminatableChar(chars[startIndex + SIZE - 1])
-                    ) {
+            if (startIndex + SIZE - 1 < charsLength && ParseUtil::isTerminatableChar(chars[startIndex + SIZE - 1])) {
                 return pos;
             }
         }
 
         return -1;
     }
+
+    // EXPECT_EQ(0, Tokenizer::matchAt("class A{}", "class"));
 
     static bool hasCharBeforeLineBreak(const char *chars, int charsLength, int startIndex) {
         for (int i = startIndex; i < charsLength; i++) {

@@ -27,8 +27,8 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static const utf8byte *selfText(EndOfFileNodeStruct *) {
-        return "";
+    static void copySelfText(EndOfFileNodeStruct *self, utf8byte *buf) {
+        return;
     }
 
     static int selfTextLength(EndOfFileNodeStruct *) {
@@ -46,7 +46,7 @@ namespace smart {
 
     static node_vtable _endOfDocVTable = CREATE_VTABLE(EndOfFileNodeStruct,
                                                              selfTextLength,
-                                                             selfText,
+                                                             copySelfText,
                                                              appendToLine,
                                                              applyFuncToDescendants,
                                                              endOfFileTypeText,

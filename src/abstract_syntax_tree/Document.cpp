@@ -23,9 +23,8 @@ namespace smart {
         return 5;
     }
 
-    static const char *selfText(DocumentStruct *self)
+    static void copySelfText(DocumentStruct *self, utf8byte *buf)
     {
-        return "";
     }
 
     static CodeLine *appendToLine(DocumentStruct *self, CodeLine *currentCodeLine)
@@ -47,7 +46,7 @@ namespace smart {
 
     static constexpr const char DocumentTypeText[] = "<Document>";
 
-    static node_vtable DocumentVTable_ = CREATE_VTABLE(DocumentStruct, selfTextLength, selfText,
+    static node_vtable DocumentVTable_ = CREATE_VTABLE(DocumentStruct, selfTextLength, copySelfText,
                                                        appendToLine, applyFuncToDescendants,
                                                        DocumentTypeText, NodeTypeId::Document);
 
@@ -127,10 +126,9 @@ namespace smart {
         }
 
         if (len > 0) {
-            auto *chs = VTableCall::selfText(node);
-            memcpy(text + prev_char, chs, len);
+            VTableCall::copySelfText(node, text +  prev_char);
 
-            if (chs[len] == '\0') {
+            if (text[len + prev_char] == '\0') {
             } else {
                 // int k = 32;
             }
@@ -194,6 +192,9 @@ namespace smart {
             return nullptr;
         }
 
+        //char *textA = (char *) malloc(sizeof(char) * totalCount + 1);
+        //char textB[256] = {0};
+        
         // malloc and copy text
         auto *text = (char *) malloc(sizeof(char) * totalCount + 1);
         {
@@ -210,7 +211,6 @@ namespace smart {
                     }
 
                     {
-                        auto *chs = VTableCall::selfText(node);
                         if (node->prev_chars > 0) {
                             for (int i = 0; i < node->prev_chars; i++) {
                                 text[currentOffset] = ' ';
@@ -220,7 +220,8 @@ namespace smart {
 
                         size_t len = VTableCall::selfTextLength(node);
                         if (len > 0) {
-                            memcpy(text + currentOffset, chs, len);
+                            VTableCall::copySelfText(node, text + currentOffset);
+                            //memcpy(text + currentOffset, chs, len);
                         }
                         currentOffset += len;
                     }
@@ -236,7 +237,7 @@ namespace smart {
 
         return text;
     }
-
+/*
     static int getTokenTypeId(NodeBase *node, int i)
     {
         auto *targetNode = node;
@@ -275,7 +276,7 @@ namespace smart {
             return (int) TokenTypeIds::keywordId;
         } else if (targetNode->vtable == VTables::AssignStatementVTable) {
             auto *assign = Cast::downcast<AssignStatementNodeStruct *>(targetNode);
-            if (assign->typeOrLet.hasConstMark || assign->typeOrLet.hasNullableMark) {
+            if (assign->typeOrLet.hasImmutableMark || assign->typeOrLet.hasNullableMark) {
                 if (i == 0) {
                     return (int) TokenTypeIds::numberId;
                 }
@@ -294,7 +295,7 @@ namespace smart {
         else if (targetNode->vtable == VTables::TypeVTable) {
             auto* typeNode = Cast::downcast<TypeNodeStruct*>(targetNode);
 
-            if (typeNode->hasConstMark || typeNode->hasNullableMark) {
+            if (typeNode->hasImmutableMark || typeNode->hasNullableMark) {
                 if (i == 0) {
                     return (int)TokenTypeIds::commentId;
                 }
@@ -324,7 +325,7 @@ namespace smart {
 
         if (targetNode->vtable == VTables::AssignStatementVTable) {
             auto *assign = Cast::downcast<AssignStatementNodeStruct *>(targetNode);
-            if (assign->typeOrLet.hasConstMark || assign->typeOrLet.hasNullableMark) {
+            if (assign->typeOrLet.hasImmutableMark || assign->typeOrLet.hasNullableMark) {
                 *utf16Len1 = *utf16Len0 - 1;
                 *len0 = 1;
                 *utf16Len0 = 1;
@@ -334,7 +335,7 @@ namespace smart {
         }
         if (targetNode->vtable == VTables::TypeVTable) {
             auto* typeNode = Cast::downcast<TypeNodeStruct*>(targetNode);
-            if (typeNode->hasConstMark || typeNode->hasNullableMark) {
+            if (typeNode->hasImmutableMark || typeNode->hasNullableMark) {
                 *utf16Len1 = *utf16Len0 - 1;
                 *len0 = 1;
                 *utf16Len0 = 1;
@@ -447,7 +448,7 @@ namespace smart {
         text[totalCount] = '\0';
         return text;
     }
-
+*/
     utf8byte *DocumentUtils::getTextFromTree(DocumentStruct *doc)
     {
         // get size of chars
@@ -478,7 +479,6 @@ namespace smart {
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    auto *chs = VTableCall::selfText(node);
                     if (node->prev_chars > 0) {
                         for (int i = 0; i < node->prev_chars; i++) {
                             text[currentOffset] = ' ';
@@ -487,11 +487,13 @@ namespace smart {
                     }
 
                     size_t len = VTableCall::selfTextLength(node);
+                    VTableCall::copySelfText(node, text + currentOffset);
                     //assert(chs[len] != '\0');
-                    if (chs[len] == '\0') { //?
-                        memcpy(text + currentOffset, chs, len);
+                    /*
+                    if (text[len + currentOffset] == '\0') { //?
+                        memcpy(text + currentOffset, text + currentOffset, len);
                     }
-
+                    */
                     currentOffset += len;
                     node = node->nextNodeInLine;
                 }
@@ -590,14 +592,14 @@ namespace smart {
         context->baseIndent = 4;
         context->parentDepth = -1;
         context->arithmeticBaseDepth = -1;
-        context->afterLineBreak = false;
+        context->isAfterLineBreak = false;
 
         context->unusedAssignment = nullptr;
         context->unusedClassNode = nullptr;
 
 
         if (docStruct->documentType == DocumentType::CodeDocument) {
-            Scanner::scanWithTokenizer(docStruct, tryTokenizeMulti, 0, context, /*root*/true, true);
+            Scanner::scanRoot(docStruct, tryTokenizeMulti, 0, context);
         }
         
         if (!context->syntaxErrorInfo.hasError)

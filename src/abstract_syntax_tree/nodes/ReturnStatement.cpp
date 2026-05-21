@@ -26,9 +26,8 @@ namespace smart {
         return 0;
     }
 
-    static const utf8byte *selfText(ReturnStatementNodeStruct*) {
+    static void copySelfText(ReturnStatementNodeStruct *self, utf8byte *buf) {
         // virtual node
-        return "";
     }
 
     static CodeLine *appendToLine(ReturnStatementNodeStruct*self, CodeLine *currentCodeLine) {
@@ -78,7 +77,7 @@ namespace smart {
      */
     static node_vtable _returnVTable = CREATE_VTABLE(ReturnStatementNodeStruct,
                                                           selfTextLength,
-                                                          selfText,
+                                                          copySelfText,
                                                           appendToLine,
                                                           ReturnStatementNodeStruct_applyFuncToDescendants,
                                                           assignTypeText
@@ -111,7 +110,7 @@ namespace smart {
     // --------------------- Implements Return Statement Parser ----------------------
     static int parenthesesTokenizerInternal(TokenizerParams_parent_ch_start_context) {
 
-        if (context->afterLineBreak) {
+        if (context->isAfterLineBreak) {
             return Search::NOTFOUND;
         }
 
@@ -144,7 +143,6 @@ namespace smart {
             auto *returnNode = Alloc::newReturnStatement(context, parent);
             Init::assignText_SimpleTextNode(&returnNode->returnText, context, start, returnTextSize);
 
-            //context->afterLineBreak = false;
             int currentPos = idx + returnTextSize;
             int resultPos;
             if (Search::IsTokenized(resultPos = Scanner::scanMulti(returnNode,
@@ -154,7 +152,8 @@ namespace smart {
                 context->leftNode = Cast::upcast(&returnNode->returnText);
                 context->generatedMainNode = Cast::upcast(returnNode);
                 return resultPos;
-            } else {
+            }
+            else {
                 context->leftNode = Cast::upcast(&returnNode->returnText);
                 context->generatedMainNode = Cast::upcast(returnNode);
                 return currentPos;

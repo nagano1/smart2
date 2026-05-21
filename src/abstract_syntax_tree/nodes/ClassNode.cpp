@@ -37,8 +37,8 @@ namespace smart {
         return 5;
     }
 
-    static const utf8byte *selfText(ClassNodeStruct *) {
-        return "class";
+    static void copySelfText(ClassNodeStruct * classNode, utf8byte *buf) {
+        TEXT_MEMCPY(buf, "class", 5); 
     }
 
     static CodeLine *appendToLine(ClassNodeStruct *classNode, CodeLine *currentCodeLine) {
@@ -95,7 +95,7 @@ namespace smart {
      */
     static node_vtable _classVTable = CREATE_VTABLE(ClassNodeStruct,
                                                           selfTextLength,
-                                                          selfText,
+                                                          copySelfText,
                                                           appendToLine,
                                                           applyFuncToDescendants,
                                                           classTypeText

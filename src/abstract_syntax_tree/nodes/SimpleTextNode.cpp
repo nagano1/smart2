@@ -20,8 +20,8 @@
 
 namespace smart {
 
-    static const char *self_text(SimpleTextNodeStruct *self) {
-        return self->text;
+    static void copySelfText(SimpleTextNodeStruct *self, utf8byte *buf) {
+        TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
     static int selfTextLength(SimpleTextNodeStruct *self) {
@@ -48,7 +48,7 @@ namespace smart {
 
     static struct node_vtable simpleTextVTABLE = CREATE_VTABLE(SimpleTextNodeStruct,
                                                                 selfTextLength,
-                                                                self_text,
+                                                                copySelfText,
                                                                 appendToLine,
                                                                SimpleTextNodeStruct_applyFuncToDescendants,
                                                                 simpleTextTypeText
@@ -63,7 +63,7 @@ namespace smart {
 
     static node_vtable _spaceVTable = CREATE_VTABLE(SpaceNodeStruct,
                                                             selfTextLength,
-                                                            self_text,
+                                                            copySelfText,
                                                             appendToLine,
                                                     SimpleTextNodeStruct_applyFuncToDescendants,
                                                             spaceTextTypeText, NodeTypeId::Space
@@ -73,7 +73,7 @@ namespace smart {
 
     static node_vtable _nullVTable = CREATE_VTABLE(NullNodeStruct,
                                                            selfTextLength,
-                                                           self_text,
+                                                           copySelfText,
                                                            appendToLine,
                                                    SimpleTextNodeStruct_applyFuncToDescendants,
                                                            "<NULL>", NodeTypeId::NULLId

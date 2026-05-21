@@ -26,21 +26,22 @@ namespace smart
         return self->text[1] == '\0' ? 1 : 2;
     }
 
-    static const char *self_text(LineBreakNodeStruct *self) {
-        return self->text;
+    static void copySelfText(LineBreakNodeStruct *self, utf8byte *buf) {
+        buf[0] = self->text[0];
+        if (self->text[1] != '\0') { // if it's "\r\n"
+            buf[1] = self->text[1];
+        }
     }
 
     static CodeLine *appendToLine(LineBreakNodeStruct *self, CodeLine *currentCodeLine) {
-        auto *lineBreakNode = self; // Cast::downcast<LineBreakNodeStruct *>(self);
-
-        auto* next = lineBreakNode;
+        auto *next = self;
         while (next) {
             currentCodeLine = currentCodeLine->addPrevLineBreakNode(next); // add space before break
 
             currentCodeLine->appendNode(Cast::upcast(next));
             
-            auto *newNextLine = lineBreakNode->context->newCodeLine();
-            newNextLine->init(lineBreakNode->context);
+            auto *newNextLine = self->context->newCodeLine();
+            newNextLine->init(self->context);
 
             currentCodeLine->nextLine = newNextLine;
             currentCodeLine = newNextLine;
@@ -62,15 +63,15 @@ namespace smart
         return 0;
     }
 
-    static constexpr const char lineBreakTypeText[] = "<lineBreak>";
+    static constexpr const char LineBreakTypeText[] = "<LineBreak>";
 
     static node_vtable _lineBreakVTable = CREATE_VTABLE(LineBreakNodeStruct,
-                                                              selfTextLength,
-                                                              self_text,
-                                                              appendToLine,
-                                                              applyFuncToDescendants,
-                                                              lineBreakTypeText,
-                                                              NodeTypeId::LineBreak);
+                                                        selfTextLength,
+                                                        copySelfText,
+                                                        appendToLine,
+                                                        applyFuncToDescendants,
+                                                        LineBreakTypeText,
+                                                        NodeTypeId::LineBreak);
 
     const node_vtable *VTables::LineBreakVTable = &_lineBreakVTable;
 

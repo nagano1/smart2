@@ -21,8 +21,8 @@
 namespace smart {
 
     
-    static const char *self_text(SimpleTextNodeStruct *self) {
-        return self->text;
+    static void copySelfText(SimpleTextNodeStruct *self, utf8byte *buf) {
+        TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
     static int selfTextLength(SimpleTextNodeStruct *self) {
@@ -48,7 +48,7 @@ namespace smart {
 
     static node_vtable _lineCommentVTable = CREATE_VTABLE(LineCommentNodeStruct,
                                                            selfTextLength,
-                                                           self_text,
+                                                           copySelfText,
                                                            appendToLine,
                                                           SimpleTextNodeStruct_applyFuncToDescendants,
                                                            "<Line Comment>", NodeTypeId::LineComment
@@ -59,7 +59,7 @@ namespace smart {
 
     static node_vtable _blockCommentFragmentVTable = CREATE_VTABLE(BlockCommentFragmentStruct,
                                                                  selfTextLength,
-                                                                 self_text,
+                                                                 copySelfText,
                                                                  appendToLine,
                                                                                 SimpleTextNodeStruct_applyFuncToDescendants,
                                                                  "<Comment Fragment>",
@@ -70,8 +70,8 @@ namespace smart {
 
 
 
-    static const char *self_text_blockcomment(BlockCommentNodeStruct *self) {
-        return "";
+    static void copySelfText_blockcomment(BlockCommentNodeStruct *self, char *buf) {
+        return;
     }
 
     static int selfTextLength_blockcomment(BlockCommentNodeStruct *self) {
@@ -105,7 +105,7 @@ namespace smart {
 
     static node_vtable _blockCommentVTable = CREATE_VTABLE(BlockCommentNodeStruct,
                                                                   selfTextLength_blockcomment,
-                                                                  self_text_blockcomment,
+                                                                  copySelfText_blockcomment,
                                                                  appendToLineForBlockComment,
                                                            BlockCommentNodeStruct_applyFuncToDescendants, "<BlockComment>", NodeTypeId::BlockComment
     );

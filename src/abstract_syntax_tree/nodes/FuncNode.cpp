@@ -46,8 +46,8 @@ namespace smart {
     };
 
 
-    static const utf8byte *FuncArgument_selfText(FuncArgumentItemStruct *) {
-        return "";
+    static void copySelfText_FuncArgument(FuncArgumentItemStruct *self, utf8byte *buf) {
+        return;
     }
 
     static int FuncArgument_selfTextLength2(FuncArgumentItemStruct *) {
@@ -78,7 +78,7 @@ namespace smart {
 
     static node_vtable _funcArgumentItemVTable = CREATE_VTABLE(FuncArgumentItemStruct,
                                                                      FuncArgument_selfTextLength2,
-                                                                     FuncArgument_selfText,
+                                                                     copySelfText_FuncArgument,
                                                                      FuncArgument_appendToLine2,
                                                                FuncArgumentItemStruct_applyFuncToDescendants,
                                                                      "<FuncArgument>",
@@ -139,9 +139,9 @@ namespace smart {
 
 
     // virtual node
-    static const char *callfunc_selfText(CallFuncNodeStruct *self)
+    static void copySelfText_CallFunc(CallFuncNodeStruct *self, utf8byte *buf)
     {
-        return "";
+        return;
     }
 
     static int callfun_selfTextLength(CallFuncNodeStruct *self)
@@ -209,7 +209,8 @@ namespace smart {
                 context->setCodeNode(&currentKeyValueItem->follwingComma);
                 funcCallNode->parsePhase = phase::EXPECT_VALUE;
                 return start + 1;
-            } else if (context->afterLineBreak) {
+            }
+            else if (context->isAfterLineBreak) {
                 // comma is not required after a line break
                 return parseNextValue(TokenizerParams_pass, funcCallNode);
             }
@@ -278,7 +279,7 @@ namespace smart {
 
     static node_vtable _callfuncVTable = CREATE_VTABLE(CallFuncNodeStruct,
                                                              callfun_selfTextLength,
-                                                             callfunc_selfText,
+                                                             copySelfText_CallFunc,
                                                              callfunc_appendToLine,
                                                        callfunc_applyFuncToDescendants,
                                                              callfuncNodeTypeText,
@@ -315,8 +316,8 @@ namespace smart {
         return 1;
     }
 
-    static const utf8byte *selfText2(BodyNodeStruct *) {
-        return "{";
+    static void copySelfText2(BodyNodeStruct *self, utf8byte *buf) {
+        buf[0] = '{';
     }
 
     static CodeLine *appendToLine2(BodyNodeStruct *self, CodeLine *currentCodeLine) {
@@ -389,7 +390,7 @@ namespace smart {
  */
     static node_vtable _bodyVTable = CREATE_VTABLE(BodyNodeStruct,
                                                          selfTextLength2,
-                                                         selfText2,
+                                                         copySelfText2,
                                                          appendToLine2,
                                                    BodyNodeStruct_applyFuncToDescendants,
                                                          bodyTypeText, NodeTypeId::Body);
@@ -430,7 +431,7 @@ namespace smart {
             return start + 1;
         }
         
-        if (!body->firstStatementFound || context->afterLineBreak) {
+        if (!body->firstStatementFound || context->isAfterLineBreak) {
             body->firstStatementFound = true;
             int nextPos;
             // value as a statement
@@ -568,7 +569,7 @@ namespace smart {
                 funcNode->parameterParsePhase = FuncParamParsePhase::EXPECT_Type;
                 return start + 1;
             }
-            else if (context->afterLineBreak) {
+            else if (context->isAfterLineBreak) {
                 // comma is not needed after a line break
                 return parseNextValue(TokenizerParams_pass, funcNode);
             }
@@ -579,8 +580,8 @@ namespace smart {
     }
 
     // virtual
-    static const utf8byte *selfText_FuncParameterItemStruct(FuncParameterItemStruct *) {
-        return "";
+    static void copySelfText_FuncParameterItemStruct(FuncParameterItemStruct *self, utf8byte *buf) {
+        return;
     }
 
     static int selfTextLength_FuncParameterItemStruct(FuncParameterItemStruct *) {
@@ -600,7 +601,7 @@ namespace smart {
 
     static node_vtable _funcParameterItemVTable = CREATE_VTABLE(FuncParameterItemStruct,
                                                                       selfTextLength_FuncParameterItemStruct,
-                                                                      selfText_FuncParameterItemStruct,
+                                                                      copySelfText_FuncParameterItemStruct,
                                                                       appendToLine_FuncParameterItemStruct,
                                                                 FuncParameterItemStruct_applyFuncToDescendants,
                                                                   "<FuncParameterItem>",
@@ -638,8 +639,8 @@ namespace smart {
         return size_of_fn;
     }
 
-    static const utf8byte *selfText(FuncNodeStruct *) {
-        return fn_chars;
+    static void copySelfText(FuncNodeStruct *self, utf8byte *buf) {
+        TEXT_MEMCPY(buf, fn_chars, size_of_fn);
     }
 
     static CodeLine *appendToLine(FuncNodeStruct *self, CodeLine *currentCodeLine) {
@@ -708,7 +709,7 @@ namespace smart {
  */
     static node_vtable _fnVTable = CREATE_VTABLE(FuncNodeStruct,
                                                        selfTextLength,
-                                                       selfText,
+                                                       copySelfText,
                                                        appendToLine,
                                                  FuncNodeStruct_applyFuncToDescendants,
                                                        fnTypeText, NodeTypeId::Func);

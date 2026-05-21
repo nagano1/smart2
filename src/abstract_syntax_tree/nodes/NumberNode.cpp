@@ -50,8 +50,8 @@ namespace smart {
         return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
     }
 
-    static const char *selfText2(BoolNodeStruct*self) {
-        return self->text;
+    static void copySelfText2(BoolNodeStruct *self, utf8byte *buf) {
+        TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
     static int selfTextLength2(BoolNodeStruct*self) {
@@ -94,7 +94,7 @@ namespace smart {
 
     static constexpr const char boolNodeTypeText[] = "<bool>";
     static node_vtable _boolVTable = CREATE_VTABLE(BoolNodeStruct, selfTextLength2,
-                                                         selfText2, appendToLine2,
+                                                         copySelfText2, appendToLine2,
                                                    BoolNodeStruct_applyFuncToDescendants,
                                                          boolNodeTypeText, NodeTypeId::Bool);
 
@@ -135,9 +135,9 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static const char *selfText(NumberNodeStruct *self)
+    static void copySelfText(NumberNodeStruct *self, utf8byte *buf)
     {
-        return self->text;
+        TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
     static int selfTextLength(NumberNodeStruct *self)
@@ -235,7 +235,7 @@ namespace smart {
 
 
     static node_vtable _numberVTable_ = CREATE_VTABLE(NumberNodeStruct, selfTextLength,
-                                                            selfText,
+                                                            copySelfText,
                                                             appendToLine,
                                                       NumberNodeStruct_applyFuncToDescendants,
                                                             numberNodeTypeText,
@@ -323,9 +323,9 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static const char *parentheses_selfText(ParenthesesNodeStruct *self)
+    static void copySelfText3(ParenthesesNodeStruct *self, utf8byte *buf)
     {
-        return "(";
+        buf[0] = '(';
     }
 
     static int parentheses_selfTextLength(ParenthesesNodeStruct *self)
@@ -403,7 +403,7 @@ namespace smart {
 
     static node_vtable _parenthesesVTable = CREATE_VTABLE(ParenthesesNodeStruct,
                                                                 parentheses_selfTextLength,
-                                                                parentheses_selfText,
+                                                                copySelfText3,
                                                                 parentheses_appendToLine,
                                                           parentheses_applyFuncToDescendants,
                                                                 parenthesesNodeTypeText,
@@ -421,165 +421,4 @@ namespace smart {
         Init::initSymbolNode(&node->closeNode, context, node, ')');
         return node;
     }
-
-
-
-
-
-
-
-
-    //    +--------------------------+
-    //    |  Binary Operation        |
-    //    +--------------------------+
-
-    static CodeLine *binaryop_appendToLine(BinaryOperationNodeStruct *self, CodeLine *currentCodeLine)
-    {
-        int formerParentDepth = self->context->parentDepth;
-
-        if (self->leftExprNode) {
-            // leftExpr
-            currentCodeLine = VTableCall::callAppendToLine(self->leftExprNode, currentCodeLine);
-        }
-
-        int formerArithmeticDepth = self->context->arithmeticBaseDepth;
-
-        int diff = currentCodeLine->depth == self->context->parentDepth ? 0 : 1;
-
-        int newDepth = self->context->arithmeticBaseDepth > -1 ?
-                       self->context->arithmeticBaseDepth : formerParentDepth + diff;
-
-        self->context->arithmeticBaseDepth = newDepth;
-        self->context->parentDepth = newDepth;
-
-        // operator +
-        currentCodeLine = VTableCall::callAppendToLine(&self->opNode, currentCodeLine);
-
-
-        if (self->rightExprNode) {
-            // rightExpr
-            currentCodeLine = VTableCall::callAppendToLine(self->rightExprNode, currentCodeLine);
-        }
-
-        self->context->parentDepth = formerParentDepth;
-        self->context->arithmeticBaseDepth = formerArithmeticDepth;
-
-        return currentCodeLine;
-    }
-
-    static const char *binaryop_selfText(BinaryOperationNodeStruct *self)
-    {
-        return "";
-    }
-
-    static int binaryop_selfTextLength(BinaryOperationNodeStruct *self)
-    {
-        return 0;
-    }
-
-    static int BinaryOperationNodeStruct_applyFuncToDescendants(BinaryOperationNodeStruct *node, ApplyFunc_params3)
-    {
-        if (parentIsFirst) {
-            if (targetVTable == nullptr || node->vtable == targetVTable) {
-                func(Cast::upcast(node), ApplyFunc_pass);
-            }
-        }
-
-        if (node->leftExprNode) {
-            node->leftExprNode->vtable->applyFuncToDescendants(node->leftExprNode,
-                                                           ApplyFunc_pass2);
-        }
-
-        if (node->rightExprNode) {
-            node->rightExprNode->vtable->applyFuncToDescendants(node->rightExprNode,
-                                                            ApplyFunc_pass2);
-        }
-
-        if (!parentIsFirst) {
-            if (targetVTable == nullptr || node->vtable == targetVTable) {
-                func(Cast::upcast(node), ApplyFunc_pass);
-            }
-        }
-        return 0;
-    }
-
-
-    static constexpr const char binaryop_NodeTypeText[] = "<binary op>";
-
-    static node_vtable binaryop_VTable = CREATE_VTABLE(BinaryOperationNodeStruct ,
-                                                             binaryop_selfTextLength,
-                                                             binaryop_selfText,
-                                                             binaryop_appendToLine,
-                                                       BinaryOperationNodeStruct_applyFuncToDescendants,
-                                                             binaryop_NodeTypeText,
-                                                                NodeTypeId::BinaryOperation);
-
-    const node_vtable *VTables::BinaryOperationVTable = &binaryop_VTable;
-
-
-
-    static int inner_op_binaryOpTokenizer(TokenizerParams_parent_ch_start_context) {
-
-        if (ch == '+' || ch == '*' || ch == '-' || ch == '/' || ch == '%'
-            || ch == '&' || ch == '|') {
-
-            auto *binaryOpNode = Alloc::newBinaryOperationNode(context, parent, ch);
-
-            context->leftNode = Cast::upcast(&binaryOpNode->opNode);
-            context->generatedMainNode = Cast::upcast(binaryOpNode);
-            return start + 1;
-        }
-
-        return Search::NOTFOUND;
-    }
-
-
-    int Tokenizers::binaryOperationTokenizer(TokenizerParams_parent_ch_start_context)
-    {
-        assert(context->generatedMainNode != nullptr);
-
-        auto *virtualNode = context->generatedMainNode;
-        auto *leftNode = context->leftNode;
-
-        int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, start, context);
-        context->leftNode = leftNode;
-
-        if (Search::IsTokenized(resultPos)) {
-            auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainNode);
-            binaryOpNode->leftExprNode = virtualNode;
-            binaryOpNode->leftExprNode->parentNode = Cast::upcast(binaryOpNode);
-
-            if (Search::IsTokenized(resultPos = Scanner::scanOnce(binaryOpNode,
-                                                    Tokenizers::tokenizeExpression,
-                                                    resultPos, context))) {
-                binaryOpNode->rightExprNode = context->generatedMainNode;
-                context->generatedMainNode = Cast::upcast(binaryOpNode);
-                context->leftNode = leftNode;
-                return resultPos;
-            }
-        }
-        return Search::NOTFOUND;
-    }
-
-
-    BinaryOperationNodeStruct *Alloc::newBinaryOperationNode(ParseContext *context, NodeBase *parentNode, char op)
-    {
-        auto *node = context->newMem<BinaryOperationNodeStruct>();
-        INIT_NODE(node, context, parentNode, VTables::BinaryOperationVTable);
-
-        node->leftExprNode = nullptr;
-        node->rightExprNode = nullptr;
-
-        Init::initSymbolNode(&node->opNode, context, node, op);
-
-        return node;
-    }
-
-
-
-
-
-
-
-
 } // namespace

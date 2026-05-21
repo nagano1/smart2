@@ -26,9 +26,9 @@ namespace smart {
         return 0;
     }
 
-    static const utf8byte *selfText(AssignStatementNodeStruct *self)
+    static void copySelfText(AssignStatementNodeStruct *self, utf8byte *buf)
     {
-        return "";
+        return;
     }
 
 
@@ -81,7 +81,7 @@ namespace smart {
 
     static node_vtable _assignVTable = CREATE_VTABLE(AssignStatementNodeStruct,
                                                      selfTextLength,
-                                                     selfText,
+                                                     copySelfText,
                                                      appendToLine, applyFuncToDescendants,
                                                      assignTypeText,
                                                      NodeTypeId::AssignStatement);
@@ -115,7 +115,7 @@ namespace smart {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
 
         if (assignment->nameNode.found == -1) {
-             if (assignment->hasTypeDecl && context->afterLineBreak) {
+             if (assignment->hasTypeDecl && context->isAfterLineBreak) {
                  return Search::NOTFOUND;
              }
 
@@ -148,9 +148,8 @@ namespace smart {
             }
             else {
                 if (assignment->hasTypeDecl) {
-                    //context->setCodeNode(nullptr);
                     context->scanEnd = true;
-                    return Search::DONE_WITH_PREVIUS_POSITION;//start;// context->prevFoundPos;// assignment->nameNode.found;
+                    return Search::DONE_WITH_PREVIUS_POSITION;
                 }
                 //else {
                     //context->scanEnd = true;
@@ -229,12 +228,10 @@ namespace smart {
         if (Search::IsTokenized(resul)) {
             assignStatement->hasTypeDecl = true;
 
-            //context->afterLineBreak = false;
             int resultPos;
             if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignStatement,
                                                      inner_assignStatementTokenizerMulti,
-                                                     resul, context))
-                    ) {
+                                                     resul, context))) {
                 context->leftNode = Cast::upcast(&assignStatement->typeOrLet);
                 context->generatedMainNode = Cast::upcast(assignStatement);
 

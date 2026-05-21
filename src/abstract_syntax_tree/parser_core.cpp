@@ -23,29 +23,9 @@ namespace smart
 {
     ErrorInfo ErrorInfo::ErrorInfoList[errorListSize];
     bool ErrorInfo::errorInfoInitialized{false};
-    //static int _ab = initErrorInfoList();
+    struct InternalParsingData;
 
     
-    struct InnerParsingData;
-
-    int Scanner::scanOnce(void *parentNode,
-                      TokenizerFunction tokenizer,
-                      int start,
-                      ParseContext *context
-    ) {
-
-        return Scanner::scanWithTokenizer(parentNode, tokenizer, start, context, false, false);
-    }
-
-    // scan until scanEnd==true, tokenizer should set scanEnd to true when it wants to stop scanning
-    int Scanner::scanMulti(void *parentNode,
-        TokenizerFunction tokenizer,
-        int start,
-        ParseContext *context
-    ) {
-        return Scanner::scanWithTokenizer(parentNode, tokenizer, start, context, false, true);
-    }
-
     CodeLine *VTableCall::callAppendToLine(void *node, CodeLine *currentCodeLine) {
         if (node == nullptr) {
             return currentCodeLine;
@@ -173,8 +153,9 @@ namespace smart
     }
 
 
-    struct InnerParsingData
-     {
+    struct InternalParsingData
+    {
+        int32_t returnPos = Search::NOTFOUND;
         int32_t whitespace_startpos = -1;
 
         LineBreakNodeStruct *prevLineBreak = nullptr;
@@ -182,7 +163,8 @@ namespace smart
 
         NodeBase *commentNode = nullptr;
 
-        void assignCommentNode(NodeBase* leftNode) {
+        void assignCommentNode(NodeBase* leftNode)
+        {
             assert(leftNode != nullptr);
 
             if (commentNode != nullptr) {
@@ -191,26 +173,28 @@ namespace smart
             }
         }
 
-        void assignWhiteSpaces(NodeBase* comment2, int i) {
-            if (whitespace_startpos != -1 && whitespace_startpos < i) {
+        void assignWhiteSpaces(NodeBase* comment2, int i)
+        {
+            if (whitespace_startpos != -1) {
+                assert(whitespace_startpos < i);
                 comment2->prev_chars = i - whitespace_startpos;
                 whitespace_startpos = -1;
             }
-            /*
-            if (parsingResult->whitespace_startpos != -1) {
-                if (parsingResult->whitespace_startpos < position) {
-                    (*lastLineBreak)->prev_chars = position - parsingResult->whitespace_startpos;
-                }
-                parsingResult->whitespace_startpos = -1;
-            }
+        }
 
-            */
+        void assignLineBreak(NodeBase* node)
+        {
+            if (this->prevLineBreak != nullptr) {
+                node->prevLineBreakNode = prevLineBreak;
+                prevLineBreak = nullptr;
+                lastLineBreak = nullptr;
+            }
         }
     };
     
 
 
-    int tryDetectComments(ParseContext* context, int32_t i, void* parentNode, InnerParsingData* parsingResult)
+    static inline int tryDetectComments(ParseContext* context, int32_t i, void* parentNode, InternalParsingData* parsingData)
     {
         int commentEndIndex = -1;
         bool isLineComment = false;
@@ -229,7 +213,6 @@ namespace smart
         }
 
         if (commentEndIndex > -1) {
-            auto* prevCommentNode = parsingResult->commentNode;
 
             NodeBase *newCommentNode;
             if (isLineComment) {
@@ -242,17 +225,15 @@ namespace smart
                 newCommentNode = generateBlockCommentFragments(parentNode, context, i, commentEndIndex, tagText, tagLength);
             }
 
-            parsingResult->commentNode = newCommentNode;
-            parsingResult->assignWhiteSpaces(newCommentNode, i);
+            parsingData->assignWhiteSpaces(newCommentNode, i);
 
+            auto* prevCommentNode = parsingData->commentNode;
+            parsingData->commentNode = newCommentNode;
             if (prevCommentNode != nullptr) {
                 newCommentNode->prevCommentNode = prevCommentNode;
             }
 
-            if (parsingResult->prevLineBreak != nullptr) {
-                newCommentNode->prevLineBreakNode = parsingResult->prevLineBreak;
-                parsingResult->prevLineBreak = nullptr;
-            }
+            parsingData->assignLineBreak(newCommentNode);
         }
 
         return commentEndIndex;
@@ -260,21 +241,21 @@ namespace smart
 
     
 
-    int createLineBreakNode(smart::ParseContext* context, void* parentNode,
-        int32_t& position, utf8byte ch, InnerParsingData* parsingResult)
+    static inline int createLineBreakNode(smart::ParseContext* context, void* parentNode,
+        int32_t& position, utf8byte ch, InternalParsingData* parsingData)
     {
         auto* newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
 
-        if (parsingResult->prevLineBreak == nullptr) {
-            parsingResult->lastLineBreak = parsingResult->prevLineBreak = newLineBreak;
+        if (parsingData->prevLineBreak == nullptr) {
+            parsingData->lastLineBreak = parsingData->prevLineBreak = newLineBreak;
         }
         else {
-            parsingResult->lastLineBreak->nextLineBreakNode = newLineBreak;
-            parsingResult->lastLineBreak = newLineBreak;
+            parsingData->lastLineBreak->nextLineBreakNode = newLineBreak;
+            parsingData->lastLineBreak = newLineBreak;
         }
 
-        parsingResult->assignWhiteSpaces(Cast::upcast(newLineBreak), position);
-        parsingResult->assignCommentNode(Cast::upcast(newLineBreak));
+        parsingData->assignWhiteSpaces(Cast::upcast(newLineBreak), position);
+        parsingData->assignCommentNode(Cast::upcast(newLineBreak));
 
         bool rn = ch == '\r' && context->chars[position + 1] == '\n';
         int result;
@@ -290,78 +271,68 @@ namespace smart
         return result;
     }
 
+    int detectSpaceEndIndex(int32_t i, smart::ParseContext *context)
+    {
+        int spaceEndIndex = i + 1;
+        for (; spaceEndIndex < context->length; spaceEndIndex++)
+        {
+            if (!ParseUtil::isSpace(context->chars[spaceEndIndex]))
+            {
+                break;
+            }
+        }
+        return spaceEndIndex;
+    }
 
-    // scan with the given tokenizer, if root is true, it will save the last line break node and comment node to context for later use,
-    // if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
-    // this scanner handles spaces, line breaks and comments, so tokenizer can focus on scanning code tokens without worrying about spaces, line breaks and comments
-    int Scanner::scanWithTokenizer(void *parentNode,
-                                   TokenizerFunction tokenizer,
-                                   int start,
-                                   ParseContext *context,
-                                   bool root, bool scanMulti
-    ) {
 
+    /// scan with the given tokenizer. if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
+    /// this scanning handles spaces, line breaks and comments, so tokenizer can focus on scanning code tokens without worrying about spaces, line breaks and comments
+    /// it will also link the found token with the nearest line break and comment nodes before it, so that the found token can be correctly formatted and
+    /// the comments can be attached to the correct code nodes in later formatting and attaching phase
+    static InternalParsingData scanWithTokenizer(void *parentNode, TokenizerFunction tokenizer,
+                                                 int start, ParseContext *context, bool scanMulti) {
         utf8byte ch;
-        int returnResult = -1;
-        context->afterLineBreak = false;
-        InnerParsingData  parsingResult;
-            
-        parsingResult.whitespace_startpos = -1;
-        parsingResult.commentNode = nullptr;
+        InternalParsingData parsingData;
+        context->isAfterLineBreak = false;
 
         for (int32_t i = start; i <= context->length;) {
             ch = context->chars[i];
 
-            if (ch == '/') { // comment
-                int pos = tryDetectComments(context, i, parentNode, &parsingResult);
-                if (pos > -1) {
-                    returnResult = i = pos;
+            if (ch == '/') {
+                int endPos = tryDetectComments(context, i, parentNode, &parsingData);
+                if (endPos > -1) {
+                    i = endPos;
                     continue;
                 }
             }
             else if (ParseUtil::isBreakLine(ch)) {
-                i = createLineBreakNode(context, parentNode, i, ch, &parsingResult);
-                context->afterLineBreak = true;
+                i = createLineBreakNode(context, parentNode, i, ch, &parsingData);
+                context->isAfterLineBreak = true;
                 continue;
             }
             else if (ParseUtil::isSpace(ch)) {
-                int spaceEndIndex = i + 1;
-                for (; spaceEndIndex < context->length; spaceEndIndex++) {
-                    if (!ParseUtil::isSpace(context->chars[spaceEndIndex])) {
-                        break;
-                    }
-                }
-
-                parsingResult.whitespace_startpos = i;
-                i = spaceEndIndex;
+                parsingData.whitespace_startpos = i;
+                i = detectSpaceEndIndex(i, context);
                 continue;
             }
 
+
             int result = tokenizer(Cast::upcast(parentNode), ch, i, context);
-            returnResult = result;
+            parsingData.returnPos = result;
 
             if (context->syntaxErrorInfo.hasError) {
-                return -1;
+                parsingData.returnPos = Search::NOTFOUND;
+                return parsingData;
             }
 
-            if (result == Search::DONE_WITH_PREVIUS_POSITION) {
-                break;
-            }
-
-            if (Search::IsTokenized(result)) {
-                context->afterLineBreak = false;
+            if (result > -1) {
+                context->isAfterLineBreak = false;
                 context->prevFoundPos = result;
 
                 assert(context->leftNode != nullptr);
-
-                parsingResult.assignWhiteSpaces(Cast::upcast(context->leftNode), i);
-                parsingResult.assignCommentNode(context->leftNode);
-
-                context->leftNode->prevLineBreakNode = parsingResult.prevLineBreak;
-
-                parsingResult.prevLineBreak = nullptr;
-                parsingResult.lastLineBreak = nullptr;
-
+                parsingData.assignWhiteSpaces(context->leftNode, i);
+                parsingData.assignCommentNode(context->leftNode);
+                parsingData.assignLineBreak(context->leftNode);
 
                 if (scanMulti && !context->scanEnd) {
                     i = result;
@@ -371,17 +342,32 @@ namespace smart
             break;
         }
 
-        if (root) {
-            context->remainedLineBreakNode = parsingResult.prevLineBreak;
-            context->remainedCommentNode = parsingResult.commentNode;
-            if (parsingResult.whitespace_startpos > -1 && parsingResult.whitespace_startpos < context->length) {
-                context->remaindPrevChars = context->length - parsingResult.whitespace_startpos;
-            }
+        context->scanEnd = false; // reset scanEnd for the next scan
+        return parsingData;
+    }
+
+        
+
+    // scan once with the given tokenizer, it will return when a token is found or the end of chars is reached
+    int Scanner::scanOnce(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
+        return scanWithTokenizer(parentNode, tokenizer, start, context, false).returnPos;
+    }
+
+    // scan until scanEnd==true, tokenizer should set scanEnd to true when it wants to stop scanning
+    int Scanner::scanMulti(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
+        return scanWithTokenizer(parentNode, tokenizer, start, context, true).returnPos;
+    }
+
+    int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
+        InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, start, context, /* multiScan */ true);
+
+        context->remainedLineBreakNode = parsingData.prevLineBreak;
+        context->remainedCommentNode = parsingData.commentNode;
+        if (parsingData.whitespace_startpos > -1 && parsingData.whitespace_startpos < context->length) {
+            context->remaindPrevChars = context->length - parsingData.whitespace_startpos;
         }
-        if (context->scanEnd) {
-            context->scanEnd = false;
-        }
-        return returnResult;
+
+        return parsingData.returnPos;
     }
 
 
