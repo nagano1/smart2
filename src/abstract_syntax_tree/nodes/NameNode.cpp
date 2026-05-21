@@ -50,6 +50,7 @@ namespace smart {
             // ban keywords
             constexpr char* keywords[] = {"return", "class", "fn", "false", "true", "null"};
             for (auto &&keyword : keywords) {
+                printf("Syntax error 0: keyword '%s' cannot be used as name at position %d\n", keyword, start);
                 if (ParseUtil::matchWord(context->chars, context->length, keyword, st_size_of(keyword) - 1, start)) {
                     printf("Syntax error: keyword '%s' cannot be used as name at position %d\n", keyword, start);
                     return Search::NOTFOUND;
