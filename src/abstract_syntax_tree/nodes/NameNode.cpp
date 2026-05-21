@@ -36,19 +36,19 @@ namespace smart {
 
     int Tokenizers::nameTokenizer(TokenizerParams_parent_ch_start_context) {
         int found_count = 0;
+        // TODO: first letter should be letter or _. simple solution is to use a flag to indicate if it's the first letter, and only allow letter or _ for the first letter, but it will add some overhead, since we need to check the flag for every letter. better solution is to use a separate loop to check the first letter, and then use another loop to check the rest of the letters, since it's common that the first letter is not valid, so we can fail fast without checking the rest of the letters.
         for (int_fast32_t i = start; i < context->length; i++) {
             if (ParseUtil::isIdentifierLetter(context->chars[i])) {
                 found_count++;
             }
             else {
-                int/**/a = 3;
                 break;
             }
         }
 
         if (found_count > 0) {
             // ban keywords
-            constexpr char* keywords[] = {"return", "class", "fn"};
+            constexpr char* keywords[] = {"return", "class", "fn", "false"};
             for (auto &&keyword : keywords) {
                 if (ParseUtil::matchWord(context->chars, context->length, keyword, st_size_of(keyword) - 1, start)) {
                     return Search::NOTFOUND;
