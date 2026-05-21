@@ -129,10 +129,8 @@ namespace smart {
                 }
             }
 
-            int result;
-            if (Search::IsTokenized(result = Tokenizers::nameTokenizer(Cast::upcast(&assignment->nameNode)
-                                                        , ch, start, context))
-            ) {
+            int result = Tokenizers::nameTokenizer(Cast::upcast(&assignment->nameNode), ch, start, context);
+            if (Search::IsTokenized(result)) {
                 assignment->nameNode.found = result;
                 context->setCodeNode(&assignment->nameNode);
                 return result;
@@ -226,14 +224,14 @@ namespace smart {
             context->unusedAssignment = nullptr;
         }
 
-        int resul = Tokenizers::typeTokenizer(Cast::upcast(&assignStatement->typeOrLet), ch, start, context);
-        if (Search::IsTokenized(resul)) {
+        int result = Tokenizers::typeTokenizer(Cast::upcast(&assignStatement->typeOrLet), ch, start, context);
+        if (Search::IsTokenized(result)) {
             assignStatement->hasTypeDecl = true;
 
             int resultPos;
             if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignStatement,
                                                      inner_assignStatementTokenizerMulti,
-                                                     context, resul))) {
+                                                     context, result))) {
                 context->leftNode = Cast::upcast(&assignStatement->typeOrLet);
                 context->generatedMainNode = Cast::upcast(assignStatement);
 
