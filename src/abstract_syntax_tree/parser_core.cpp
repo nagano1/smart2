@@ -192,7 +192,8 @@ namespace smart
         }
 
         void assignWhiteSpaces(NodeBase* comment2, int i) {
-            if (whitespace_startpos != -1 && whitespace_startpos < i) {
+            if (whitespace_startpos != -1) {
+                assert(whitespace_startpos < i);
                 comment2->prev_chars = i - whitespace_startpos;
                 whitespace_startpos = -1;
             }
