@@ -28,6 +28,16 @@ namespace smart
     struct InternalParsingData;
 
     
+    CodeLine *VTableCall::callAppendToLine(void *node, CodeLine *currentCodeLine) {
+        if (node == nullptr) {
+            return currentCodeLine;
+        }
+        auto *nodeBase = Cast::upcast(node);
+        //if (nodeBase->prevLineBreakNode)
+        return nodeBase->vtable->appendToLine(nodeBase, currentCodeLine);
+    }
+
+    
     static inline int detectBlockCommentEnd(int32_t i, smart::ParseContext *context, int &tagLength, char *&tagText)
     {
         int textStartPos = i + 2;
@@ -371,15 +381,6 @@ namespace smart
         ParseContext *context
     ) {
         return scanWithTokenizer(parentNode, tokenizer, start, context, true).returnPos;
-    }
-
-    CodeLine *VTableCall::callAppendToLine(void *node, CodeLine *currentCodeLine) {
-        if (node == nullptr) {
-            return currentCodeLine;
-        }
-        auto *nodeBase = Cast::upcast(node);
-        //if (nodeBase->prevLineBreakNode)
-        return nodeBase->vtable->appendToLine(nodeBase, currentCodeLine);
     }
 
     int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
