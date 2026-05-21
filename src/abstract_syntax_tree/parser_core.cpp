@@ -58,7 +58,7 @@ namespace smart
         }
 
         int searchEndPos = textStartPos;
-        while (true)
+        while (searchEndPos < context->length)
         {
             int endCommentPos = ParseUtil::indexOf2(context->chars, context->length, searchEndPos, '*', '/');
             if (endCommentPos == -1)
@@ -66,6 +66,8 @@ namespace smart
                 // the end of block comment not found, treat the rest of chars as comment
                 return context->length;
             }
+
+            searchEndPos = endCommentPos + 2; // continue to search for next block comment if the current found block comment end doesn't match the tag
 
             // [hoge]*/
             if (context->chars[endCommentPos - 1] == ']') {
