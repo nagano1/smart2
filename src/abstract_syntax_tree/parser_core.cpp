@@ -360,7 +360,7 @@ namespace smart
         return scanWithTokenizer(parentNode, tokenizer, context, start, false).returnPos;
     }
 
-    // scan until scanEnd==true, tokenizer should set scanEnd to true when it wants to stop scanning
+    // scan until scanEnd==true, tokenizer is responsible for setting scanEnd to true when it wants to stop scanning
     int Scanner::scanMulti(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start) {
         return scanWithTokenizer(parentNode, tokenizer, context, start, true).returnPos;
     }
