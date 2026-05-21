@@ -196,8 +196,7 @@ namespace smart {
                 {
                     resultPos = Scanner::scanOnce(&classNode->nameNode,
                                               Tokenizers::nameTokenizer,
-                                              currentPos,
-                                              context);
+                                              context, currentPos);
 
                     if (!Search::IsTokenized(resultPos)) {
                         // the class should have a class name
@@ -210,7 +209,7 @@ namespace smart {
                 // Parse body
                 currentPos = resultPos;
                 if (!Search::IsTokenized(resultPos = Scanner::scanMulti(classNode, inner_classBodyTokenizer,
-                                                     currentPos, context))) {
+                                                     context, currentPos))) {
                     //context->codeNode = Cast::upcast(classNode);
                     //return currentPos;
                     return Search::NOTFOUND;

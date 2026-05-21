@@ -238,8 +238,7 @@ namespace smart {
         int currentPos = start + 1;
         int resultPos;
         if (Search::IsTokenized(resultPos = Scanner::scanMulti(funcCallNode,
-                                                    tokenizeFuncCallInternal,
-                                                    currentPos, context))) {
+                                                               tokenizeFuncCallInternal, context, currentPos))) {
             context->generatedMainNode = Cast::upcast(funcCallNode);
             context->leftNode = leftNode;
             return resultPos;
@@ -469,8 +468,7 @@ namespace smart {
             int returnPosition = start + 1;
             int result = Scanner::scanMulti(bodyNode,
                                             inner_bodyTokenizerMulti,
-                                            returnPosition,
-                                            context);
+                                            context, returnPosition);
 
             if (Search::IsTokenized(result)) {
                 context->setCodeNode(bodyNode);
@@ -749,11 +747,10 @@ namespace smart {
                 int nextPos =  start + 1;
                 int result = Scanner::scanMulti(fnNode,
                                                 internal_parameterListTokenizerMulti,
-                                                nextPos,
-                                                context);
+                                                context, nextPos);
                 if (Search::IsTokenized(result)) {
                     int result2;
-                    if (Search::IsTokenized(result2 = Scanner::scanOnce(Cast::upcast(&fnNode->bodyNode), Tokenizers::bodyTokenizer,  result, context))) {
+                    if (Search::IsTokenized(result2 = Scanner::scanOnce(Cast::upcast(&fnNode->bodyNode), Tokenizers::bodyTokenizer, context, result))) {
                         context->scanEnd = true;
                         context->leftNode = Cast::upcast(&fnNode->parameterStartNode);
                         return result2;
@@ -784,17 +781,8 @@ namespace smart {
                 // now after "fn "
                 auto *fnNode = Alloc::newFuncNode(context, parent);
                 {
-                    resultPos = Scanner::scanOnce(&fnNode->nameNode,
-                                              Tokenizers::nameTokenizer,
-                                              currentPos,
-                                              context);
-
-
+                    resultPos = Scanner::scanOnce(&fnNode->nameNode, Tokenizers::nameTokenizer, context, currentPos);
                     // nameNode should have spaces/comments/lineBreaks before between "fn" and function name,
-
-
-
-
                     if (!Search::IsTokenized(resultPos)) {
                         // the fn should have a function name
                         context->setError(ErrorCode::invalid_fn_name, start);
@@ -807,7 +795,7 @@ namespace smart {
                 // Parse body
                 currentPos = resultPos;
                 if (!Search::IsTokenized(resultPos = Scanner::scanOnce(fnNode, inner_fnParamsAndBodyTokenizer,
-                                                         currentPos, context))) {
+                                                         context, currentPos))) {
 
                     context->setError(ErrorCode::syntax_error, context->prevFoundPos);
 

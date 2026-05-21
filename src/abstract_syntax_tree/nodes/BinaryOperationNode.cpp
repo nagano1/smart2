@@ -131,7 +131,7 @@ namespace smart {
         auto *virtualNode = context->generatedMainNode;
         auto *leftNode = context->leftNode;
 
-        int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, start, context);
+        int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, context, start);
         context->leftNode = leftNode;
 
         if (Search::IsTokenized(resultPos)) {
@@ -141,7 +141,7 @@ namespace smart {
 
             if (Search::IsTokenized(resultPos = Scanner::scanOnce(binaryOpNode,
                                                     Tokenizers::tokenizeExpression,
-                                                    resultPos, context))) {
+                                                    context, resultPos))) {
                 binaryOpNode->rightExprNode = context->generatedMainNode;
                 context->generatedMainNode = Cast::upcast(binaryOpNode);
                 context->leftNode = leftNode;

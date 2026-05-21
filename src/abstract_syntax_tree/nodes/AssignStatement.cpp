@@ -193,7 +193,7 @@ namespace smart {
 
         int resultPos;
         if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignment, inner_assignStatementTokenizerMulti,
-                                                 start, context))) {
+                                                 context, start))) {
             assignment->hasTypeDecl = false;
             assignment->typeOrLet.isLet = false;
 
@@ -231,7 +231,7 @@ namespace smart {
             int resultPos;
             if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignStatement,
                                                      inner_assignStatementTokenizerMulti,
-                                                     resul, context))) {
+                                                     context, resul))) {
                 context->leftNode = Cast::upcast(&assignStatement->typeOrLet);
                 context->generatedMainNode = Cast::upcast(assignStatement);
 

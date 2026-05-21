@@ -147,7 +147,7 @@ namespace smart {
             int resultPos;
             if (Search::IsTokenized(resultPos = Scanner::scanMulti(returnNode,
                                                         parenthesesTokenizerInternal,
-                                                        currentPos, context))) {
+                                                        context, currentPos))) {
 
                 context->leftNode = Cast::upcast(&returnNode->returnText);
                 context->generatedMainNode = Cast::upcast(returnNode);
