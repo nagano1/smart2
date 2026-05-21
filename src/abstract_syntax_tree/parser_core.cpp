@@ -156,7 +156,7 @@ namespace smart
 
 
     struct InternalParsingData
-     {
+    {
         int32_t returnPos = -1;
         int32_t whitespace_startpos = -1;
 
@@ -165,7 +165,8 @@ namespace smart
 
         NodeBase *commentNode = nullptr;
 
-        void assignCommentNode(NodeBase* leftNode) {
+        void assignCommentNode(NodeBase* leftNode)
+        {
             assert(leftNode != nullptr);
 
             if (commentNode != nullptr) {
@@ -174,29 +175,17 @@ namespace smart
             }
         }
 
-        void assignWhiteSpaces(NodeBase* comment2, int i) {
+        void assignWhiteSpaces(NodeBase* comment2, int i)
+        {
             if (whitespace_startpos != -1) {
                 assert(whitespace_startpos < i);
                 comment2->prev_chars = i - whitespace_startpos;
                 whitespace_startpos = -1;
             }
-            /*
-            if (parsingData->whitespace_startpos != -1) {
-                if (parsingData->whitespace_startpos < position) {
-                    (*lastLineBreak)->prev_chars = position - parsingData->whitespace_startpos;
-                }
-                parsingData->whitespace_startpos = -1;
-            }
-            */
         }
 
-        //
-        void assignLineBreak(NodeBase* node) {
-            /*
-                context->leftNode->prevLineBreakNode = parsingData.prevLineBreak;
-                parsingData.prevLineBreak = nullptr;
-                parsingData.lastLineBreak = nullptr;
-            */
+        void assignLineBreak(NodeBase* node)
+        {
             if (this->prevLineBreak != nullptr) {
                 node->prevLineBreakNode = prevLineBreak;
                 prevLineBreak = nullptr;
@@ -207,7 +196,7 @@ namespace smart
     
 
 
-    int tryDetectComments(ParseContext* context, int32_t i, void* parentNode, InternalParsingData* parsingData)
+    static inline int tryDetectComments(ParseContext* context, int32_t i, void* parentNode, InternalParsingData* parsingData)
     {
         int commentEndIndex = -1;
         bool isLineComment = false;
@@ -254,7 +243,7 @@ namespace smart
 
     
 
-    int createLineBreakNode(smart::ParseContext* context, void* parentNode,
+    static inline int createLineBreakNode(smart::ParseContext* context, void* parentNode,
         int32_t& position, utf8byte ch, InternalParsingData* parsingData)
     {
         auto* newLineBreak = Alloc::newLineBreakNode(context, Cast::upcast(parentNode));
@@ -298,14 +287,13 @@ namespace smart
     }
 
 
-
-    // scan with the given tokenizer, if root is true, it will save the last line break node and comment node to context for later use,
-    // if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
-    // this scanner handles spaces, line breaks and comments, so tokenizer can focus on scanning code tokens without worrying about spaces, line breaks and comments
+    /// scan with the given tokenizer, if root is true, it will save the last line break node and comment node to context for later use,
+    /// if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
+    /// this scanner handles spaces, line breaks and comments, so tokenizer can focus on scanning code tokens without worrying about spaces, line breaks and comments
     static InternalParsingData scanWithTokenizer(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context, bool scanMulti
     ) {
         utf8byte ch;
-        int returnResultPos = -1;
+        int returnResultPos = Search::NOTFOUND;
         context->isAfterLineBreak = false;
         InternalParsingData parsingData;
 
@@ -335,7 +323,7 @@ namespace smart
             returnResultPos = result;
 
             if (context->syntaxErrorInfo.hasError) {
-                parsingData.returnPos = -1;
+                parsingData.returnPos = Search::NOTFOUND;
                 return parsingData;
             }
 
@@ -344,7 +332,7 @@ namespace smart
                 context->prevFoundPos = result;
 
                 assert(context->leftNode != nullptr);
-                parsingData.assignWhiteSpaces(Cast::upcast(context->leftNode), i);
+                parsingData.assignWhiteSpaces(context->leftNode, i);
                 parsingData.assignCommentNode(context->leftNode);
                 parsingData.assignLineBreak(context->leftNode);
 
@@ -361,30 +349,19 @@ namespace smart
         return parsingData;
     }
 
-    
-
         
 
-    int Scanner::scanOnce(void *parentNode,
-                      TokenizerFunction tokenizer,
-                      int start,
-                      ParseContext *context
-    ) {
-
+    // scan once with the given tokenizer, it will return when a token is found or the end of chars is reached
+    int Scanner::scanOnce(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
         return scanWithTokenizer(parentNode, tokenizer, start, context, false).returnPos;
     }
 
     // scan until scanEnd==true, tokenizer should set scanEnd to true when it wants to stop scanning
-    int Scanner::scanMulti(void *parentNode,
-        TokenizerFunction tokenizer,
-        int start,
-        ParseContext *context
-    ) {
+    int Scanner::scanMulti(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
         return scanWithTokenizer(parentNode, tokenizer, start, context, true).returnPos;
     }
 
     int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
-
         InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, start, context, /* multiScan */ true);
 
         context->remainedLineBreakNode = parsingData.prevLineBreak;
