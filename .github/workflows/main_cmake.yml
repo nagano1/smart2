@@ -101,7 +101,6 @@ jobs:
         shell: bash
         run: |
           cd build;
-          clang++ --version;
           mkdir -p deb/${{ matrix.config.name }};
           cp -r ${{ matrix.config.testdir }}* deb/${{ matrix.config.name }}
           ls -al deb/${{ matrix.config.name }}
