@@ -173,11 +173,12 @@ namespace smart
             }
         }
 
-        void assignWhiteSpaces(NodeBase* comment2, int i)
+        void assignWhiteSpaces(NodeBase* commentNode, int endIndex)
         {
             if (whitespace_startpos != -1) {
-                assert(whitespace_startpos < i);
-                comment2->prev_chars = i - whitespace_startpos;
+                assert(whitespace_startpos < endIndex);
+                // prev_chars allows only ascii whitespace and japanese whitespaces are not allowed.
+                commentNode->prev_chars = endIndex - whitespace_startpos;
                 whitespace_startpos = -1;
             }
         }
@@ -349,16 +350,16 @@ namespace smart
         
 
     // scan once with the given tokenizer, it will return when a token is found or the end of chars is reached
-    int Scanner::scanOnce(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
+    int Scanner::scanOnce(void *parentNode, TokenizerFunction tokenizer,ParseContext *context,  int start) {
         return scanWithTokenizer(parentNode, tokenizer, start, context, false).returnPos;
     }
 
     // scan until scanEnd==true, tokenizer should set scanEnd to true when it wants to stop scanning
-    int Scanner::scanMulti(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
+    int Scanner::scanMulti(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start) {
         return scanWithTokenizer(parentNode, tokenizer, start, context, true).returnPos;
     }
 
-    int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, int start, ParseContext *context) {
+    int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start) {
         InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, start, context, /* multiScan */ true);
 
         context->remainedLineBreakNode = parsingData.prevLineBreak;

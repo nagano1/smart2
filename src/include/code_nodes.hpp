@@ -156,6 +156,8 @@ namespace smart {
         int typeIndex;                \
         bool typeAtHeap;                \
         int found; \
+        /* number of chars before this node, used for error reporting and code generation. creating another Nodes like SpaceNode would increase nodes so*/ \
+        /* this reduces memory usage and keeps simplicity of AST. */ \
         int prev_chars
 
     #define SIMPLE_TEXT_CONTENT \
@@ -1187,25 +1189,11 @@ namespace smart {
      * Implements common scanning and parsing method
      */
     struct Scanner {
-        static int scanRoot(
-            void *parentNode,
-            TokenizerFunction tokenizer,
-            int start,
-            ParseContext *context);
+        static int scanRoot(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start);
 
-        static int scanOnce(
-                void *parentNode,
-                TokenizerFunction tokenizer,
-                int start,
-                ParseContext *context
-        );
+        static int scanOnce(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start);
 
-        static int scanMulti(
-                void *parentNode,
-                TokenizerFunction tokenizer,
-                int start,
-                ParseContext *context
-        );
+        static int scanMulti(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start);
     };
 }
 
