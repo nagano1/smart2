@@ -55,7 +55,7 @@ class FooClass
 constexpr auto *testCode3 = const_cast<char *>(u8R"(
 class OuterClass
 {
-    class InnerClass/*[AB]this is so nice![A]*/
+    class InnerClass/* /*[A]this is so nice![A]*/ */
     {/**/
         // awef
         fn func1()
