@@ -148,17 +148,17 @@ namespace smart {
         _NodeBase *nextNodeInLine; \
         CodeLine *codeLine; \
         int indentType; \
-        void *prevCommentNode; \
-        struct _LineBreakNodeStruct *prevLineBreakNode; \
         ParseContext *context; \
         PrimitiveCalcRegisterEnum calcRegEnum; \
         st_byte *calcReg;                 \
         int typeIndex;                \
         bool typeAtHeap;                \
         int found; \
-        /* number of chars before this node, used for error reporting and code generation. creating another Nodes like SpaceNode would increase nodes so*/ \
-        /* this reduces memory usage and keeps simplicity of AST. */ \
-        int prev_chars
+        /* prev_chars holds number of chars before this node, used for error reporting and code generation. */ \
+        /* this reduces memory usage and keeps AST simple by avoid creating additional nodes for all spaces and comments. */ \
+        int prev_chars; \
+        void *prevCommentNode; \
+        struct _LineBreakNodeStruct *prevLineBreakNode; \
 
     #define SIMPLE_TEXT_CONTENT \
         utf8byte *text; \
