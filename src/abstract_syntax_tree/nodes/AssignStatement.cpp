@@ -115,11 +115,11 @@ namespace smart {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
 
         if (assignment->nameNode.found == -1) {
-            /*
-             if (assignment->hasTypeDecl && context->isAfterLineBreak) {
-                 return Search::NOTFOUND;
-             }
-            */
+            if (assignment->hasTypeDecl && context->isAfterLineBreak) {
+                printf("-----------------------TEST-------------------------------------------");
+                printf("%s", assignment->nameNode.name);
+                return Search::NOTFOUND;
+            }
 
              if (assignment->pointerAsterisk.found == -1) {
                 if (ch == '*') {
