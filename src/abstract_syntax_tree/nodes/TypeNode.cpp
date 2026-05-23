@@ -90,6 +90,7 @@ namespace smart
                                );
 
             context->setCodeNode(typeNode);
+            
             return result;
         }
 

@@ -47,6 +47,7 @@ namespace smart {
         }
 
         if (found_count > 0) {
+            // ban keywords
             if (ParseUtil::IsKeyword(context->chars + start, found_count)) {
                 return Search::NOTFOUND;
             }

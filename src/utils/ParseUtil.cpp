@@ -206,12 +206,12 @@ int ParseUtil::_matchFirstWithTrim(const char *chars, int charsLength, const cha
 
 bool ParseUtil::IsKeyword(utf8byte *ch, st_int length)
 {
-    constexpr const char* keywords[] = {"return", "class", "fn", "false", "true", "null"};
-    // ban keywords
+    constexpr const char* keywords[] = {"return", "class", "fn", "false", "true", "null", "ret"};
     for (auto &&keyword : keywords)
     {
+        int keywordLength = strlen(keyword);
         // printf("IsKeyword check: %.*s, keyword: %s\n", length, ch, keyword);
-        if (length == strlen(keyword) && ParseUtil::matchWord(ch, length, keyword, strlen(keyword), 0))
+        if (length == keywordLength && ParseUtil::matchWord(ch, length, keyword, keywordLength, 0))
         {
             return true;
         }

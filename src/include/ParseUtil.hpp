@@ -180,7 +180,7 @@ struct ParseUtil {
     template<int SIZE>
     static inline bool endsWith2(const char* chars, int charsLength, const char(&suffix)[SIZE])
     {
-        int suffixLength = SIZE - 1;
+        const int suffixLength = SIZE - 1;
         return endsWith(chars, charsLength, suffix, suffixLength);
     }
 
@@ -223,7 +223,10 @@ struct ParseUtil {
             return true;
         }
 
-        // non-ascii char, allow it in identifier, since it's common in modern languages to allow non-ascii char in identifier, and the target language of this parser is designed for modern programming, so we allow non-ascii char in identifier. we can use & with 0x80 to determine if it's ascii char or not, since ascii char has 0 in the most significant bit, while non-ascii char has 1 in the most significant bit.
+        // non-ascii char, allow it in identifier, since it's common in modern languages to allow non-ascii char in identifier,
+        // and the target language of this parser is designed for modern programming, so we allow non-ascii char in identifier.
+        // we can use & with 0x80 to determine if it's ascii char or not, since ascii char has 0 in the most significant bit,
+        // while non-ascii char has 1 in the most significant bit.
         return (ch & 0x80) == 0x80;
     }
 
