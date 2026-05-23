@@ -38,21 +38,18 @@ namespace smart {
     int Tokenizers::stringLiteralTokenizer(TokenizerParams_parent_ch_start_context) {
         int found_count = 0;
 
-        // starts with "
-        bool startsWithQuote = false;
+
         bool endsWithQuote = false;
 
         char quoteChar;
         int literalType;
 
         if (ch == '"') {
-            startsWithQuote = true;
             found_count++;
             quoteChar = '"';
             literalType = 0;
         }
         else if (ch == '`'){
-            startsWithQuote = true;
             found_count++;
             quoteChar = '`';
             literalType = 1;
@@ -62,12 +59,11 @@ namespace smart {
         }
 
 
-
+        // find the closing quote, and count the length of the literal text
         {
-            int letterStart = (startsWithQuote) ? start + 1 : start;
             bool escapeMode = false;
 
-            for (int_fast32_t i = letterStart; i < context->length; i++) {
+            for (int_fast32_t i = start; i < context->length; i++) {
                 found_count++;
 
                 if (escapeMode) {
@@ -80,16 +76,14 @@ namespace smart {
                     continue;
                 }
 
-                if (startsWithQuote) {
-                    if (context->chars[i] == quoteChar) {
-                        endsWithQuote = true;
-                        break;
-                    }
+                if (context->chars[i] == quoteChar) {
+                    endsWithQuote = true;
+                    break;
                 }
             }
         }
 
-        if (startsWithQuote &&  !endsWithQuote) {
+        if (!endsWithQuote) {
             context->setError(ErrorCode::missing_closing_quote, start);
             return Search::NOTFOUND;
         }
@@ -162,13 +156,10 @@ namespace smart {
                 }
             }
 
-            if (startsWithQuote) {
-                strLiteralNode->literalType = literalType;
-                strLiteralNode->str = str;
-                strLiteralNode->strLength = strLength;
-                strLiteralNode->str[strLength] = '\0';
-
-            }
+            strLiteralNode->literalType = literalType;
+            strLiteralNode->str = str;
+            strLiteralNode->strLength = strLength;
+            strLiteralNode->str[strLength] = '\0';
 
             return start + found_count;
         }
