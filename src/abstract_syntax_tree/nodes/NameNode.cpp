@@ -47,9 +47,11 @@ namespace smart {
         }
 
         if (found_count > 0) {
+            /*
             if (ParseUtil::IsKeyword(context->chars + start, found_count)) {
                 return Search::NOTFOUND;
             }
+            */
             auto *nameNode = Cast::downcast<NameNodeStruct *>(parent);
 
             context->setCodeNode(nameNode);
