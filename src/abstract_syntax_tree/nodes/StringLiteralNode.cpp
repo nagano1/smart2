@@ -63,7 +63,7 @@ namespace smart {
         {
             bool escapeMode = false;
 
-            for (int_fast32_t i = start; i < context->length; i++) {
+            for (int_fast32_t i = start + 1; i < context->length; i++) {
                 found_count++;
 
                 if (escapeMode) {
