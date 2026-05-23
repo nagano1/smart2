@@ -71,13 +71,13 @@ namespace smart {
     VariableNodeStruct *Alloc::newVariableNode(ParseContext *context, NodeBase *parentNode)
     {
         auto *node = context->newMem<VariableNodeStruct>();
-        INIT_NODE(node, context, parentNode, VTables::NameVTable);
+        INIT_NODE(node, context, parentNode, VTables::VariableVTable);
 
         node->stackOffset = 0;
-        //node->name = nullptr;
-        //node->nameLength = 0;   
+        node->name = nullptr;
+        node->nameLength = 0;   
         
-         Init::initNameNode(node, context, parentNode);
+        // Init::initNameNode(node, context, parentNode);
         //Init::initNameNode(reinterpret_cast<NameNodeStruct *>(&node), context, parentNode);
         return node;
     }
