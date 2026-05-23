@@ -36,8 +36,7 @@ namespace smart {
 
 
     int Tokenizers::stringLiteralTokenizer(TokenizerParams_parent_ch_start_context) {
-        int found_count = 0;
-
+        int strLength = 0; // including quotes, and escape characters
 
         bool endsWithQuote = false;
 
@@ -45,12 +44,12 @@ namespace smart {
         int literalType;
 
         if (ch == '"') {
-            found_count++;
+            strLength++;
             quoteChar = '"';
             literalType = 0;
         }
         else if (ch == '`'){
-            found_count++;
+            strLength++;
             quoteChar = '`';
             literalType = 1;
         }
@@ -64,7 +63,7 @@ namespace smart {
             bool escapeMode = false;
 
             for (int_fast32_t i = start + 1; i < context->length; i++) {
-                found_count++;
+                strLength++;
 
                 if (escapeMode) {
                     escapeMode = false;
@@ -89,83 +88,23 @@ namespace smart {
         }
 
 
-        if (found_count > 0) {
-            auto *strLiteralNode = context->newMem<StringLiteralNodeStruct>();
-            Init::initStringLiteralNode(strLiteralNode, context, parent);
-            context->setCodeNode(strLiteralNode);
+        assert(strlength > 1); // at least has two quotes
+        auto *strLiteralNode = context->newMem<StringLiteralNodeStruct>();
+        Init::initStringLiteralNode(strLiteralNode, context, parent);
+        context->setCodeNode(strLiteralNode);
 
-            strLiteralNode->text = context->memBuffer.newMem<char>(found_count + 1);
+        strLiteralNode->text = context->memBuffer.newMem<char>(strLength + 1);
+        strLiteralNode->textLength = strLength;
 
-            strLiteralNode->textLength = found_count;
-
-            memcpy(strLiteralNode->text, context->chars + start, found_count);
-            strLiteralNode->text[found_count] = '\0';
-
-            // create actual string
-            auto *str = context->memBuffer.newMem<char>(found_count+ 3);
-            bool escapeMode = false;
-            int strLength = 0;
-            int currentStrIndex = 0;
-            for (int_fast32_t i = 1; i < found_count-1; i++) {
-                /* \uXXXX		4s, 16unit Unicode char */
-
-                if (escapeMode) {
-                    escapeMode = false;
-                    if (strLiteralNode->text[i] == 'u') {
-                        int consumed = 0;
-
-                        int utf16length = ParseUtil::parseJsonUtf16Sequense(strLiteralNode->text, strLiteralNode->textLength
-                            , i - 1, &consumed
-                            , (unsigned char*)&str[currentStrIndex]
-                            , (unsigned char*)&str[currentStrIndex+1]
-                            , (unsigned char*)&str[currentStrIndex+2]
-                            , (unsigned char*)&str[currentStrIndex+3]);
-
-                        if (utf16length > 0) {
-                            currentStrIndex += utf16length;
-                            strLength += utf16length;
-                            i += consumed - 2;
-                            continue;
-                        }
-                    }
-
-                    switch (strLiteralNode->text[i]) {
-                        case 'r': str[currentStrIndex++] = '\r'; break;
-                        case 'n': str[currentStrIndex++] = '\n'; break;
-                        case 't': str[currentStrIndex++] = '\t'; break;
-                        case '\\': str[currentStrIndex++] = '\\'; break;
-                        case 'f': str[currentStrIndex++] = 'f'; break;
-                        case '/': str[currentStrIndex++] = '/'; break;
-                        case '"': str[currentStrIndex++] = '"'; break;
-                        case '\'': str[currentStrIndex++] = '\''; break;
-                        case 'u': str[currentStrIndex++] = 'u'; break;
-                        default: str[currentStrIndex++] = strLiteralNode->text[i]; break;
-                    }
-
-                    strLength++;
-                    continue;
-                }
+        memcpy(strLiteralNode->text, context->chars + start, strLength);
+        strLiteralNode->text[strLength] = '\0';
 
 
-                if (strLiteralNode->text[i] == '\\') {
-                    escapeMode = true;
-                }
-                else {
-                    strLength++;
-                    str[currentStrIndex++] = strLiteralNode->text[i];
-                }
-            }
+        strLiteralNode->literalType = literalType;
+        strLiteralNode->str = strLiteralNode->text;
+        strLiteralNode->strLength = strLength;
 
-            strLiteralNode->literalType = literalType;
-            strLiteralNode->str = str;
-            strLiteralNode->strLength = strLength;
-            strLiteralNode->str[strLength] = '\0';
-
-            return start + found_count;
-        }
-
-        return Search::NOTFOUND;
-
+        return start + strLength;
     }
 
     static constexpr const char nameTypeText[] = "<string>";
