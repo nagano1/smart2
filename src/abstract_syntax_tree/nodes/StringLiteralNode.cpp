@@ -42,17 +42,20 @@ namespace smart {
         bool startsWithQuote = false;
         bool endsWithQuote = false;
 
-        char quote;
+        char quoteChar;
+        int literalType;
 
         if (ch == '"') {
             startsWithQuote = true;
             found_count++;
-            quote = '"';
+            quoteChar = '"';
+            literalType = 0;
         }
         else if (ch == '`'){
             startsWithQuote = true;
             found_count++;
-            quote = '`';
+            quoteChar = '`';
+            literalType = 1;
         }
         else {
             return Search::NOTFOUND;
@@ -78,7 +81,7 @@ namespace smart {
                 }
 
                 if (startsWithQuote) {
-                    if (context->chars[i] == quote) {
+                    if (context->chars[i] == quoteChar) {
                         endsWithQuote = true;
                         break;
                     }
@@ -160,7 +163,7 @@ namespace smart {
             }
 
             if (startsWithQuote) {
-                strLiteralNode->literalType = quote == '"' ? 0 : 1;
+                strLiteralNode->literalType = literalType;
                 strLiteralNode->str = str;
                 strLiteralNode->strLength = strLength;
                 strLiteralNode->str[strLength] = '\0';
