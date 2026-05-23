@@ -47,15 +47,11 @@ namespace smart {
         }
 
         if (found_count > 0) {
-            // ban keywords
-            constexpr char* keywords[] = {"return", "class", "fn", "false", "true", "null"};
-            for (auto &&keyword : keywords) {
-                if (found_count == strlen(keyword) && ParseUtil::matchWord(context->chars, context->length, keyword, strlen(keyword), start)) {
-                    printf("Syntax error: keyword '%s'(%d) cannot be used as name at position %d\n", keyword, (int)strlen(keyword), start);
-                    return Search::NOTFOUND;
-                }
+            /*
+            if (ParseUtil::IsKeyword(context->chars + start, found_count)) {
+                return Search::NOTFOUND;
             }
-
+*/
             auto *nameNode = Cast::downcast<NameNodeStruct *>(parent);
 
             context->setCodeNode(nameNode);
