@@ -111,16 +111,11 @@ namespace smart {
     }
 
 
-    static int inner_assignStatementTokenizerMulti(TokenizerParams_parent_ch_start_context) {
+    /// tokenizer for assignment statement without let keyword. e.g. a = 3
+    static int tokenizeAssignStatementMulti(TokenizerParams_parent_ch_start_context) {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
 
         if (assignment->nameNode.foundPos == -1) {
-            // if (assignment->hasTypeDecl && context->isAfterLineBreak) {
-            //     printf("-----------------------TEST-------------------------------------------");
-            //     printf("\n%s", assignment->typeOrLet.nameNode.name);
-            //     return Search::NOTFOUND;
-            // }
-
              if (assignment->pointerAsterisk.foundPos == -1) {
                 if (ch == '*') {
                     assignment->pointerAsterisk.foundPos = start;
@@ -129,6 +124,7 @@ namespace smart {
                 }
             }
 
+            // if type is declared, it can be just declaration without assignment. e.g. int a 
             int result = Tokenizers::nameTokenizer(Cast::upcast(&assignment->nameNode), ch, start, context);
             if (Search::IsTokenized(result)) {
                 assignment->nameNode.foundPos = result;
@@ -136,8 +132,8 @@ namespace smart {
                 return result;
             }
             else {
-                //context->scanEnd = true;
-                //context->setError(ErrorCode::syntax_error, start);
+                // no name found. not found as assignment statement.
+                return Search::NOTFOUND;
             }
         }
         else if (assignment->equalSymbol.foundPos == -1) {
@@ -151,24 +147,25 @@ namespace smart {
                     context->scanEnd = true;
                     return Search::DONE_WITH_PREVIUS_POSITION;
                 }
-                //else {
-                    //context->scanEnd = true;
-                    //context->setError(ErrorCode::syntax_error, start);
-                    //return -1;
-                //}
+                else {
+                    // no equal symbol found. not found as assignment statement.
+                    return Search::NOTFOUND;
+                }
             }
         }
-        else {
-            int result;
-            if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(Cast::upcast(assignment), ch,
-                                                               start, context))) {
+        else { // already has name and equal symbol. now should be value node.
+            int result = Tokenizers::tokenizeExpression(Cast::upcast(assignment), ch, start, context);
+            if (Search::IsTokenized(result)) {
                 assignment->valueNode = context->generatedMainNode;
                 context->scanEnd = true;
                 return result;
             }
             else {
-                //context->scanEnd = true;
-                //context->setError(ErrorCode::syntax_error, start);
+                // no value node found. not found as assignment statement.
+                // equal symbol is found but no value node. invalid syntax. stop scanning and report error.
+                context->scanEnd = true;
+                context->setError(ErrorCode::syntax_error, start);
+                return Search::NOTFOUND;
             }
         }
 
@@ -192,7 +189,7 @@ namespace smart {
         }
 
         int resultPos;
-        if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignment, inner_assignStatementTokenizerMulti,
+        if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignment, tokenizeAssignStatementMulti,
                                                  context, start))) {
             assignment->hasTypeDecl = false;
             assignment->typeOrLet.isLet = false;
@@ -230,7 +227,7 @@ namespace smart {
 
             int resultPos;
             if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignStatement,
-                                                     inner_assignStatementTokenizerMulti,
+                                                     tokenizeAssignStatementMulti,
                                                      context, result))) {
                 context->leftNode = Cast::upcast(&assignStatement->typeOrLet);
                 context->generatedMainNode = Cast::upcast(assignStatement);
