@@ -821,7 +821,7 @@ namespace smart {
         /*
          * TODO: make calcFunc always returns with same register
         if (node->vtable == VTables::CallFuncVTable) {
-            auto *callFunc = Cast::downcast<CallFuncNodeStruct *>(node);
+            auto *callFunc = Cast::downcast<FuncCallNodeStruct *>(node);
 
             node->calcResultReg = PrimitiveCalcRegister::eax;
         }
@@ -1261,8 +1261,8 @@ namespace smart {
 
 
 
-        if (expressionNode->vtable == VTables::CallFuncVTable) {
-            //auto *funcCall = Cast::downcast<CallFuncNodeStruct *>(expressionNode);
+        if (expressionNode->vtable == VTables::FuncCallVTable) {
+            //auto *funcCall = Cast::downcast<FuncCallNodeStruct *>(expressionNode);
             //auto *valueBase = this->evaluateExprNode(funcCall->exprNode);
             // proceed Stack
         }
@@ -1312,8 +1312,8 @@ namespace smart {
         while (statementNode)
         {
             // call func: funcA(100)
-            if (statementNode->vtable == VTables::CallFuncVTable) {
-                auto* funcCall = Cast::downcast<CallFuncNodeStruct*>(statementNode);
+            if (statementNode->vtable == VTables::FuncCallVTable) {
+                auto* funcCall = Cast::downcast<FuncCallNodeStruct*>(statementNode);
                 auto* arg = funcCall->firstArgumentItem;
                 if (arg != nullptr) {
                     while (true) {

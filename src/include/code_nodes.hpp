@@ -344,7 +344,7 @@ namespace smart {
 
 
 
-    /* (?int point = null) */
+    // (?int point = null)
     using FuncParameterItemStruct = struct {
         NODE_HEADER;
         AssignStatementNodeStruct *assignStatementNodeStruct;
@@ -399,7 +399,7 @@ namespace smart {
 
 
     // func(param, param)
-    using CallFuncNodeStruct = struct {
+    using FuncCallNodeStruct = struct {
         NODE_HEADER;
 
         NodeBase *exprNode;
@@ -728,7 +728,7 @@ namespace smart {
 
         Variable = 25,
         Parentheses = 26,
-        CallFunc = 27,
+        FuncCall = 27,
         FuncArgument = 28,
         FuncParameter = 29,
 
@@ -844,7 +844,7 @@ namespace smart {
                 *SpaceVTable,
                 *LineBreakVTable,
                 *ParenthesesVTable,
-                *CallFuncVTable,
+                *FuncCallVTable,
                 *FuncArgumentVTable,
                 *FuncParameterVTable,
 
@@ -1077,7 +1077,7 @@ namespace smart {
         static NumberNodeStruct *newNumberNode(ParseContext *context, NodeBase *parentNode);
         static VariableNodeStruct *newVariableNode(ParseContext *context, NodeBase *parentNode);
         static ParenthesesNodeStruct *newParenthesesNode(ParseContext *context, NodeBase *parentNode);
-        static CallFuncNodeStruct *newFuncCallNode(ParseContext *context, NodeBase *parentNode);
+        static FuncCallNodeStruct *newFuncCallNode(ParseContext *context, NodeBase *parentNode);
 
         static BoolNodeStruct *newBoolNode(ParseContext *context, NodeBase *parentNode);
         static LineBreakNodeStruct *newLineBreakNode(ParseContext *context, NodeBase *parentNode);

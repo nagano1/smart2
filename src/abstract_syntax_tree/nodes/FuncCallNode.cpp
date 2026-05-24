@@ -99,14 +99,12 @@ namespace smart {
 
     // -----------------------------------------------------------------------------------
     //
-    //                              CallFunc Node
+    //                              FuncCall Node
     //
     // -----------------------------------------------------------------------------------
 
-    static CodeLine *callfunc_appendToLine(CallFuncNodeStruct *self, CodeLine *currentCodeLine)
+    static CodeLine *funcCall_appendToLine(FuncCallNodeStruct *self, CodeLine *currentCodeLine)
     {
-        // currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self->exprNode);
-
         if (self->exprNode) {
             currentCodeLine = VTableCall::callAppendToLine(self->exprNode, currentCodeLine);
         }
@@ -135,21 +133,21 @@ namespace smart {
 
 
     // virtual node does not have self text. underlying nodes will be appended to code line.
-    static void copySelfText_CallFunc(CallFuncNodeStruct *self, utf8byte *buf)
+    static void copySelfText_FuncCall(FuncCallNodeStruct *self, utf8byte *buf)
     {
         return;
     }
 
-    static int callfun_selfTextLength(CallFuncNodeStruct *self)
+    static int funcCall_selfTextLength(FuncCallNodeStruct *self)
     {
         return 0;
     }
 
 
-    static constexpr const char callfuncNodeTypeText[] = "<FuncCall>";
+    static constexpr const char funcCallNodeTypeText[] = "<FuncCall>";
 
 
-    static inline void appendRootNode(CallFuncNodeStruct *arr, FuncArgumentItemStruct *arrayItem) {
+    static inline void appendRootNode(FuncCallNodeStruct *arr, FuncArgumentItemStruct *arrayItem) {
         assert(arr != nullptr && arrayItem != nullptr);
 
         if (arr->firstArgumentItem == nullptr) {
@@ -169,7 +167,7 @@ namespace smart {
 
 
 
-    static inline int parseNextValue(TokenizerParams_parent_ch_start_context, CallFuncNodeStruct* funcCallNode)
+    static inline int parseNextValue(TokenizerParams_parent_ch_start_context, FuncCallNodeStruct* funcCallNode)
     {
         int result;
         if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(TokenizerParams_pass))) {
@@ -185,7 +183,7 @@ namespace smart {
 
 
     static int tokenizeFuncCallInternal(TokenizerParams_parent_ch_start_context) {
-        auto *funcCallNode = Cast::downcast<CallFuncNodeStruct*>(parent);
+        auto *funcCallNode = Cast::downcast<FuncCallNodeStruct*>(parent);
 
         if (ch == ')') {
             context->setCodeNode(&funcCallNode->closeNode2);
@@ -244,7 +242,7 @@ namespace smart {
 
 
     static int callfunc_applyFuncToDescendants(
-            CallFuncNodeStruct *node, ApplyFunc_params3)
+            FuncCallNodeStruct *node, ApplyFunc_params3)
     {
         if (parentIsFirst) {
             if (targetVTable == nullptr || node->vtable == targetVTable) {
@@ -272,21 +270,21 @@ namespace smart {
         return 0;
     }
 
-    static node_vtable _callfuncVTable = CREATE_VTABLE(CallFuncNodeStruct,
-                                                             callfun_selfTextLength,
-                                                             copySelfText_CallFunc,
-                                                             callfunc_appendToLine,
-                                                       callfunc_applyFuncToDescendants,
-                                                             callfuncNodeTypeText,
-                                                             NodeTypeId::CallFunc);
+    static node_vtable _funcCallVTable = CREATE_VTABLE(FuncCallNodeStruct,
+                                                             funcCall_selfTextLength,
+                                                             copySelfText_FuncCall,
+                                                             funcCall_appendToLine,
+                                                       funcCall_applyFuncToDescendants,
+                                                             funcCallNodeTypeText,
+                                                             NodeTypeId::FuncCall);
 
-    const node_vtable *VTables::CallFuncVTable = &_callfuncVTable;
+    const node_vtable *VTables::FuncCallVTable = &_funcCallVTable;
 
 
-    CallFuncNodeStruct *Alloc::newFuncCallNode(ParseContext *context, NodeBase *parentNode)
+    FuncCallNodeStruct *Alloc::newFuncCallNode(ParseContext *context, NodeBase *parentNode)
     {
-        auto *node = context->newMem<CallFuncNodeStruct>();
-        INIT_NODE(node, context, parentNode, VTables::CallFuncVTable);
+        auto *node = context->newMem<FuncCallNodeStruct>();
+        INIT_NODE(node, context, parentNode, VTables::FuncCallVTable);
         node->exprNode = nullptr;
         node->parsePhase = phase::EXPECT_VALUE;
 
