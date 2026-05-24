@@ -167,7 +167,6 @@ namespace smart {
         */
 
     }
-
     utf8byte *DocumentUtils::getTypeTextFromTree(DocumentStruct *doc) {
         // get size of chars
         int totalCount = 0;
@@ -192,9 +191,6 @@ namespace smart {
             return nullptr;
         }
 
-        //char *textA = (char *) malloc(sizeof(char) * totalCount + 1);
-        //char textB[256] = {0};
-        
         // malloc and copy text
         auto *text = (char *) malloc(sizeof(char) * totalCount + 1);
         {
@@ -203,28 +199,23 @@ namespace smart {
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    {
-                        auto *chs = VTableCall::typeText(node);
-                        size_t len = VTableCall::typeTextLength(node);
-                        memcpy(text + currentOffset, chs, len);
-                        currentOffset += len;
+                    auto *chs = VTableCall::typeText(node);
+                    size_t len = VTableCall::typeTextLength(node);
+                    memcpy(text + currentOffset, chs, len);
+                    currentOffset += len;
+
+                    if (node->prev_chars > 0) {
+                        for (int i = 0; i < node->prev_chars; i++) {
+                            text[currentOffset] = ' ';
+                            currentOffset++;
+                        }
                     }
 
-                    {
-                        if (node->prev_chars > 0) {
-                            for (int i = 0; i < node->prev_chars; i++) {
-                                text[currentOffset] = ' ';
-                                currentOffset++;
-                            }
-                        }
-
-                        size_t len = VTableCall::selfTextLength(node);
-                        if (len > 0) {
-                            VTableCall::copySelfText(node, text + currentOffset);
-                            //memcpy(text + currentOffset, chs, len);
-                        }
-                        currentOffset += len;
+                    size_t len = VTableCall::selfTextLength(node);
+                    if (len > 0) {
+                        VTableCall::copySelfText(node, text + currentOffset);
                     }
+                    currentOffset += len;
 
                     node = node->nextNodeInLine;
                 }

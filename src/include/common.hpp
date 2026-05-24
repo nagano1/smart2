@@ -46,7 +46,7 @@ namespace Search {
 
     static inline bool IsPositionChanged(int result) {
         return result > -1;
-}
+    }
 }
 
 template<class T>
