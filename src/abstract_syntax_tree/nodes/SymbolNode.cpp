@@ -20,7 +20,7 @@
 namespace smart {
 
     static CodeLine *appendToLine(SymbolStruct *self, CodeLine *currentCodeLine) {
-        return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
+        return currentCodeLine->AddAttachedFormatNodes(self)->appendNode(self);
     }
 
     static void copySelfText(SymbolStruct *self, utf8byte *buf)

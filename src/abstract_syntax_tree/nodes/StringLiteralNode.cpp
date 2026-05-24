@@ -20,7 +20,7 @@
 namespace smart {
 
     static CodeLine *appendToLine(StringLiteralNodeStruct *self, CodeLine *currentCodeLine) {
-        currentCodeLine = currentCodeLine->addPrevLineBreakNode(self);
+        currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self);
         currentCodeLine->appendNode(self);
 
         return currentCodeLine;

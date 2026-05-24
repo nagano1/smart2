@@ -30,7 +30,7 @@ namespace smart {
     }
 
     static CodeLine *appendToLine(SimpleTextNodeStruct *self, CodeLine *currentCodeLine) {
-        return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
+        return currentCodeLine->AddAttachedFormatNodes(self)->appendNode(self);
     }
 
     static int SimpleTextNodeStruct_applyFuncToDescendants(SimpleTextNodeStruct *node, ApplyFunc_params3)
@@ -81,7 +81,7 @@ namespace smart {
 
     static CodeLine *appendToLineForBlockComment(BlockCommentNodeStruct *self, CodeLine *currentCodeLine)
     {
-        currentCodeLine =  currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
+        currentCodeLine =  currentCodeLine->AddAttachedFormatNodes(self)->appendNode(self);
 
         auto *commentFragment = self->firstCommentFragment;
         while (commentFragment) {

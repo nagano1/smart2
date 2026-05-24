@@ -30,7 +30,7 @@ namespace smart {
 
 
     static CodeLine *appendToLine(SimpleTextNodeStruct *self, CodeLine *currentCodeLine) {
-        return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
+        return currentCodeLine->AddAttachedFormatNodes(self)->appendNode(self);
     }
 
     static int SimpleTextNodeStruct_applyFuncToDescendants(

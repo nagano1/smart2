@@ -47,7 +47,7 @@ namespace smart {
     */
 
     static CodeLine *appendToLine2(BoolNodeStruct *self, CodeLine *currentCodeLine) {
-        return currentCodeLine->addPrevLineBreakNode(self)->appendNode(self);
+        return currentCodeLine->AddAttachedFormatNodes(self)->appendNode(self);
     }
 
     static void copySelfText2(BoolNodeStruct *self, utf8byte *buf) {
@@ -129,7 +129,7 @@ namespace smart {
     {
         assert(self->text != nullptr);
 
-        currentCodeLine = currentCodeLine->addPrevLineBreakNode(self);
+        currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self);
         currentCodeLine->appendNode(self);
 
         return currentCodeLine;
@@ -268,7 +268,7 @@ namespace smart {
     static CodeLine *parentheses_appendToLine(ParenthesesNodeStruct *self, CodeLine *currentCodeLine)
     {
         // (
-        currentCodeLine = currentCodeLine->addPrevLineBreakNode(self)
+        currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self)
                                          ->appendNode(self);
 
         auto *openCodeLine = currentCodeLine;

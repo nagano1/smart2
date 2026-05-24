@@ -43,7 +43,7 @@ namespace smart {
 
     static CodeLine *appendToLine(ClassNodeStruct *classNode, CodeLine *currentCodeLine) {
 
-        currentCodeLine = currentCodeLine->addPrevLineBreakNode(classNode);
+        currentCodeLine = currentCodeLine->AddAttachedFormatNodes(classNode);
         currentCodeLine->appendNode(classNode);
 
 

@@ -26,7 +26,7 @@ namespace smart
     static constexpr int size_of_let = sizeof(let_chars) - 1;
 
     static CodeLine *appendToLine(TypeNodeStruct *self, CodeLine *currentCodeLine) {
-        currentCodeLine = currentCodeLine->addPrevLineBreakNode(self);
+        currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self);
         currentCodeLine->appendNode(self);
 
         return currentCodeLine;

@@ -19,9 +19,11 @@
 namespace smart {
     /**
      *  EndOfFile Struct
+     * EndOfFile node is a special node that represents the end of the file. It is used to indicate the end of the code and
+     * to attach some format nodes like comments/line-breaks that are after the last code node in the file.
      */
     static CodeLine *appendToLine(EndOfFileNodeStruct *self, CodeLine *currentCodeLine) {
-        currentCodeLine = currentCodeLine->addPrevLineBreakNode(self);
+        currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self);
         currentCodeLine->appendNode(self);
 
         return currentCodeLine;
@@ -45,12 +47,12 @@ namespace smart {
 
 
     static node_vtable _endOfDocVTable = CREATE_VTABLE(EndOfFileNodeStruct,
-                                                             selfTextLength,
-                                                             copySelfText,
-                                                             appendToLine,
-                                                             applyFuncToDescendants,
-                                                             endOfFileTypeText,
-                                                             NodeTypeId::EndOfDoc);
+                                                       selfTextLength,
+                                                       copySelfText,
+                                                       appendToLine,
+                                                       applyFuncToDescendants,
+                                                       endOfFileTypeText,
+                                                       NodeTypeId::EndOfDoc);
 
     const node_vtable *VTables::EndOfFileVTable = &_endOfDocVTable;
 }

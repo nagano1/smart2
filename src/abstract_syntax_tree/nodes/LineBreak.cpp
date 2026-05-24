@@ -36,9 +36,7 @@ namespace smart
     static CodeLine *appendToLine(LineBreakNodeStruct *self, CodeLine *currentCodeLine) {
         auto *currentLineBreakItem = self;
         while (currentLineBreakItem) {
-             // add comments before break. line breaks are not added here because they will be added in the next step
-             // when the line break node itself is appended to the code line,
-            currentCodeLine = currentCodeLine->addPrevLineBreakNode(currentLineBreakItem);
+            currentCodeLine = currentCodeLine->AddAttachedFormatNodes(currentLineBreakItem);
 
             currentCodeLine->appendNode(Cast::upcast(currentLineBreakItem));
 
