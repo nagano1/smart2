@@ -241,7 +241,7 @@ namespace smart {
     }
 
 
-    static int callfunc_applyFuncToDescendants(
+    static int funcCall_applyFuncToDescendants(
             FuncCallNodeStruct *node, ApplyFunc_params3)
     {
         if (parentIsFirst) {
@@ -274,7 +274,7 @@ namespace smart {
                                                              funcCall_selfTextLength,
                                                              copySelfText_FuncCall,
                                                              funcCall_appendToLine,
-                                                       funcCall_applyFuncToDescendants,
+                                                             funcCall_applyFuncToDescendants,
                                                              funcCallNodeTypeText,
                                                              NodeTypeId::FuncCall);
 
