@@ -167,6 +167,21 @@ namespace smart {
         */
 
     }
+
+    // output type text of all nodes in the tree, for debugging
+    // e.g.:
+    // <LineBreak>
+    // <Class>        class<Name> TestCass<LineBreak>
+    // <Symbol>        {<LineBreak>
+    // <fn>            fn<Name> func<Symbol>(<Symbol>)<LineBreak>
+    // <body>            {<LineBreak>
+    // <Type>                let<Name> aw<Symbol> =<number> 242<LineBreak>
+    // <bool>                true<LineBreak>
+    // <NULL>                null<LineBreak>
+    // <Variable>                printf<Symbol>(<FuncArgument><number>214<Symbol>)<LineBreak>
+    // <Symbol>            }<LineBreak>
+    // <Symbol>        }<LineBreak>
+    // <EndOfFile>
     utf8byte *DocumentUtils::getTypeTextFromTree(DocumentStruct *doc) {
         // get size of chars
         int totalBytes = 0;
@@ -178,8 +193,8 @@ namespace smart {
                     if (node->prev_chars > 0) {
                         totalBytes += node->prev_chars;
                     }
-                    int typeTextLen = VTableCall::typeTextLength(node) + VTableCall::selfTextLength(node);
-                    totalBytes += typeTextLen;
+                    int len = VTableCall::typeTextLength(node) + VTableCall::selfTextLength(node);
+                    totalBytes += len;
                     node = node->nextNodeInLine;
                 }
 
@@ -192,40 +207,40 @@ namespace smart {
         }
 
         // malloc and copy text
-        auto *text = (char *) malloc(sizeof(char) * totalBytes + 1);
-        {
-            auto *line = doc->firstCodeLine;
-            size_t currentOffset = 0;
-            while (line) {
-                auto *node = line->firstNode;
-                while (node) {
-                    auto *typeText = VTableCall::typeText(node);
-                    size_t typeTextLen = VTableCall::typeTextLength(node);
-                    memcpy(text + currentOffset, typeText, typeTextLen);
-                    currentOffset += typeTextLen;
+        auto *outputText = (char *) malloc(sizeof(char) * totalBytes + 1);
 
-                    if (node->prev_chars > 0) {
-                        for (int i = 0; i < node->prev_chars; i++) {
-                            text[currentOffset] = ' ';
-                            currentOffset++;
-                        }
+        auto *line = doc->firstCodeLine;
+        size_t currentOffset = 0;
+        while (line) {
+            auto *node = line->firstNode;
+            while (node) {
+                auto *typeText = VTableCall::typeText(node);
+                size_t typeTextLen = VTableCall::typeTextLength(node);
+                memcpy(outputText + currentOffset, typeText, typeTextLen);
+                currentOffset += typeTextLen;
+
+                if (node->prev_chars > 0) {
+                    for (int i = 0; i < node->prev_chars; i++) {
+                        outputText[currentOffset] = ' ';
+                        currentOffset++;
                     }
-
-                    if (typeTextLen > 0) {
-                        VTableCall::copySelfText(node, text + currentOffset);
-                    }
-                    currentOffset += typeTextLen;
-
-                    node = node->nextNodeInLine;
                 }
 
-                line = line->nextLine;
+                int textLen = VTableCall::selfTextLength(node);
+                if (textLen > 0) {
+                    VTableCall::copySelfText(node, outputText + currentOffset);
+                }
+                currentOffset += textLen;
+
+                node = node->nextNodeInLine;
             }
+
+            line = line->nextLine;
         }
 
-        text[totalBytes] = '\0';
+        outputText[totalBytes] = '\0';
 
-        return text;
+        return outputText;
     }
 /*
     static int getTokenTypeId(NodeBase *node, int i)
