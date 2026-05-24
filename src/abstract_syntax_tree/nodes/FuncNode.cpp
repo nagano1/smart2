@@ -393,19 +393,17 @@ namespace smart {
     }
 
 
-    static int FuncNodeStruct_applyFuncToDescendants(
-            FuncNodeStruct *node, ApplyFunc_params3)
+    static int FuncNodeStruct_applyFuncToDescendants(FuncNodeStruct *node, ApplyFunc_params3)
     {
         if (parentIsFirst) {
             if (targetVTable == nullptr || node->vtable == targetVTable) {
                 func(Cast::upcast(node), ApplyFunc_pass);
             }
         }
-        //if (node->bodyNode) {
-            node->bodyNode.vtable->applyFuncToDescendants(
-                    reinterpret_cast<NodeBase *>(&node->bodyNode),
-                    ApplyFunc_pass2);
-        //}
+        assert(node->bodyNode);
+        node->bodyNode.vtable->applyFuncToDescendants(
+                reinterpret_cast<NodeBase *>(&node->bodyNode),
+                ApplyFunc_pass2);
 
         if (!parentIsFirst) {
             if (targetVTable == nullptr || node->vtable == targetVTable) {
@@ -419,11 +417,12 @@ namespace smart {
     static constexpr const char fnTypeText[] = "<fn>";
 
     static node_vtable _fnVTable = CREATE_VTABLE(FuncNodeStruct,
-                                                       selfTextLength,
-                                                       copySelfText,
-                                                       appendToLine,
+                                                 selfTextLength,
+                                                 copySelfText,
+                                                 appendToLine,
                                                  FuncNodeStruct_applyFuncToDescendants,
-                                                       fnTypeText, NodeTypeId::Func);
+                                                 fnTypeText,
+                                                 NodeTypeId::Func);
 
     const struct node_vtable *VTables::FnVTable = &_fnVTable;
 
