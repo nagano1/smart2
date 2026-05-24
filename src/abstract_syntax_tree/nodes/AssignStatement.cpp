@@ -19,8 +19,11 @@
 
 namespace smart {
 
-    // --------------------- AssignStatement VTable ---------------------- //
-
+    // Assignment or variable declaration statement. It can be with or without type declaration. e.g.
+    //     a = 3; // assignment without type declaration
+    //     int a = 3; // assignment with type declaration
+    //     int a; // variable declaration without assignment
+    // this struct is also used in method parameters, e.g. fn func(int a, string *b) { ... }.
     static int selfTextLength(AssignStatementNodeStruct *)
     {
         return 0;
@@ -47,9 +50,8 @@ namespace smart {
         if (self->equalSymbol.foundPos > -1) {
             currentCodeLine = VTableCall::callAppendToLine(&self->equalSymbol, currentCodeLine);
 
-            if (self->valueNode) {
-                currentCodeLine = VTableCall::callAppendToLine(self->valueNode, currentCodeLine);
-            }
+            assert(self->valueNode); // if equal symbol exists, value node must exist, otherwise tokenizer throws syntax errors.
+            currentCodeLine = VTableCall::callAppendToLine(self->valueNode, currentCodeLine);
         }
 
         return currentCodeLine;
