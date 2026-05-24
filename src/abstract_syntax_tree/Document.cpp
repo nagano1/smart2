@@ -169,17 +169,17 @@ namespace smart {
     }
     utf8byte *DocumentUtils::getTypeTextFromTree(DocumentStruct *doc) {
         // get size of chars
-        int totalCount = 0;
+        int totalBytes = 0;
         {
             auto *line = doc->firstCodeLine;
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
                     if (node->prev_chars > 0) {
-                        totalCount += node->prev_chars;
+                        totalBytes += node->prev_chars;
                     }
-                    int len = VTableCall::typeTextLength(node) + VTableCall::selfTextLength(node);
-                    totalCount += len;
+                    int typeTextLen = VTableCall::typeTextLength(node) + VTableCall::selfTextLength(node);
+                    totalBytes += typeTextLen;
                     node = node->nextNodeInLine;
                 }
 
@@ -187,22 +187,22 @@ namespace smart {
             }
         }
 
-        if (totalCount == 0) {
+        if (totalBytes == 0) {
             return nullptr;
         }
 
         // malloc and copy text
-        auto *text = (char *) malloc(sizeof(char) * totalCount + 1);
+        auto *text = (char *) malloc(sizeof(char) * totalBytes + 1);
         {
             auto *line = doc->firstCodeLine;
             size_t currentOffset = 0;
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    auto *chs = VTableCall::typeText(node);
-                    size_t len = VTableCall::typeTextLength(node);
-                    memcpy(text + currentOffset, chs, len);
-                    currentOffset += len;
+                    auto *typeText = VTableCall::typeText(node);
+                    size_t typeTextLen = VTableCall::typeTextLength(node);
+                    memcpy(text + currentOffset, typeText, typeTextLen);
+                    currentOffset += typeTextLen;
 
                     if (node->prev_chars > 0) {
                         for (int i = 0; i < node->prev_chars; i++) {
@@ -211,11 +211,10 @@ namespace smart {
                         }
                     }
 
-                    size_t len = VTableCall::selfTextLength(node);
-                    if (len > 0) {
+                    if (typeTextLen > 0) {
                         VTableCall::copySelfText(node, text + currentOffset);
                     }
-                    currentOffset += len;
+                    currentOffset += typeTextLen;
 
                     node = node->nextNodeInLine;
                 }
@@ -224,7 +223,7 @@ namespace smart {
             }
         }
 
-        text[totalCount] = '\0';
+        text[totalBytes] = '\0';
 
         return text;
     }
