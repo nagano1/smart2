@@ -122,14 +122,4 @@ namespace smart {
         name->name = nullptr;
         name->nameLength = 0;
     }
-
-    /*
-    Not used
-    NameNodeStruct *Allocator::newNameNode(ParseContext *context, NodeBase *parentNode) {
-        auto *node = (NameNodeStruct *) malloc(sizeof(NameNodeStruct));
-        INIT_NODE(node, context, VTables::NameVTable);
-        node->parentNode = parentNode;
-        return node;
-    }
-    */
 }
