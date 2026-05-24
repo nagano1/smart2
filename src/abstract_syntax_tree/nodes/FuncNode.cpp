@@ -46,6 +46,7 @@ namespace smart {
     };
 
 
+    // virtual node does not have self text. underlying nodes will be appended to code line.
     static void copySelfText_FuncArgument(FuncArgumentItemStruct *self, utf8byte *buf) {
         return;
     }
@@ -138,7 +139,7 @@ namespace smart {
     }
 
 
-    // virtual node
+    // virtual node does not have self text. underlying nodes will be appended to code line.
     static void copySelfText_CallFunc(CallFuncNodeStruct *self, utf8byte *buf)
     {
         return;

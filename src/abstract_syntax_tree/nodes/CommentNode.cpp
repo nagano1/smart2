@@ -69,13 +69,13 @@ namespace smart {
 
 
 
-
+    // virtual node does not have self text. underlying nodes will be appended to code line.
     static void copySelfText_blockcomment(BlockCommentNodeStruct *self, char *buf) {
         return;
     }
 
     static int selfTextLength_blockcomment(BlockCommentNodeStruct *self) {
-        return 0; //self->textLength;
+        return 0;
     }
 
 

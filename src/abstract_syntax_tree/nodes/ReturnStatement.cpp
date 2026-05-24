@@ -21,13 +21,14 @@ namespace smart {
 
     // --------------------- Defines ReturnStatement VTable ---------------------- /
 
-    static int selfTextLength(ReturnStatementNodeStruct *) {
-        // virtual node
+    // virtual node does not have self text. underlying nodes will be appended to code line.
+    static int selfTextLength(ReturnStatementNodeStruct *)
+    {
         return 0;
     }
 
-    static void copySelfText(ReturnStatementNodeStruct *self, utf8byte *buf) {
-        // virtual node
+    static void copySelfText(ReturnStatementNodeStruct *self, utf8byte *buf)
+    {
     }
 
     static CodeLine *appendToLine(ReturnStatementNodeStruct*self, CodeLine *currentCodeLine) {

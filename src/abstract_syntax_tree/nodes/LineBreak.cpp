@@ -34,12 +34,15 @@ namespace smart
     }
 
     static CodeLine *appendToLine(LineBreakNodeStruct *self, CodeLine *currentCodeLine) {
-        auto *next = self;
-        while (next) {
-            currentCodeLine = currentCodeLine->addPrevLineBreakNode(next); // add space before break
+        auto *currentLineBreakItem = self;
+        while (currentLineBreakItem) {
+            //currentCodeLine = currentCodeLine->addPrevLineBreakNode(currentLineBreakItem); // add space before break
 
-            currentCodeLine->appendNode(Cast::upcast(next));
-            
+            currentCodeLine->appendNode(Cast::upcast(currentLineBreakItem));
+
+            // if there are multiple line breaks in a row, we need to add them all to the code line,
+            // and the depth of the code line will be increased by 1 for each line break,
+            // so that the nodes after the line breaks will be in the new line with correct indentation
             auto *newNextLine = self->context->newCodeLine();
             newNextLine->init(self->context);
 
@@ -48,7 +51,7 @@ namespace smart
 
             currentCodeLine->depth = self->context->parentDepth + 1;
 
-            next = next->nextLineBreakNode;
+            currentLineBreakItem = currentLineBreakItem->nextLineBreakNode;
         }
         
         return currentCodeLine;

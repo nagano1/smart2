@@ -58,6 +58,7 @@ namespace smart {
         return currentCodeLine;
     }
 
+    // virtual node does not have self text. underlying nodes will be appended to code line.
     static void copySelfText_binaryOp(BinaryOperationNodeStruct *self, utf8byte *buf)
     {
     }

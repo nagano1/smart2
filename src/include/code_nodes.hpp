@@ -974,6 +974,9 @@ namespace smart {
         }
 
         // append line break node and comment node before the line
+        // lines are generated from bottom to top,
+        // so line break nodes and comment nodes are generated before the code node,
+        // and they are appended to the line when the code node is appended to the line.
         CodeLine *addPrevLineBreakNode(void *node) {
             CodeLine *currentCodeLine = this;
 
