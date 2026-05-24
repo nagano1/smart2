@@ -111,7 +111,7 @@ namespace smart {
 		while (line) {
 			auto* node = line->firstNode;
 			if (line->depth > 0 && node->vtable != VTables::LineBreakVTable) {
-				int nodeIndent = node->prev_chars;
+				int nodeIndent = node->prevSpaceCount;
 				bool ok = false;
 				if (node->vtable == VTables::BlockCommentFragmentVTable) {
 					auto fragment = Cast::downcast<BlockCommentFragmentStruct*>(node);
@@ -147,12 +147,12 @@ namespace smart {
 
 			// modify indent
 			if (justKeepRule) {
-				if (firstElement->prev_chars >= line->depth * baseIndent) {
+				if (firstElement->prevSpaceCount >= line->depth * baseIndent) {
 					return;
 				}
 			}
 			int textLen = static_cast<int>(line->depth * baseIndent);
-			firstElement->prev_chars = textLen;
+			firstElement->prevSpaceCount = textLen;
 		}
 	}
 

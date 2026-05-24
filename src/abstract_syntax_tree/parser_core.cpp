@@ -185,8 +185,8 @@ namespace smart
         {
             if (whitespace_startpos != -1) {
                 assert(whitespace_startpos < endIndex);
-                // prev_chars allows only ascii whitespace. Japanese whitespaces are not allowed.
-                commentNode->prev_chars = endIndex - whitespace_startpos;
+                // prevSpaceCount allows only ascii whitespace. Japanese whitespaces are not allowed.
+                commentNode->prevSpaceCount = endIndex - whitespace_startpos;
                 whitespace_startpos = -1;
             }
         }

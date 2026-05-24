@@ -114,27 +114,24 @@ namespace smart {
 
 
     utf8byte *DocumentUtils::getTextFromNode(NodeBase *node) {
-        //printf("tset; %s", node->vtable->typeChars);
-        //fflush(stdout);
         int len = VTableCall::selfTextLength(node);
+        int spaceCount = node->prevSpaceCount;
+        auto *text = (char *) node->context->newMemArray<char>(len + 1 + spaceCount);
 
-        int prev_char = node->prev_chars; // = '\0' ? 1 : 0;
-        auto *text = (char *) node->context->newMemArray<char>(len + 1 + prev_char);
-
-        for (int i = 0; i < prev_char; i++) {
+        for (int i = 0; i < spaceCount; i++) {
             text[i] = ' ';
         }
 
         if (len > 0) {
-            VTableCall::copySelfText(node, text +  prev_char);
+            VTableCall::copySelfText(node, text +  spaceCount);
 
-            if (text[len + prev_char] == '\0') {
+            if (text[len + spaceCount] == '\0') {
             } else {
                 // int k = 32;
             }
         }
 
-        text[len + prev_char] = '\0';
+        text[len + spaceCount] = '\0';
         return text;
     }
 
@@ -168,8 +165,7 @@ namespace smart {
 
     }
 
-    // output type text of all nodes in the tree, for debugging
-    // e.g.:
+    // output type text of all nodes in the tree, for debugging, example:
     // <LineBreak>
     // <Class>        class<Name> TestCass<LineBreak>
     // <Symbol>        {<LineBreak>
@@ -190,8 +186,8 @@ namespace smart {
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    if (node->prev_chars > 0) {
-                        totalBytes += node->prev_chars;
+                    if (node->prevSpaceCount > 0) {
+                        totalBytes += node->prevSpaceCount;
                     }
                     int len = VTableCall::typeTextLength(node) + VTableCall::selfTextLength(node);
                     totalBytes += len;
@@ -219,8 +215,8 @@ namespace smart {
                 memcpy(outputText + currentOffset, typeText, typeTextLen);
                 currentOffset += typeTextLen;
 
-                if (node->prev_chars > 0) {
-                    for (int i = 0; i < node->prev_chars; i++) {
+                if (node->prevSpaceCount > 0) {
+                    for (int i = 0; i < node->prevSpaceCount; i++) {
                         outputText[currentOffset] = ' ';
                         currentOffset++;
                     }
@@ -423,7 +419,7 @@ namespace smart {
                     int charPos = 0;
                     int prevStart = 0;
                     while (node) {
-                        charPos += node->prev_chars;
+                        charPos += node->prevSpaceCount;
 
                         char *dst = text != nullptr ? text + totalByteCount : buff;
                         int writeBytes = addSemanticTokens(node, dst, currentLineNo, &first,
@@ -463,8 +459,8 @@ namespace smart {
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    if (node->prev_chars > 0) {
-                        totalCount += node->prev_chars;
+                    if (node->prevSpaceCount > 0) {
+                        totalCount += node->prevSpaceCount;
                     }
                     int len = VTableCall::selfTextLength(node);
                     totalCount += len;
@@ -484,8 +480,8 @@ namespace smart {
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    if (node->prev_chars > 0) {
-                        for (int i = 0; i < node->prev_chars; i++) {
+                    if (node->prevSpaceCount > 0) {
+                        for (int i = 0; i < node->prevSpaceCount; i++) {
                             text[currentOffset] = ' ';
                             currentOffset++;
                         }
@@ -614,7 +610,7 @@ namespace smart {
             }
 
             docStruct->lastRootNode = Cast::upcast(&docStruct->endOfFile);
-            docStruct->lastRootNode->prev_chars = context->remaindPrevChars;
+            docStruct->lastRootNode->prevSpaceCount = context->remaindPrevChars;
             docStruct->lastRootNode->prevLineBreakNode = context->remainedLineBreakNode;
             docStruct->lastRootNode->prevCommentNode = context->remainedCommentNode;
 

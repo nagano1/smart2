@@ -621,7 +621,7 @@ namespace smart {
         NodeBase *currenNode = codeLine->firstNode;
         while (currenNode) {
 
-            utf16Pos += currenNode->prev_chars;
+            utf16Pos += currenNode->prevSpaceCount;
 
             if (currenNode == node) {
                 if (beginningPos) {
