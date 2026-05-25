@@ -59,26 +59,24 @@ namespace smart {
 
 
         // find the closing quote, and count the length of the literal text
-        {
-            bool escapeMode = false;
+        bool escapeMode = false;
 
-            for (int_fast32_t i = start + 1; i < context->length; i++) {
-                strLength++;
+        for (int_fast32_t i = start + 1; i < context->length; i++) {
+            strLength++;
 
-                if (escapeMode) {
-                    escapeMode = false;
-                    continue;
-                }
+            if (escapeMode) {
+                escapeMode = false;
+                continue;
+            }
 
-                if (context->chars[i] == '\\') {
-                    escapeMode = true;
-                    continue;
-                }
+            if (context->chars[i] == '\\') {
+                escapeMode = true;
+                continue;
+            }
 
-                if (context->chars[i] == quoteChar) {
-                    endsWithQuote = true;
-                    break;
-                }
+            if (context->chars[i] == quoteChar) {
+                endsWithQuote = true;
+                break;
             }
         }
 
@@ -93,7 +91,7 @@ namespace smart {
         Init::initStringLiteralNode(strLiteralNode, context, parent);
         context->setCodeNode(strLiteralNode);
 
-        strLiteralNode->text = context->memBuffer.newMem<char>(strLength + 1);
+        strLiteralNode->text = context->memBuffer.newText(strLength);
         strLiteralNode->textLength = strLength;
 
         memcpy(strLiteralNode->text, context->chars + start, strLength);

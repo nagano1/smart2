@@ -129,11 +129,14 @@ struct MemBuffer {
         return (T *) this->newMem<T>(len);
     }
 
-
     template<typename Type>
     Type *newMem(unsigned int count) {
         auto bytes = st_size_of(Type) * count;
         return (Type*)this->newBytesMem(bytes);
+    }
+    utf8byte *newText(unsigned int count) {
+        auto bytes = st_size_of(utf8byte) * (count + 1); // 1 for null terminator
+        return (utf8byte*)this->newBytesMem(bytes);
     }
 
     void *newBytesMem(unsigned int bytes) {

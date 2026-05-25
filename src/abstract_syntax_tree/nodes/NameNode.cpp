@@ -54,7 +54,7 @@ namespace smart {
             auto *nameNode = Cast::downcast<NameNodeStruct *>(parent);
 
             context->setCodeNode(nameNode);
-            nameNode->name = context->memBuffer.newMem<char>(found_count + 1);
+            nameNode->name = context->memBuffer.newText(found_count);
             nameNode->nameLength = found_count;
             nameNode->foundPos = start;
 

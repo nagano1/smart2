@@ -43,7 +43,7 @@ void VoidHashMap::put(const char *keyA, int keyLength, void* val) const
         this->entries[hashInt] = newHashNode;
 
 
-        char *keyB = this->memBuffer->newMem<char>(keyLength + 1);
+        char *keyB = this->memBuffer->newText(keyLength);
         for (int i = 0; i < keyLength; i++) {
             keyB[i] = keyA[i];
         }
@@ -77,7 +77,7 @@ void VoidHashMap::put(const char *keyA, int keyLength, void* val) const
 
 
     auto *newHashNode = this->memBuffer->newMem<VoidHashNode>(1);
-    char *keyB =  this->memBuffer->newMemArray<char>(keyLength + 1);
+    char *keyB =  this->memBuffer->newText(keyLength);
     for (int i = 0; i < keyLength; i++) {
         keyB[i] = keyA[i];
     }

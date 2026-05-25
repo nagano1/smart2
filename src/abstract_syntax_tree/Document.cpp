@@ -97,7 +97,7 @@ namespace smart {
     utf8byte *DocumentUtils::getTextFromNode(NodeBase *node) {
         int len = VTableCall::selfTextLength(node);
         int spaceCount = node->prevSpaceCount;
-        auto *text = (char *) node->context->newMemArray<char>(len + 1 + spaceCount);
+        auto *text = node->context->newText(len + spaceCount);
 
         for (int i = 0; i < spaceCount; i++) {
             text[i] = ' ';

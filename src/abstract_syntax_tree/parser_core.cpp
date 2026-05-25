@@ -57,7 +57,7 @@ namespace smart
             {
                 tagLength = endOfStartTagPos - nameStartPos;
                 textStartPos = endOfStartTagPos + 1;
-                tagText = context->memBuffer.newMem<char>(tagLength + 1);
+                tagText = context->memBuffer.newText(tagLength);
                 TEXT_MEMCPY(tagText, context->chars + nameStartPos, tagLength);
                 tagText[tagLength] = '\0';
             }

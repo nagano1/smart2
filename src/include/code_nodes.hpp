@@ -554,6 +554,9 @@ namespace smart {
         T *newMemArray(st_size len) {
             return (T *) memBuffer.newMem<T>(len);
         }
+        utf8byte *newText(st_size len) {
+            return memBuffer.newText(len);
+        }
 
 
         LineBreakNodeStruct *newLineBreakNode() {
@@ -1162,7 +1165,7 @@ namespace smart {
                     auto *boolNode = (SimpleTextNodeStruct*)(genereater(context, parent));
                     //Init::initSimpleTextNode(boolNode, context, parent, 3);
 
-                    boolNode->text = context->memBuffer.newMem<char>(length + 1);
+                    boolNode->text = context->memBuffer.newText(length);
                     boolNode->textLength = length;
 
                     TEXT_MEMCPY(boolNode->text, context->chars + start, length);

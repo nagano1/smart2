@@ -102,7 +102,7 @@ namespace smart {
     {
         INIT_NODE(textNode, context, parentNode, VTables::SimpleTextVTable);
 
-        textNode->text = context->memBuffer.newMem<char>(charLen + 1);
+        textNode->text = context->memBuffer.newText(charLen);
         textNode->textLength = charLen;
 
         //TEXT_MEMCPY(boolNode->text, context->chars + start, length);
@@ -111,7 +111,7 @@ namespace smart {
 
     void Init::assignText_SimpleTextNode(SimpleTextNodeStruct *textNode, ParseContext *context, int pos, int charLen)
     {
-        textNode->text = context->memBuffer.newMem<char>(charLen + 1);
+        textNode->text = context->memBuffer.newText(charLen);
         textNode->textLength = charLen;
 
         if (charLen > 0) {
