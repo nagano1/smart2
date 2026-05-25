@@ -125,20 +125,22 @@ namespace smart {
     }
 
 
+    // tokenizer for binary operation, e.g. a + b
+    // left expression is already tokenized. this tokenizer will try to tokenize operator and right expression.
     int Tokenizers::binaryOperationTokenizer(TokenizerParams_argNode_ch_start_context)
     {
         NodeBase *parent = argNode;
         assert(context->generatedMainNode != nullptr);
 
-        auto *virtualNode = context->generatedMainNode;
-        auto *leftNode = context->mostLeftNode;
+        auto *leftExpressionNode = context->generatedMainNode;
+        //auto *leftNode = context->mostLeftNode;
 
         int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, context, start);
-        context->mostLeftNode = leftNode;
+        //context->mostLeftNode = leftNode;
 
         if (Search::IsTokenized(resultPos)) {
             auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainNode);
-            binaryOpNode->leftExprNode = virtualNode;
+            binaryOpNode->leftExprNode = leftExpressionNode;
             binaryOpNode->leftExprNode->parentNode = Cast::upcast(binaryOpNode);
 
             if (Search::IsTokenized(resultPos = Scanner::scanOnce(binaryOpNode,
@@ -146,7 +148,7 @@ namespace smart {
                                                     context, resultPos))) {
                 binaryOpNode->rightExprNode = context->generatedMainNode;
                 context->generatedMainNode = Cast::upcast(binaryOpNode);
-                context->mostLeftNode = leftNode;
+                //context->mostLeftNode = leftNode;
                 return resultPos;
             }
         }

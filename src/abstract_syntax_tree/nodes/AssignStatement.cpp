@@ -230,7 +230,7 @@ namespace smart {
             if (Search::IsTokenized(resultPos = Scanner::scanLoop(assignStatement,
                                                      tokenizeAssignStatementLoop,
                                                      context, result))) {
-                context->mostLeftNode = Cast::upcast(&assignStatement->typeOrLet);
+                // context->mostLeftNode = Cast::upcast(&assignStatement->typeOrLet);
                 context->generatedMainNode = Cast::upcast(assignStatement);
 
                 return resultPos;
