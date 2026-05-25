@@ -30,11 +30,17 @@ namespace smart {
     static CodeLine *appendToLine(DocumentStruct *self, CodeLine *currentCodeLine)
     {
         auto *child = self->firstRootNode;
+        bool endOfFileAppended = false;
         while (child) {
+            if (child == Cast::upcast(&self->endOfFile)) {
+                endOfFileAppended = true;
+            }
             currentCodeLine = VTableCall::callAppendToLine(child, currentCodeLine);
             child = child->nextNode;
         }
-        //currentCodeLine = VTableCall::callAppendToLine(&self->endOfFile, currentCodeLine);
+        if (!endOfFileAppended) {
+            currentCodeLine = VTableCall::callAppendToLine(&self->endOfFile, currentCodeLine);
+        }
         return currentCodeLine;
     }
 
