@@ -34,7 +34,7 @@ namespace smart {
             currentCodeLine = VTableCall::callAppendToLine(child, currentCodeLine);
             child = child->nextNode;
         }
-        currentCodeLine = VTableCall::callAppendToLine(&self->endOfFile, currentCodeLine);
+        //currentCodeLine = VTableCall::callAppendToLine(&self->endOfFile, currentCodeLine);
         return currentCodeLine;
     }
 
