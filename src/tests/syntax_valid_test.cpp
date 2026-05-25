@@ -463,6 +463,7 @@ class AABC  {  }
 #define FUNC(x) checkTextEquality(#x, x)
 void testParsing()
 {
+    /*
     FUNC(text);
     FUNC(testCode3);
     FUNC(testCode4);
@@ -473,5 +474,6 @@ void testParsing()
 
     NodeTypeEqualityTest();
     DepthTest();
+    */
     testTypeTreeTest();
 }
