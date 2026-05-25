@@ -304,6 +304,7 @@ namespace smart
         InternalParsingData parsingData;
         context->isAfterLineBreak = false;
         int lastTokenizedPos = context->lastTokenizedPos;
+        NodeBase* firstTokenizedLeftNode = nullptr;
 
         for (int32_t i = start; i <= context->length;) {
             ch = context->chars[i];
@@ -336,6 +337,9 @@ namespace smart
             }
 
             if (result > -1) {
+                if (firstTokenizedLeftNode == nullptr) {
+                    firstTokenizedLeftNode = context->mostLeftNode;
+                }
                 context->isAfterLineBreak = false;
                 context->lastTokenizedPos = result;
 
@@ -356,6 +360,10 @@ namespace smart
             context->lastTokenizedPos = lastTokenizedPos; // reset lastTokenizedPos if not found
         }
         context->scanEnd = false; // reset scanEnd for the next scan
+        if (firstTokenizedLeftNode != nullptr) {
+            context->mostLeftNode = firstTokenizedLeftNode;
+        }
+        context->firstTokenizedLeftNode = firstTokenizedLeftNode;
         return parsingData;
     }
 
