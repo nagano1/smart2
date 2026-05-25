@@ -60,7 +60,7 @@ struct ParseUtil {
     /// match target at startIndex with trim, and ensure the char after target is terminatable char
     /// trim means it allows spaces and line breaks before target
     template<int SIZE>
-    static int matchAt(const char *chars, int charsLength, int startIndex, const char(&target)[SIZE])
+    static int matchWordWithTerminatableEnd(const char *chars, int charsLength, int startIndex, const char(&target)[SIZE])
     {
         int pos = _matchFirstWithTrim(chars, charsLength, target, startIndex);
         if (pos > -1) {

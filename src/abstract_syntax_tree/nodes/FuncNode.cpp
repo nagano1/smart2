@@ -484,7 +484,7 @@ namespace smart {
         }
 
         // fn
-        auto idx = ParseUtil::matchAt(context->chars, context->length, start, fn_chars);
+        auto idx = ParseUtil::matchWordWithTerminatableEnd(context->chars, context->length, start, fn_chars);
         if (idx == -1) {
             return Search::NOTFOUND;
         }

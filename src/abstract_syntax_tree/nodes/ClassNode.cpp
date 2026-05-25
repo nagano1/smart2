@@ -187,7 +187,7 @@ namespace smart {
         NodeBase *parent = argNode;
 
         if ('c' == ch) {
-            auto idx = ParseUtil::matchAt(context->chars, context->length, start, class_chars);
+            auto idx = ParseUtil::matchWordWithTerminatableEnd(context->chars, context->length, start, class_chars);
             if (idx > -1) {
                 int currentPos = idx + size_of_class;
                 int resultPos;

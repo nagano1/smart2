@@ -1165,7 +1165,7 @@ namespace smart {
         {
             if (capitalLetter == ch) {
                 int length = st_size_of(word) - 1;
-                if (ParseUtil::matchAt(context->chars, context->length, start, word) > -1 ) {
+                if (ParseUtil::matchWordWithTerminatableEnd(context->chars, context->length, start, word) > -1 ) {
                     auto *boolNode = (SimpleTextNodeStruct*)(genereater(context, argNode));
                     //Init::initSimpleTextNode(boolNode, context, parent, 3);
 

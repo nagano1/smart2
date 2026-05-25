@@ -139,7 +139,7 @@ namespace smart {
             return Search::NOTFOUND;
         }
 
-        auto idx = ParseUtil::matchAt(context->chars, context->length, start, returnText);
+        auto idx = ParseUtil::matchWordWithTerminatableEnd(context->chars, context->length, start, returnText);
         if (idx > -1) {
             auto *returnNode = Alloc::newReturnStatement(context, argNode);
             Init::assignText_SimpleTextNode(&returnNode->returnText, context, start, returnTextSize);
