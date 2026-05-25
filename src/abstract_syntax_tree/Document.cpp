@@ -544,7 +544,7 @@ namespace smart {
         
         if (!context->syntaxErrorInfo.hasError) {
             if (docStruct->lastRootNode) {
-                docStruct->lastRootNode->nextNode = Cast::upcast(&docStruct->endOfFile);
+                //docStruct->lastRootNode->nextNode = Cast::upcast(&docStruct->endOfFile);
             }
 
             docStruct->lastRootNode = Cast::upcast(&docStruct->endOfFile);
