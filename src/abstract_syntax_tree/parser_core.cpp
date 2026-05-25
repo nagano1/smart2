@@ -385,7 +385,7 @@ namespace smart
         context->remainedLineBreakNode = parsingData.firstLineBreak;
         context->remainedCommentNode = parsingData.commentNode;
         if (parsingData.whitespace_startpos > -1 && parsingData.whitespace_startpos < context->length) {
-            context->remaindPrevChars = context->length - parsingData.whitespace_startpos;
+            context->remainedSpaceCount = context->length - parsingData.whitespace_startpos;
         }
 
         return parsingData.returnPos;

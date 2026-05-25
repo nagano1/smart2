@@ -527,7 +527,7 @@ namespace smart {
         context->remainedLineBreakNode = nullptr;
         context->remainedCommentNode = nullptr;
 
-        context->remaindPrevChars = 0;
+        context->remainedSpaceCount = 0;
         context->baseIndent = 4;
         context->parentDepth = -1;
         context->arithmeticBaseDepth = -1;
@@ -549,7 +549,7 @@ namespace smart {
                 docStruct->firstRootNode = Cast::upcast(&docStruct->endOfFile);
             }
             docStruct->lastRootNode = Cast::upcast(&docStruct->endOfFile);
-            docStruct->lastRootNode->prevSpaceCount = context->remaindPrevChars;
+            docStruct->lastRootNode->prevSpaceCount = context->remainedSpaceCount;
             docStruct->lastRootNode->prevLineBreakNode = context->remainedLineBreakNode;
             docStruct->lastRootNode->prevCommentNode = context->remainedCommentNode;
 

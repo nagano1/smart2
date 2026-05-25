@@ -523,7 +523,7 @@ namespace smart {
 
         LineBreakNodeStruct *remainedLineBreakNode;
         void *remainedCommentNode;
-        int remaindPrevChars{0};
+        int remainedSpaceCount{0};
 
         MemBuffer memBuffer;
         MemBuffer memBufferForCodeLines;
