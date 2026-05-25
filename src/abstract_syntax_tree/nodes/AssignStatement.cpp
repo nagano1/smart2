@@ -189,13 +189,12 @@ namespace smart {
             context->unusedAssignment = nullptr;
         }
 
-        int resultPos;
-        if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignment, tokenizeAssignStatementMulti,
-                                                 context, start))) {
+        int resultPos = Scanner::scanMulti(assignment, tokenizeAssignStatementMulti, context, start);
+        if (Search::IsTokenized(resultPos)) {
             assignment->hasTypeDecl = false;
             assignment->typeOrLet.isLet = false;
 
-            context->leftNode = Cast::upcast(&assignment->nameNode);
+            //context->leftNode = Cast::upcast(&assignment->nameNode);
             context->generatedMainNode = Cast::upcast(assignment);
 
             return resultPos;
