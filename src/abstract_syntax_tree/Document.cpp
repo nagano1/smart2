@@ -72,14 +72,6 @@ namespace smart {
         doc->nodeCount = 0;
 
         context->init();
-
-        /*
-        context->spaceBufferList.init();
-        context->lineBreakBufferList.init();
-        context->charBuffer.init();
-        context->codeLineBufferList.init();
-         */
-
         return doc;
     }
 
@@ -96,17 +88,6 @@ namespace smart {
      */
 
     void Alloc::deleteDocument(DocumentStruct *doc) {
-        /*
-        auto *node = doc->firstRootNode;
-        while (node) {
-            auto *nextNode = node->nextNode;
-            if (node->vtable == VTables::ClassVTable) {
-                Alloc::deleteClassNode(node);
-            }
-            node = nextNode;
-        }
-*/
-
         doc->context->dispose();
         free(doc->context);
         free(doc);
@@ -123,12 +104,7 @@ namespace smart {
         }
 
         if (len > 0) {
-            VTableCall::copySelfText(node, text +  spaceCount);
-
-            if (text[len + spaceCount] == '\0') {
-            } else {
-                // int k = 32;
-            }
+            VTableCall::copySelfText(node, text + spaceCount);
         }
 
         text[len + spaceCount] = '\0';
@@ -489,12 +465,7 @@ namespace smart {
 
                     size_t len = VTableCall::selfTextLength(node);
                     VTableCall::copySelfText(node, text + currentOffset);
-                    //assert(chs[len] != '\0');
-                    /*
-                    if (text[len + currentOffset] == '\0') { //?
-                        memcpy(text + currentOffset, text + currentOffset, len);
-                    }
-                    */
+
                     currentOffset += len;
                     node = node->nextNodeInLine;
                 }
