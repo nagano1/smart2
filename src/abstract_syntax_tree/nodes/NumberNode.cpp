@@ -30,7 +30,7 @@ namespace smart {
         +--------------------------+
     */
 
-    int Tokenizers::nullTokenizer(TokenizerParams_parent_ch_start_context) {
+    int Tokenizers::nullTokenizer(TokenizerParams_argNode_ch_start_context) {
         static constexpr const char null_chars[] = "null";
         return Tokenizers::tokenizeWord(TokenizerParams_pass, Alloc::newNullNode, 'n', null_chars);
     }
@@ -59,7 +59,7 @@ namespace smart {
     }
 
 
-    int Tokenizers::boolTokenizer(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::boolTokenizer(TokenizerParams_argNode_ch_start_context)
     {
         int result = Tokenizers::tokenizeWord(TokenizerParams_pass,
                                                 Alloc::newBoolNode
@@ -167,7 +167,7 @@ namespace smart {
     static constexpr const char numberNodeTypeText[] = "<number>";
 
     // jfiowaef
-    int Tokenizers::numberTokenizer(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::numberTokenizer(TokenizerParams_argNode_ch_start_context)
     {
         bool hasNegative = false;
         
@@ -193,7 +193,7 @@ namespace smart {
 
         if (hasNegative ? charCount > 1 : charCount > 0) {
 
-            auto *numberNode = Alloc::newNumberNode(context, parent);
+            auto *numberNode = Alloc::newNumberNode(context, argNode);
 
             context->setCodeNode(numberNode);
             numberNode->text = context->memBuffer.newMem<char>(charCount + 1/* \0 */ + 1/*L*/);
@@ -336,8 +336,8 @@ namespace smart {
 
     static constexpr const char parenthesesNodeTypeText[] = "<parentheses>";
 
-    static int parenthesesTokenizerInternal(TokenizerParams_parent_ch_start_context) {
-        auto *parenthesesNode = Cast::downcast<ParenthesesNodeStruct *>(parent);
+    static int parenthesesTokenizerInternal(TokenizerParams_argNode_ch_start_context) {
+        auto *parenthesesNode = Cast::downcast<ParenthesesNodeStruct *>(argNode);
 
         if (ch == ')') {
             context->setCodeNode(&parenthesesNode->closeNode);
@@ -366,10 +366,10 @@ namespace smart {
     }
 
 
-    int Tokenizers::parenthesesTokenizer(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::parenthesesTokenizer(TokenizerParams_argNode_ch_start_context)
     {
         if ('(' == ch) {
-            auto *parenthesesNode = Alloc::newParenthesesNode(context, parent);
+            auto *parenthesesNode = Alloc::newParenthesesNode(context, argNode);
             int currentPos = start + 1;
             int resultPos =  Scanner::scanMulti(parenthesesNode, parenthesesTokenizerInternal, context, currentPos);
             if (Search::IsTokenized(resultPos)) {

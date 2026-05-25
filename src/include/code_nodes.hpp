@@ -1120,41 +1120,41 @@ namespace smart {
     /**
      * Function Types and vtable for node structures
      */
-    #define TokenizerParams_parent_ch_start_context \
-        NodeBase *parent, utf8byte ch, st_int start, ParseContext *context
+    #define TokenizerParams_argNode_ch_start_context \
+        NodeBase *argNode, utf8byte ch, st_int start, ParseContext *context
 
-    #define TokenizerParams_pass parent, ch, start, context
+    #define TokenizerParams_pass argNode, ch, start, context
     #define TokenizerParams_pass_3 ch, start, context
 
-    using TokenizerFunction = int (*)(TokenizerParams_parent_ch_start_context);
+    using TokenizerFunction = int (*)(TokenizerParams_argNode_ch_start_context);
 
     struct Tokenizers {
-        static int nameTokenizer(TokenizerParams_parent_ch_start_context);
-        static int variableTokenizer(TokenizerParams_parent_ch_start_context);
-        static int tokenizeExpression(TokenizerParams_parent_ch_start_context);
-        static int parenthesesTokenizer(TokenizerParams_parent_ch_start_context);
-        static int tokenizeFuncCall(TokenizerParams_parent_ch_start_context);
-        static int binaryOperationTokenizer(TokenizerParams_parent_ch_start_context);
+        static int nameTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int variableTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int tokenizeExpression(TokenizerParams_argNode_ch_start_context);
+        static int parenthesesTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int tokenizeFuncCall(TokenizerParams_argNode_ch_start_context);
+        static int binaryOperationTokenizer(TokenizerParams_argNode_ch_start_context);
 
 
-        static int typeTokenizer(TokenizerParams_parent_ch_start_context);
-        static int numberTokenizer(TokenizerParams_parent_ch_start_context);
-        static int nullTokenizer(TokenizerParams_parent_ch_start_context);
-        static int stringLiteralTokenizer(TokenizerParams_parent_ch_start_context);
-        static int boolTokenizer(TokenizerParams_parent_ch_start_context);
+        static int typeTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int numberTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int nullTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int stringLiteralTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int boolTokenizer(TokenizerParams_argNode_ch_start_context);
 
-        static int classTokenizer(TokenizerParams_parent_ch_start_context);
-        static int bodyTokenizer(TokenizerParams_parent_ch_start_context);
-        static int fnTokenizer(TokenizerParams_parent_ch_start_context);
+        static int classTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int bodyTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int fnTokenizer(TokenizerParams_argNode_ch_start_context);
 
-        static int assignStatementTokenizer(TokenizerParams_parent_ch_start_context);
-        static int assignStatementWithoutLetTokenizer(TokenizerParams_parent_ch_start_context);
-        static int returnStatementTokenizer(TokenizerParams_parent_ch_start_context);
+        static int assignStatementTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int assignStatementWithoutLetTokenizer(TokenizerParams_argNode_ch_start_context);
+        static int returnStatementTokenizer(TokenizerParams_argNode_ch_start_context);
 
         // tokenizer for simple keywords or symbols, like "null", "true", "false", " ", etc... they can be tokenized in one step without backtracking, so we can use this template function to generate them.
         // genereater is a function pointer for generating corresponding node, it will be called when the word is matched, and the generated node will be returned by the tokenizer.
         template<typename TYPE, std::size_t SIZE, typename GENTYPE>
-        static inline int tokenizeWord(TokenizerParams_parent_ch_start_context
+        static inline int tokenizeWord(TokenizerParams_argNode_ch_start_context
                       , GENTYPE* (*genereater)(ParseContext *, NodeBase*)
                       , utf8byte capitalLetter
                       , const TYPE(&word)[SIZE])
@@ -1182,7 +1182,7 @@ namespace smart {
 
         // SimpleTextNodeStruct
         template<typename TYPE, std::size_t SIZE>
-        static inline int WordTokenizer(TokenizerParams_parent_ch_start_context
+        static inline int WordTokenizer(TokenizerParams_argNode_ch_start_context
                 , utf8byte capitalLetter
                 , const TYPE(&word)[SIZE])
         {

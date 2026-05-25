@@ -54,8 +54,8 @@ namespace smart
 
 
 
-    int Tokenizers::typeTokenizer(TokenizerParams_parent_ch_start_context) {
-        TypeNodeStruct *typeNode  = Cast::downcast<TypeNodeStruct*>(parent);
+    int Tokenizers::typeTokenizer(TokenizerParams_argNode_ch_start_context) {
+        TypeNodeStruct *typeNode  = Cast::downcast<TypeNodeStruct*>(argNode);
 
         int currentPos = start;
 

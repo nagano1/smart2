@@ -35,7 +35,7 @@ namespace smart {
     }
 
 
-    int Tokenizers::stringLiteralTokenizer(TokenizerParams_parent_ch_start_context) {
+    int Tokenizers::stringLiteralTokenizer(TokenizerParams_argNode_ch_start_context) {
         int strLength = 0; // including quotes, and escape characters
 
         bool endsWithQuote = false;
@@ -88,7 +88,7 @@ namespace smart {
 
         assert(strlength > 1); // at least has two quotes
         auto *strLiteralNode = context->newMem<StringLiteralNodeStruct>();
-        Init::initStringLiteralNode(strLiteralNode, context, parent);
+        Init::initStringLiteralNode(strLiteralNode, context, argNode);
         context->setCodeNode(strLiteralNode);
 
         strLiteralNode->text = context->memBuffer.newText(strLength);

@@ -109,12 +109,12 @@ namespace smart {
 
 
 
-    static int inner_op_binaryOpTokenizer(TokenizerParams_parent_ch_start_context) {
+    static int inner_op_binaryOpTokenizer(TokenizerParams_argNode_ch_start_context) {
 
         if (ch == '+' || ch == '*' || ch == '-' || ch == '/' || ch == '%'
             || ch == '&' || ch == '|') {
 
-            auto *binaryOpNode = Alloc::newBinaryOperationNode(context, parent, ch);
+            auto *binaryOpNode = Alloc::newBinaryOperationNode(context, argNode, ch);
 
             context->leftNode = Cast::upcast(&binaryOpNode->opNode);
             context->generatedMainNode = Cast::upcast(binaryOpNode);
@@ -125,8 +125,9 @@ namespace smart {
     }
 
 
-    int Tokenizers::binaryOperationTokenizer(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::binaryOperationTokenizer(TokenizerParams_argNode_ch_start_context)
     {
+        NodeBase *parent = argNode;
         assert(context->generatedMainNode != nullptr);
 
         auto *virtualNode = context->generatedMainNode;

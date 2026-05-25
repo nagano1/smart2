@@ -140,9 +140,9 @@ namespace smart {
         body->childCount++;
     }
 
-    static int inner_bodyTokenizerMulti(TokenizerParams_parent_ch_start_context)
+    static int inner_bodyTokenizerMulti(TokenizerParams_argNode_ch_start_context)
     {
-        auto *body = Cast::downcast<BodyNodeStruct *>(parent);
+        auto *body = Cast::downcast<BodyNodeStruct *>(argNode);
         if (ch == '}') {
             context->scanEnd = true;
             context->setCodeNode(&body->endBodyNode);
@@ -153,17 +153,15 @@ namespace smart {
             body->firstStatementFound = true;
             int nextPos;
             // value as a statement
-            if (Search::IsTokenized(nextPos = Tokenizers::returnStatementTokenizer(parent, ch, start, context))) {
+            if (Search::IsTokenized(nextPos = Tokenizers::returnStatementTokenizer(TokenizerParams_pass))) {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }
-            else if (Search::IsTokenized(nextPos = Tokenizers::assignStatementTokenizer(parent, ch, start, context))) {
+            else if (Search::IsTokenized(nextPos = Tokenizers::assignStatementTokenizer(TokenizerParams_pass))) {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }
-            else if (Search::IsTokenized(nextPos = Tokenizers::assignStatementWithoutLetTokenizer(parent, ch,
-                                                                                    start,
-                                                                                    context))) {
+            else if (Search::IsTokenized(nextPos = Tokenizers::assignStatementWithoutLetTokenizer(TokenizerParams_pass))) {
                 appendChildNode(body, context->generatedMainNode);
                 return nextPos;
             }
@@ -180,8 +178,8 @@ namespace smart {
         return Search::NOTFOUND;
     }
 
-    int Tokenizers::bodyTokenizer(TokenizerParams_parent_ch_start_context) {
-        auto *bodyNode = Cast::downcast<BodyNodeStruct *>(parent);
+    int Tokenizers::bodyTokenizer(TokenizerParams_argNode_ch_start_context) {
+        auto *bodyNode = Cast::downcast<BodyNodeStruct *>(argNode);
 
         if (ch == '{') {
             int returnPosition = start + 1;
@@ -248,8 +246,9 @@ namespace smart {
     }
 
 
-    static inline int parseNextValue(TokenizerParams_parent_ch_start_context, FuncNodeStruct* funcNode)
+    static inline int parseNextValue(TokenizerParams_argNode_ch_start_context, FuncNodeStruct* funcNode)
     {
+        NodeBase *parent = argNode;
         auto *nextParam = Alloc::newFuncParameterItem(context, parent);
         int result;
         if (Search::IsTokenized(result = Tokenizers::assignStatementTokenizer(Cast::upcast(nextParam), ch, start, context))) {
@@ -262,7 +261,8 @@ namespace smart {
         return Search::NOTFOUND;
     }
 
-    static int internal_parameterListTokenizerMulti(TokenizerParams_parent_ch_start_context) {
+    static int internal_parameterListTokenizerMulti(TokenizerParams_argNode_ch_start_context) {
+        NodeBase *parent = argNode;
         auto *funcNode = Cast::downcast<FuncNodeStruct *>(parent);
 
         if (ch == ')') {
@@ -447,8 +447,8 @@ namespace smart {
 
 
 
-    static int inner_fnParamsAndBodyTokenizer(TokenizerParams_parent_ch_start_context) {
-        auto *fnNode = Cast::downcast<FuncNodeStruct *>(parent);
+    static int inner_fnParamsAndBodyTokenizer(TokenizerParams_argNode_ch_start_context) {
+        auto *fnNode = Cast::downcast<FuncNodeStruct *>(argNode);
 
         if (fnNode->parameterStartNode.foundPos == -1) {
             if (ch == '(') {
@@ -466,8 +466,6 @@ namespace smart {
                         return result2;
                     }
                 }
-
-
             }
             else {
                 context->setError(ErrorCode::expect_parenthesis_for_fn_params, context->lastTokenizedPos);
@@ -480,43 +478,47 @@ namespace smart {
     }
 
 
-    int Tokenizers::fnTokenizer(TokenizerParams_parent_ch_start_context) {
-        if (fn_first_char == ch) {
-            // fn
-            auto idx = ParseUtil::matchAt(context->chars, context->length, start, fn_chars);
-            if (idx > -1) {
-                int currentPos = idx + size_of_fn;
-                int resultPos = -1;
+    int Tokenizers::fnTokenizer(TokenizerParams_argNode_ch_start_context) {
+        if (fn_first_char != ch) {
+            return Search::NOTFOUND;
+        }
 
-                // now after "fn "
-                auto *fnNode = Alloc::newFuncNode(context, parent);
-                {
-                    resultPos = Scanner::scanOnce(&fnNode->nameNode, Tokenizers::nameTokenizer, context, currentPos);
-                    // nameNode should have spaces/comments/lineBreaks before between "fn" and function name,
-                    if (!Search::IsTokenized(resultPos)) {
-                        // the fn should have a function name
-                        context->setError(ErrorCode::invalid_fn_name, start);
+        // fn
+        auto idx = ParseUtil::matchAt(context->chars, context->length, start, fn_chars);
+        if (idx == -1) {
+            return Search::NOTFOUND;
+        }
 
-                        context->setCodeNode(fnNode);
-                        return currentPos;
-                    }
-                }
 
-                // Parse body
-                currentPos = resultPos;
-                if (!Search::IsTokenized(resultPos = Scanner::scanOnce(fnNode, inner_fnParamsAndBodyTokenizer,
-                                                         context, currentPos))) {
+        int currentPos = idx + size_of_fn;
+        int resultPos = -1;
 
-                    context->setError(ErrorCode::syntax_error, context->lastTokenizedPos);
-
-                    context->setCodeNode(fnNode);
-                    return currentPos;
-                }
+        // now after "fn "
+        auto *fnNode = Alloc::newFuncNode(context, argNode);
+        {
+            resultPos = Scanner::scanOnce(&fnNode->nameNode, Tokenizers::nameTokenizer, context, currentPos);
+            // nameNode should have spaces/comments/lineBreaks before between "fn" and function name,
+            if (!Search::IsTokenized(resultPos)) {
+                // the fn should have a function name
+                context->setError(ErrorCode::invalid_fn_name, start);
 
                 context->setCodeNode(fnNode);
-                return resultPos;
+                return currentPos;
             }
         }
-        return Search::NOTFOUND;
+
+        // Parse body
+        currentPos = resultPos;
+        if (!Search::IsTokenized(resultPos = Scanner::scanOnce(fnNode, inner_fnParamsAndBodyTokenizer,
+                                                    context, currentPos))) {
+
+            context->setError(ErrorCode::syntax_error, context->lastTokenizedPos);
+
+            context->setCodeNode(fnNode);
+            return currentPos;
+        }
+
+        context->setCodeNode(fnNode);
+        return resultPos;
     }
 }

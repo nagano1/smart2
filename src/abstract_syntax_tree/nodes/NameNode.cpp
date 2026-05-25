@@ -34,7 +34,7 @@ namespace smart {
         return self->nameLength;
     }
 
-    int Tokenizers::nameTokenizer(TokenizerParams_parent_ch_start_context) {
+    int Tokenizers::nameTokenizer(TokenizerParams_argNode_ch_start_context) {
         int found_count = 0;
         // TODO: first letter should be letter or _. simple solution is to use a flag to indicate if it's the first letter, and only allow letter or _ for the first letter, but it will add some overhead, since we need to check the flag for every letter. better solution is to use a separate loop to check the first letter, and then use another loop to check the rest of the letters, since it's common that the first letter is not valid, so we can fail fast without checking the rest of the letters.
         for (int_fast32_t i = start; i < context->length; i++) {
@@ -51,7 +51,7 @@ namespace smart {
             if (ParseUtil::IsKeyword(context->chars + start, found_count)) {
                 return Search::NOTFOUND;
             }
-            auto *nameNode = Cast::downcast<NameNodeStruct *>(parent);
+            auto *nameNode = Cast::downcast<NameNodeStruct *>(argNode);
 
             context->setCodeNode(nameNode);
             nameNode->name = context->memBuffer.newText(found_count);
@@ -81,9 +81,9 @@ namespace smart {
         return node;
     }
 
-    int Tokenizers::variableTokenizer(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::variableTokenizer(TokenizerParams_argNode_ch_start_context)
     {
-        auto *variableNode = Alloc::newVariableNode(context, parent);
+        auto *variableNode = Alloc::newVariableNode(context, argNode);
         return Tokenizers::nameTokenizer(reinterpret_cast<NodeBase *>(variableNode), ch, start, context);
     }
 

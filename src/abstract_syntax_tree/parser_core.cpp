@@ -384,7 +384,7 @@ namespace smart
     }
 
 
-    int Tokenizers::tokenizeExpression(TokenizerParams_parent_ch_start_context) {
+    int Tokenizers::tokenizeExpression(TokenizerParams_argNode_ch_start_context) {
         int result = numberTokenizer(TokenizerParams_pass);
 
         if (!Search::IsTokenized(result)) { result = boolTokenizer(TokenizerParams_pass); }
@@ -401,13 +401,13 @@ namespace smart
 
         // call func expression: func()
         int extraPos;
-        if (Search::IsTokenized(extraPos = Tokenizers::tokenizeFuncCall(parent, context->chars[result],
+        if (Search::IsTokenized(extraPos = Tokenizers::tokenizeFuncCall(argNode, context->chars[result],
                                                            result, context))) {
             result = extraPos;
         }
 
         //  binary operator expression: calc() + 421431
-        if (Search::IsTokenized(extraPos = Tokenizers::binaryOperationTokenizer(parent, context->chars[result],
+        if (Search::IsTokenized(extraPos = Tokenizers::binaryOperationTokenizer(argNode, context->chars[result],
                                                                   result, context))) {
             result = extraPos;
         }

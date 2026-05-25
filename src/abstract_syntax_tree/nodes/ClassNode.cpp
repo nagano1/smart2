@@ -137,7 +137,8 @@ namespace smart {
         classNode->childCount++;
     }
 
-    static int inner_classBodyTokenizer(TokenizerParams_parent_ch_start_context) {
+    static int inner_classBodyTokenizer(TokenizerParams_argNode_ch_start_context) {
+        NodeBase *parent = argNode;
         auto *classNode = Cast::downcast<ClassNodeStruct *>(parent);
 
         if (!classNode->startFound) {
@@ -179,9 +180,11 @@ namespace smart {
 
 
 
-    int Tokenizers::classTokenizer(TokenizerParams_parent_ch_start_context) {
+    int Tokenizers::classTokenizer(TokenizerParams_argNode_ch_start_context) {
         static constexpr const char class_chars[] = "class";
         static constexpr int size_of_class = sizeof(class_chars) - 1;
+
+        NodeBase *parent = argNode;
 
         if ('c' == ch) {
             auto idx = ParseUtil::matchAt(context->chars, context->length, start, class_chars);

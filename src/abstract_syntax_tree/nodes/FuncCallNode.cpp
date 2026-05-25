@@ -167,11 +167,11 @@ namespace smart {
 
 
 
-    static inline int parseNextValue(TokenizerParams_parent_ch_start_context, FuncCallNodeStruct* funcCallNode)
+    static inline int parseNextValue(TokenizerParams_argNode_ch_start_context, FuncCallNodeStruct* funcCallNode)
     {
         int result;
         if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(TokenizerParams_pass))) {
-            auto *nextItem = Alloc::newFuncArgumentItem(context, parent);
+            auto *nextItem = Alloc::newFuncArgumentItem(context, argNode);
 
             nextItem->exprNode = context->generatedMainNode;
             appendRootNode(funcCallNode, nextItem);
@@ -182,8 +182,8 @@ namespace smart {
     }
 
 
-    static int tokenizeFuncCallInternal(TokenizerParams_parent_ch_start_context) {
-        auto *funcCallNode = Cast::downcast<FuncCallNodeStruct*>(parent);
+    static int tokenizeFuncCallInternal(TokenizerParams_argNode_ch_start_context) {
+        auto *funcCallNode = Cast::downcast<FuncCallNodeStruct*>(argNode);
 
         if (ch == ')') {
             context->setCodeNode(&funcCallNode->closeNode2);
@@ -214,8 +214,10 @@ namespace smart {
     }
 
 
-    int Tokenizers::tokenizeFuncCall(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::tokenizeFuncCall(TokenizerParams_argNode_ch_start_context)
     {
+        NodeBase *parent = argNode;
+
         if ('(' != ch) {
             return Search::NOTFOUND;
         }

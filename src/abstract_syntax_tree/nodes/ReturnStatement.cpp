@@ -109,13 +109,13 @@ namespace smart {
     }
 
     // --------------------- Implements Return Statement Parser ----------------------
-    static int parenthesesTokenizerInternal(TokenizerParams_parent_ch_start_context) {
+    static int parenthesesTokenizerInternal(TokenizerParams_argNode_ch_start_context) {
 
         if (context->isAfterLineBreak) {
             return Search::NOTFOUND;
         }
 
-        auto *returnNode = Cast::downcast<ReturnStatementNodeStruct *>(parent);
+        auto *returnNode = Cast::downcast<ReturnStatementNodeStruct *>(argNode);
         int result;
         if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(Cast::upcast(returnNode), ch,
                                                            start, context))) {
@@ -133,7 +133,7 @@ namespace smart {
     }
 
     // return 1234
-    int Tokenizers::returnStatementTokenizer(TokenizerParams_parent_ch_start_context) {
+    int Tokenizers::returnStatementTokenizer(TokenizerParams_argNode_ch_start_context) {
         // return
         if ('r' != ch) {
             return Search::NOTFOUND;
@@ -141,7 +141,7 @@ namespace smart {
 
         auto idx = ParseUtil::matchAt(context->chars, context->length, start, returnText);
         if (idx > -1) {
-            auto *returnNode = Alloc::newReturnStatement(context, parent);
+            auto *returnNode = Alloc::newReturnStatement(context, argNode);
             Init::assignText_SimpleTextNode(&returnNode->returnText, context, start, returnTextSize);
 
             int currentPos = idx + returnTextSize;

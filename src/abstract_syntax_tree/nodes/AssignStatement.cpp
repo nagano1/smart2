@@ -114,8 +114,8 @@ namespace smart {
 
 
     /// tokenizer for assignment statement without let keyword. e.g. a = 3
-    static int tokenizeAssignStatementMulti(TokenizerParams_parent_ch_start_context) {
-        auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(parent);
+    static int tokenizeAssignStatementMulti(TokenizerParams_argNode_ch_start_context) {
+        auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(argNode);
 
         if (assignment->nameNode.foundPos == -1) {
              if (assignment->pointerAsterisk.foundPos == -1) {
@@ -176,16 +176,16 @@ namespace smart {
 
 
     // b = 32
-    int Tokenizers::assignStatementWithoutLetTokenizer(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::assignStatementWithoutLetTokenizer(TokenizerParams_argNode_ch_start_context)
     {
         AssignStatementNodeStruct *assignment;
 
         if (context->unusedAssignment == nullptr) {
-            assignment = Alloc::newAssignStatement(context, parent);
+            assignment = Alloc::newAssignStatement(context, argNode);
         }
         else {
             assignment = context->unusedAssignment;
-            Init::initAssignStatement(context, parent, assignment);
+            Init::initAssignStatement(context, argNode, assignment);
             context->unusedAssignment = nullptr;
         }
 
@@ -210,8 +210,9 @@ namespace smart {
     // int m = 5
     // int a
     // ?string *str = null
-    int Tokenizers::assignStatementTokenizer(TokenizerParams_parent_ch_start_context)
+    int Tokenizers::assignStatementTokenizer(TokenizerParams_argNode_ch_start_context)
     {
+        NodeBase *parent = argNode;
         AssignStatementNodeStruct *assignStatement;
         if (context->unusedAssignment == nullptr) {
             assignStatement = Alloc::newAssignStatement(context, parent);
