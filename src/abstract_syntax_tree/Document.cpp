@@ -76,7 +76,7 @@ namespace smart {
     }
 
     static inline void deleteLineNodes(CodeLine *line) {
-        //assert(line != nullptr);
+        assert(line != nullptr);
         if (line) {
             if (line->nextLine) {
                 deleteLineNodes(line->nextLine);
@@ -107,36 +107,6 @@ namespace smart {
 
         text[len + spaceCount] = '\0';
         return text;
-    }
-
-    utf8byte *DocumentUtils::getTextFromLine(CodeLine *line) {
-        return nullptr;
-        /*
-        int totalCount = 0;
-            auto *node = line->leftNode;
-            while (node) {
-                int len = VTableCall::selfTextLength(node);
-                totalCount += len;
-                node = node->nextNodeInLine;
-            }
-
-        auto *text = (char *)line->context->newMemArray<char>(totalCount+ 1);
-        text[totalCount] = '\0';
-        {
-            auto *node = line->leftNode;
-            size_t currentOffset = 0;
-            while (node) {
-                auto *chs = VTableCall::selfText(node);
-                size_t len = VTableCall::selfTextLength(node);
-                memcpy(text + currentOffset, chs, len);
-
-                currentOffset += len;
-                node = node->nextNodeInLine;
-            }
-        }
-        return text;
-        */
-
     }
 
     // output type text of all nodes in the tree, for debugging, example:
@@ -572,10 +542,9 @@ namespace smart {
             Scanner::scanRoot(docStruct, tryTokenizeLoop, context);
         }
         
-        if (!context->syntaxErrorInfo.hasError)
-        {
+        if (!context->syntaxErrorInfo.hasError) {
             if (docStruct->lastRootNode) {
-                //docStruct->lastRootNode->nextNode = Cast::upcast(&docStruct->endOfFile);
+                docStruct->lastRootNode->nextNode = Cast::upcast(&docStruct->endOfFile);
             }
 
             docStruct->lastRootNode = Cast::upcast(&docStruct->endOfFile);

@@ -1047,9 +1047,7 @@ namespace smart {
         static utf8byte *getTextFromTree(DocumentStruct *doc);
         static utf8byte *getSemanticTokensTextFromTree(DocumentStruct *doc, int *len, int line0, int line1);
         static utf8byte *getTypeTextFromTree(DocumentStruct *doc);
-        static utf8byte *getTextFromLine(CodeLine *line);
         static utf8byte *getTextFromNode(NodeBase *line);
-
     };
 
 
