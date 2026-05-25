@@ -194,7 +194,7 @@ namespace smart {
             assignment->hasTypeDecl = false;
             assignment->typeOrLet.isLet = false;
 
-            //context->leftNode = Cast::upcast(&assignment->nameNode);
+            context->leftNode = Cast::upcast(&assignment->nameNode);
             context->generatedMainNode = Cast::upcast(assignment);
 
             return resultPos;
