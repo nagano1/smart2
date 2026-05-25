@@ -133,10 +133,10 @@ namespace smart {
         assert(context->generatedMainNode != nullptr);
 
         auto *leftExpressionNode = context->generatedMainNode;
-        //auto *leftNode = context->mostLeftNode;
+        auto *leftNode = context->mostLeftNode;
 
         int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, context, start);
-        //context->mostLeftNode = leftNode;
+        context->mostLeftNode = leftNode;
 
         if (Search::IsTokenized(resultPos)) {
             auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainNode);
@@ -148,7 +148,7 @@ namespace smart {
                                                     context, resultPos))) {
                 binaryOpNode->rightExprNode = context->generatedMainNode;
                 context->generatedMainNode = Cast::upcast(binaryOpNode);
-                //context->mostLeftNode = leftNode;
+                context->mostLeftNode = leftNode;
                 return resultPos;
             }
         }
