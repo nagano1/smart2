@@ -227,8 +227,6 @@ namespace smart {
         if (self->assignStatementNodeStruct) {
             currentCodeLine = VTableCall::callAppendToLine(self->assignStatementNodeStruct, currentCodeLine);
         }
-        //currentCodeLine = VTableCall::callAppendToLine(&self->typeNode, currentCodeLine);
-        //currentCodeLine = VTableCall::callAppendToLine(&self->nameNode, currentCodeLine);
 
         if (self->hasComma) {
             currentCodeLine = VTableCall::callAppendToLine(&self->follwingComma, currentCodeLine);
