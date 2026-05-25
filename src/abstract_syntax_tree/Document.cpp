@@ -30,16 +30,9 @@ namespace smart {
     static CodeLine *appendToLine(DocumentStruct *self, CodeLine *currentCodeLine)
     {
         auto *child = self->firstRootNode;
-        bool endOfFileAppended = false;
         while (child) {
-            if (child == Cast::upcast(&self->endOfFile)) {
-                endOfFileAppended = true;
-            }
             currentCodeLine = VTableCall::callAppendToLine(child, currentCodeLine);
             child = child->nextNode;
-        }
-        if (!endOfFileAppended) {
-            currentCodeLine = VTableCall::callAppendToLine(&self->endOfFile, currentCodeLine);
         }
         return currentCodeLine;
     }
@@ -552,7 +545,9 @@ namespace smart {
             if (docStruct->lastRootNode) {
                 docStruct->lastRootNode->nextNode = Cast::upcast(&docStruct->endOfFile);
             }
-
+            else {
+                docStruct->firstRootNode = Cast::upcast(&docStruct->endOfFile);
+            }
             docStruct->lastRootNode = Cast::upcast(&docStruct->endOfFile);
             docStruct->lastRootNode->prevSpaceCount = context->remaindPrevChars;
             docStruct->lastRootNode->prevLineBreakNode = context->remainedLineBreakNode;
