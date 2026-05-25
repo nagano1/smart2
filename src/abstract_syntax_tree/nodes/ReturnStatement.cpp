@@ -146,7 +146,7 @@ namespace smart {
 
             int currentPos = idx + returnTextSize;
             int resultPos;
-            if (Search::IsTokenized(resultPos = Scanner::scanMulti(returnNode,
+            if (Search::IsTokenized(resultPos = Scanner::scanLoop(returnNode,
                                                         parenthesesTokenizerInternal,
                                                         context, currentPos))) {
 

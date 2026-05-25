@@ -371,7 +371,7 @@ namespace smart {
         if ('(' == ch) {
             auto *parenthesesNode = Alloc::newParenthesesNode(context, argNode);
             int currentPos = start + 1;
-            int resultPos =  Scanner::scanMulti(parenthesesNode, parenthesesTokenizerInternal, context, currentPos);
+            int resultPos =  Scanner::scanLoop(parenthesesNode, parenthesesTokenizerInternal, context, currentPos);
             if (Search::IsTokenized(resultPos)) {
                 context->setCodeNode(parenthesesNode);
                 return resultPos;

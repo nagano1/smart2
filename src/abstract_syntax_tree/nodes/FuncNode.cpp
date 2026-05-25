@@ -140,7 +140,7 @@ namespace smart {
         body->childCount++;
     }
 
-    static int inner_bodyTokenizerMulti(TokenizerParams_argNode_ch_start_context)
+    static int inner_bodyTokenizerLoop(TokenizerParams_argNode_ch_start_context)
     {
         auto *body = Cast::downcast<BodyNodeStruct *>(argNode);
         if (ch == '}') {
@@ -183,8 +183,8 @@ namespace smart {
 
         if (ch == '{') {
             int returnPosition = start + 1;
-            int result = Scanner::scanMulti(bodyNode,
-                                            inner_bodyTokenizerMulti,
+            int result = Scanner::scanLoop(bodyNode,
+                                            inner_bodyTokenizerLoop,
                                             context, returnPosition);
 
             if (Search::IsTokenized(result)) {
@@ -261,7 +261,7 @@ namespace smart {
         return Search::NOTFOUND;
     }
 
-    static int internal_parameterListTokenizerMulti(TokenizerParams_argNode_ch_start_context) {
+    static int internal_parameterListTokenizerLoop(TokenizerParams_argNode_ch_start_context) {
         NodeBase *parent = argNode;
         auto *funcNode = Cast::downcast<FuncNodeStruct *>(parent);
 
@@ -455,8 +455,8 @@ namespace smart {
                 fnNode->parameterStartNode.foundPos = start;
                 context->setCodeNode(&fnNode->parameterStartNode);
                 int nextPos =  start + 1;
-                int result = Scanner::scanMulti(fnNode,
-                                                internal_parameterListTokenizerMulti,
+                int result = Scanner::scanLoop(fnNode,
+                                                internal_parameterListTokenizerLoop,
                                                 context, nextPos);
                 if (Search::IsTokenized(result)) {
                     int result2;

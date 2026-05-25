@@ -233,7 +233,7 @@ namespace smart {
 
         int currentPos = start + 1;
         int resultPos;
-        if (Search::IsTokenized(resultPos = Scanner::scanMulti(funcCallNode,
+        if (Search::IsTokenized(resultPos = Scanner::scanLoop(funcCallNode,
                                                                tokenizeFuncCallInternal, context, currentPos))) {
             context->generatedMainNode = Cast::upcast(funcCallNode);
             context->leftNode = leftNode;

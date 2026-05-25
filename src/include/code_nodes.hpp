@@ -501,7 +501,7 @@ namespace smart {
         AppendLineMode appendLineMode; // 0:
         int lastTokenizedPos; // used for error reporting 
 
-        bool isAfterLineBreak; // for multiScan tokenizer
+        bool isAfterLineBreak; // for loopMode=true tokenizer
         NodeBase *leftNode;
         NodeBase *valueNode;
         NodeBase *generatedMainNode;
@@ -1199,7 +1199,7 @@ namespace smart {
 
         static int scanOnce(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start);
 
-        static int scanMulti(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start);
+        static int scanLoop(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start);
     };
 }
 

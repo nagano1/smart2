@@ -297,9 +297,9 @@ namespace smart
 
     // scan with the given tokenizer.
     // this function handles spaces, line breaks and comments, so tokenizers can focus on scanning their syntax.
-    // if scanMulti is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
+    // if loopMode is true, it will continue to scan after a token is found until scanEnd is set to true by tokenizer
     static InternalParsingData scanWithTokenizer(void *parentNode, TokenizerFunction tokenizer,
-                                                 ParseContext *context, int start, bool scanMulti) {
+                                                 ParseContext *context, int start, bool loopMode) {
         utf8byte ch;
         InternalParsingData parsingData;
         context->isAfterLineBreak = false;
@@ -344,7 +344,7 @@ namespace smart
                 parsingData.assignCommentNode(context->leftNode);
                 parsingData.assignLineBreak(context->leftNode);
 
-                if (scanMulti && !context->scanEnd) {
+                if (loopMode && !context->scanEnd) {
                     i = result;
                     continue;
                 }
@@ -367,12 +367,12 @@ namespace smart
     }
 
     // scan until scanEnd==true, tokenizer is responsible for setting scanEnd to true when it wants to stop scanning
-    int Scanner::scanMulti(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start) {
+    int Scanner::scanLoop(void *parentNode, TokenizerFunction tokenizer, ParseContext *context, int start) {
         return scanWithTokenizer(parentNode, tokenizer, context, start, true).returnPos;
     }
 
     int Scanner::scanRoot(void *parentNode, TokenizerFunction tokenizer, ParseContext *context) {
-        InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, context, 0, /* multiScan */ true);
+        InternalParsingData parsingData = scanWithTokenizer(parentNode, tokenizer, context, 0, /* loopMode */ true);
 
         context->remainedLineBreakNode = parsingData.firstLineBreak;
         context->remainedCommentNode = parsingData.commentNode;

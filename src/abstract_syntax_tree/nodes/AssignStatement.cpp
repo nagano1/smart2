@@ -114,7 +114,7 @@ namespace smart {
 
 
     /// tokenizer for assignment statement without let keyword. e.g. a = 3
-    static int tokenizeAssignStatementMulti(TokenizerParams_argNode_ch_start_context) {
+    static int tokenizeAssignStatementLoop(TokenizerParams_argNode_ch_start_context) {
         auto *assignment = Cast::downcast<AssignStatementNodeStruct *>(argNode);
 
         if (assignment->nameNode.foundPos == -1) {
@@ -189,7 +189,7 @@ namespace smart {
             context->unusedAssignment = nullptr;
         }
 
-        int resultPos = Scanner::scanMulti(assignment, tokenizeAssignStatementMulti, context, start);
+        int resultPos = Scanner::scanLoop(assignment, tokenizeAssignStatementLoop, context, start);
         if (Search::IsTokenized(resultPos)) {
             assignment->hasTypeDecl = false;
             assignment->typeOrLet.isLet = false;
@@ -227,8 +227,8 @@ namespace smart {
             assignStatement->hasTypeDecl = true;
 
             int resultPos;
-            if (Search::IsTokenized(resultPos = Scanner::scanMulti(assignStatement,
-                                                     tokenizeAssignStatementMulti,
+            if (Search::IsTokenized(resultPos = Scanner::scanLoop(assignStatement,
+                                                     tokenizeAssignStatementLoop,
                                                      context, result))) {
                 context->leftNode = Cast::upcast(&assignStatement->typeOrLet);
                 context->generatedMainNode = Cast::upcast(assignStatement);

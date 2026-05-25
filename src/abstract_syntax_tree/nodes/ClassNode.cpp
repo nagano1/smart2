@@ -211,7 +211,7 @@ namespace smart {
 
                 // Parse body
                 currentPos = resultPos;
-                if (!Search::IsTokenized(resultPos = Scanner::scanMulti(classNode, inner_classBodyTokenizer,
+                if (!Search::IsTokenized(resultPos = Scanner::scanLoop(classNode, inner_classBodyTokenizer,
                                                      context, currentPos))) {
                     //context->codeNode = Cast::upcast(classNode);
                     //return currentPos;
