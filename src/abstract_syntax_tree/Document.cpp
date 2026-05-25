@@ -75,17 +75,15 @@ namespace smart {
         return doc;
     }
 
-    /*
-        static inline void deleteLineNodes(CodeLine *line) {
-            //assert(line != nullptr);
-            if (line) {
-                if (line->nextLine) {
-                    deleteLineNodes(line->nextLine);
-                }
-                free(line);
+    static inline void deleteLineNodes(CodeLine *line) {
+        //assert(line != nullptr);
+        if (line) {
+            if (line->nextLine) {
+                deleteLineNodes(line->nextLine);
             }
+            free(line);
         }
-     */
+    }
 
     void Alloc::deleteDocument(DocumentStruct *doc) {
         doc->context->dispose();
