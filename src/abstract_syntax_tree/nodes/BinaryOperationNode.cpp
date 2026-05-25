@@ -116,7 +116,7 @@ namespace smart {
 
             auto *binaryOpNode = Alloc::newBinaryOperationNode(context, argNode, ch);
 
-            context->leftNode = Cast::upcast(&binaryOpNode->opNode);
+            context->mostLeftNode = Cast::upcast(&binaryOpNode->opNode);
             context->generatedMainNode = Cast::upcast(binaryOpNode);
             return start + 1;
         }
@@ -131,10 +131,10 @@ namespace smart {
         assert(context->generatedMainNode != nullptr);
 
         auto *virtualNode = context->generatedMainNode;
-        auto *leftNode = context->leftNode;
+        auto *leftNode = context->mostLeftNode;
 
         int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, context, start);
-        context->leftNode = leftNode;
+        context->mostLeftNode = leftNode;
 
         if (Search::IsTokenized(resultPos)) {
             auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainNode);
@@ -146,7 +146,7 @@ namespace smart {
                                                     context, resultPos))) {
                 binaryOpNode->rightExprNode = context->generatedMainNode;
                 context->generatedMainNode = Cast::upcast(binaryOpNode);
-                context->leftNode = leftNode;
+                context->mostLeftNode = leftNode;
                 return resultPos;
             }
         }

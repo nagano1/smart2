@@ -229,14 +229,14 @@ namespace smart {
         funcCallNode->exprNode = context->generatedMainNode;
         funcCallNode->exprNode->parentNode = Cast::upcast(funcCallNode);
 
-        auto *leftNode = context->leftNode;
+        auto *leftNode = context->mostLeftNode;
 
         int currentPos = start + 1;
         int resultPos;
         if (Search::IsTokenized(resultPos = Scanner::scanLoop(funcCallNode,
                                                                tokenizeFuncCallInternal, context, currentPos))) {
             context->generatedMainNode = Cast::upcast(funcCallNode);
-            context->leftNode = leftNode;
+            context->mostLeftNode = leftNode;
             return resultPos;
         }
         return Search::NOTFOUND;

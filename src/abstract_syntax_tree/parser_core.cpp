@@ -339,10 +339,10 @@ namespace smart
                 context->isAfterLineBreak = false;
                 context->lastTokenizedPos = result;
 
-                assert(context->leftNode != nullptr);
-                parsingData.assignWhiteSpaces(context->leftNode, i);
-                parsingData.assignCommentNode(context->leftNode);
-                parsingData.assignLineBreak(context->leftNode);
+                assert(context->mostLeftNode != nullptr);
+                parsingData.assignWhiteSpaces(context->mostLeftNode, i);
+                parsingData.assignCommentNode(context->mostLeftNode);
+                parsingData.assignLineBreak(context->mostLeftNode);
 
                 if (loopMode && !context->scanEnd) {
                     i = result;

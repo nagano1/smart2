@@ -150,12 +150,12 @@ namespace smart {
                                                         parenthesesTokenizerInternal,
                                                         context, currentPos))) {
 
-                context->leftNode = Cast::upcast(&returnNode->returnText);
+                context->mostLeftNode = Cast::upcast(&returnNode->returnText);
                 context->generatedMainNode = Cast::upcast(returnNode);
                 return resultPos;
             }
             else {
-                context->leftNode = Cast::upcast(&returnNode->returnText);
+                context->mostLeftNode = Cast::upcast(&returnNode->returnText);
                 context->generatedMainNode = Cast::upcast(returnNode);
                 return currentPos;
             }

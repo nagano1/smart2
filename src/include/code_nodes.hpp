@@ -502,7 +502,7 @@ namespace smart {
         int lastTokenizedPos; // used for error reporting 
 
         bool isAfterLineBreak; // for loopMode=true tokenizer
-        NodeBase *leftNode;
+        NodeBase *mostLeftNode;
         NodeBase *valueNode;
         NodeBase *generatedMainNode;
         int baseIndent;
@@ -525,7 +525,7 @@ namespace smart {
         MemBuffer memBufferForCodeLines;
 
         void setCodeNode(void* node) {
-            this->leftNode = static_cast<NodeBase *>(node);
+            this->mostLeftNode = static_cast<NodeBase *>(node);
             this->generatedMainNode = static_cast<NodeBase *>(node);
         }
 
@@ -1171,7 +1171,7 @@ namespace smart {
                     TEXT_MEMCPY(boolNode->text, context->chars + start, length);
                     boolNode->text[length] = '\0';
 
-                    context->leftNode = Cast::upcast(boolNode);
+                    context->mostLeftNode = Cast::upcast(boolNode);
                     context->generatedMainNode = Cast::upcast(boolNode);
                     return start + length;
                 }

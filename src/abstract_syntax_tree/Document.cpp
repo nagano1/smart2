@@ -554,7 +554,7 @@ namespace smart {
         context->start = 0;
         context->scanEnd = false;
         context->length = length;
-        context->leftNode = nullptr;
+        context->mostLeftNode = nullptr;
         context->generatedMainNode = nullptr;
 
         context->remainedLineBreakNode = nullptr;
