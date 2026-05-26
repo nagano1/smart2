@@ -50,8 +50,8 @@ namespace smart {
         if (self->equalSymbol.foundPos > -1) {
             currentCodeLine = VTableCall::callAppendToLine(&self->equalSymbol, currentCodeLine);
 
-            assert(self->valueNode); // if equal symbol exists, value node must exist, otherwise tokenizer throws syntax errors.
-            currentCodeLine = VTableCall::callAppendToLine(self->valueNode, currentCodeLine);
+            assert(self->expressionNode); // if equal symbol exists, expression node must exist, otherwise tokenizer throws syntax errors.
+            currentCodeLine = VTableCall::callAppendToLine(self->expressionNode, currentCodeLine);
         }
 
         return currentCodeLine;
@@ -68,8 +68,8 @@ namespace smart {
             }
         }
 
-        if (node->valueNode) {
-            node->valueNode->vtable->applyFuncToDescendants(node->valueNode, ApplyFunc_pass2);
+        if (node->expressionNode) {
+            node->expressionNode->vtable->applyFuncToDescendants(node->expressionNode, ApplyFunc_pass2);
         }
 
         if (!parentIsFirst) {
@@ -102,7 +102,7 @@ namespace smart {
         INIT_NODE(assignStatement, context, parentNode, &_assignVTable);
 
         assignStatement->hasTypeDecl = false;
-        assignStatement->valueNode = nullptr;
+        assignStatement->expressionNode = nullptr;
         assignStatement->stackOffset = 0;
 
         Init::initSymbolNode(&assignStatement->pointerAsterisk, context, assignStatement, '*');
@@ -158,7 +158,7 @@ namespace smart {
         else { // already has name and equal symbol. now should be value node.
             int result = Tokenizers::tokenizeExpression(Cast::upcast(assignment), ch, start, context);
             if (Search::IsTokenized(result)) {
-                assignment->valueNode = context->generatedMainNode;
+                assignment->expressionNode = context->generatedMainNode;
                 context->scanEnd = true;
                 return result;
             }
