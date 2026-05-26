@@ -13,19 +13,7 @@
 #include <ctime>
 //
 #include <string.h> // memcpy
-//
-//
-////using utf8byte = char;
-///*
-// *
-// * afunc
-// *   <int<int>>
-// *   () {
-// *
-// * }
-// *
-// *
-// */
+
 namespace smart {
 
     enum class ErrorIndex {
@@ -109,29 +97,6 @@ namespace smart {
         static bool errorInfoInitialized;
     };
 
-/*
-    static int acompare(void const * alhs, void const * arhs) {
-        ErrorInfo* lhs = (ErrorInfo*)alhs;
-        ErrorInfo* rhs = (ErrorInfo*)arhs;
-
-        if (lhs->errorCode == rhs->errorCode) {
-#if defined(_MSVC_LANG) //_MSC_VER  _MSVC_LANG _MSC_BUILD
-            printf("duplicate error id(%d)\n ", lhs->errorCode);
-#endif
-            //exit(9990);
-            return 0;
-        }
-        else if (lhs->errorCode > rhs->errorCode) {
-            return 1;
-        }
-        else {
-            return -1;
-        }
-        //return lhs->errorCode - rhs->errorCode;
-        return 0;
-    }
-*/
-
     // C++-14
     // 201402L (C++14), 201703L (C++17), 202002L (C++20)
     #if __cplusplus >= 201402L || _MSVC_LANG >= 201402L
@@ -195,7 +160,7 @@ namespace smart {
             ErrorInfo{ ErrorIndex::expect_end_parenthesis_for_fn_params, 7777818, "expect ')' for fn parameters"},
 
             // return
-            ErrorInfo{ ErrorIndex::no_value_for_return, 7778818, "no_value_for_return"},
+            ErrorInfo{ ErrorIndex::no_value_for_return, 7778818, "no value for return statement"},
 
             //----------------------------------------------------------------------------------
             //
@@ -203,9 +168,9 @@ namespace smart {
             //
             //----------------------------------------------------------------------------------
             ErrorInfo{ErrorIndex::no_logical_error, 57770000, "no_logical_error"},
-            ErrorInfo{ErrorIndex::no_variable_defined, 57770001, "no_variable_defined"},
+            ErrorInfo{ErrorIndex::no_variable_defined, 57770001, "no variable defined"},
             ErrorInfo{ErrorIndex::type_not_found, 57770002, "type not found"},
-            ErrorInfo{ErrorIndex::assign_null_to_unnullable, 57770003, "assign_null_to_unnullable"},
+            ErrorInfo{ErrorIndex::assign_null_to_unnullable, 57770003, "assign null to unnullable type"},
             ErrorInfo{ErrorIndex::assign_to_immutable, 57770004, "assign_to_immutable"},
             ErrorInfo{ErrorIndex::need_mutable_mark_for_no_value_assignment, 57770005, "need_mutable_mark_for_no_value_assignment"},
             ErrorInfo{ErrorIndex::type_is_not_assigneable, 57770006, "type_is_not_assigneable"},
@@ -215,8 +180,7 @@ namespace smart {
         };
 
 
-
-        static_assert(errorListSize == (sizeof tempList) / sizeof(ErrorInfo), "error list should have the same length");
+        static_assert(errorListSize == (sizeof tempList) / sizeof(ErrorInfo), "error list should have the same length"); 
         static_assert(0 == (int)ErrorIndex::first_keeper, "first keeper id = 0");
         static_assert(errorListSize-1 == (int)ErrorIndex::last_keeper, "last keeper id = ");
 
@@ -224,6 +188,7 @@ namespace smart {
         static_assert(is_sorted(tempList), "error List should be sorted with error code"); // C++14
         #endif
 
+        // initialize error info list
         for (int i = 0; i < errorListSize; i++) {
             auto &&errorInfo = tempList[i];
             ErrorInfo::ErrorInfoList[static_cast<int>(tempList[i].errorIndex)] = errorInfo;
