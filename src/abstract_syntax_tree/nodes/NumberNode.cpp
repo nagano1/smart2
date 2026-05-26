@@ -120,7 +120,7 @@ namespace smart {
     //    | Number                   |
     //    +--------------------------+
 
-    static CodeLine *appendToLine(NumberNodeStruct *self, CodeLine *currentCodeLine)
+    static CodeLine *appendToLine_NumberNode(NumberNodeStruct *self, CodeLine *currentCodeLine)
     {
         assert(self->text != nullptr);
 
@@ -130,12 +130,12 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static void copySelfText(NumberNodeStruct *self, utf8byte *buf)
+    static void copySelfText_NumberNode(NumberNodeStruct *self, utf8byte *buf)
     {
         TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
-    static int selfTextLength(NumberNodeStruct *self)
+    static int selfTextLength_NumberNode(NumberNodeStruct *self)
     {
         return self->textLength;
     }
@@ -217,8 +217,7 @@ namespace smart {
     }
 
 
-    static int NumberNodeStruct_applyFuncToDescendants(
-            NumberNodeStruct *node, ApplyFunc_params3)
+    static int NumberNodeStruct_applyFuncToDescendants(NumberNodeStruct *node, ApplyFunc_params3)
     {
         if (targetVTable == nullptr || node->vtable == targetVTable) {
             func(Cast::upcast(node), ApplyFunc_pass);
@@ -228,9 +227,9 @@ namespace smart {
     }
 
 
-    static node_vtable _numberVTable_ = CREATE_VTABLE(NumberNodeStruct, selfTextLength,
-                                                            copySelfText,
-                                                            appendToLine,
+    static node_vtable _numberVTable_ = CREATE_VTABLE(NumberNodeStruct, selfTextLength_NumberNode,
+                                                            copySelfText_NumberNode,
+                                                            appendToLine_NumberNode,
                                                       NumberNodeStruct_applyFuncToDescendants,
                                                             numberNodeTypeText,
                                                             NodeTypeId::Number);
@@ -317,7 +316,7 @@ namespace smart {
         return currentCodeLine;
     }
 
-    static void copySelfText3(ParenthesesNodeStruct *self, utf8byte *buf)
+    static void copySelfText_ParenthesesNode(ParenthesesNodeStruct *self, utf8byte *buf)
     {
         buf[0] = '(';
     }
@@ -397,7 +396,7 @@ namespace smart {
 
     static node_vtable _parenthesesVTable = CREATE_VTABLE(ParenthesesNodeStruct,
                                                                 parentheses_selfTextLength,
-                                                                copySelfText3,
+                                                                copySelfText_ParenthesesNode,
                                                                 parentheses_appendToLine,
                                                           parentheses_applyFuncToDescendants,
                                                                 parenthesesNodeTypeText,
