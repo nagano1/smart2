@@ -21,7 +21,7 @@
 
 namespace smart
 {
-    ErrorInfo ErrorInfo::ErrorInfoList[errorListSize];
+    ErrorInfo ErrorInfo::ErrorInfoList[errorListSize]; // errorIndex -> ErrorInfo
     bool ErrorInfo::errorInfoInitialized{false};
     struct InternalParsingData;
 

@@ -186,7 +186,7 @@ namespace smart
             errorInfo.hasError = true;
             auto *mem = this->memBufferForError.newMem<LogicErrorItem>(1);
             mem->node = node;
-            mem->codeErrorItem.errorCode = errorCode;
+            mem->codeErrorItem.errorIndex = errorCode;
             mem->codeErrorItem.linePos1 = -1;
             mem->next = nullptr;
             if (errorInfo.firstErrorItem == nullptr) {

@@ -138,7 +138,6 @@ namespace smart {
     #define  USE_STATIC_SORT
     #endif
     #ifdef USE_STATIC_SORT
-    // Check if the error list is sorted by error code. This is important for efficient error lookup.
     static constexpr bool is_sorted(const ErrorInfo tempList[])
     {
         for (std::size_t i = 0; i < errorListSize - 1; ++i) {
@@ -246,32 +245,32 @@ namespace smart {
     };
 
 
-    static const char *translateErrorMessage(ErrorIndex errorCode, Language lang) {
+    static const char *translateErrorMessage(ErrorIndex errorIndex, Language lang) {
         return nullptr;
     }
 
     // This function returns a unique error ID for a given error code.
     // The error ID can be used for user-friendly error reporting and localization.
-    static int getErrorId(ErrorIndex errorCode) {
+    static int getErrorId(ErrorIndex errorIndex) {
         if (!ErrorInfo::errorInfoInitialized) {
             initErrorInfoList();
         }
 
-        auto&& errorInfo = ErrorInfo::ErrorInfoList[static_cast<int>(errorCode)];
+        auto&& errorInfo = ErrorInfo::ErrorInfoList[static_cast<int>(errorIndex)];
         return errorInfo.errorCode;
     }
 
 
-    static const char *getErrorMessage(ErrorIndex errorCode) {
+    static const char *getErrorMessage(ErrorIndex errorIndex) {
         if (!ErrorInfo::errorInfoInitialized) {
             initErrorInfoList();
         }
 
         const char *mes = nullptr;
-        auto&& errorInfo = ErrorInfo::ErrorInfoList[static_cast<int>(errorCode)];
+        auto&& errorInfo = ErrorInfo::ErrorInfoList[static_cast<int>(errorIndex)];
         mes = errorInfo.msg;
 
-        auto *transMess = translateErrorMessage(errorCode, Language::jp);
+        auto *transMess = translateErrorMessage(errorIndex, Language::jp);
         if (transMess != nullptr) {
             mes = transMess;
         }
@@ -283,7 +282,7 @@ namespace smart {
 
 
     using CodeErrorItem = struct _CodeErrorItem {
-        ErrorIndex errorCode;
+        ErrorIndex errorIndex;
         char reason[MAX_REASON_LENGTH + 1];
         int reasonLength = 0;
 

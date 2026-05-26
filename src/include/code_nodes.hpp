@@ -646,7 +646,7 @@ namespace smart {
 
 
             errorInfo.hasError = true;
-            errorInfo.errorItem.errorCode = errorCode;
+            errorInfo.errorItem.errorIndex = errorCode;
 
             errorInfo.errorItem.errorId = getErrorId(errorCode);
             const char* reason = getErrorMessage(errorCode);

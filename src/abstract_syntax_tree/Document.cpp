@@ -513,7 +513,7 @@ namespace smart {
 
         auto *context = docStruct->context;
         context->syntaxErrorInfo.hasError = false;
-        context->syntaxErrorInfo.errorItem.errorCode = ErrorIndex::no_syntax_error;
+        context->syntaxErrorInfo.errorItem.errorIndex = ErrorIndex::no_syntax_error;
         context->syntaxErrorInfo.errorItem.errorId = 10000;
         context->syntaxErrorInfo.errorItem.charPosition = -1;
         context->syntaxErrorInfo.errorItem.charPosition2 = -1;
