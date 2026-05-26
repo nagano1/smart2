@@ -294,14 +294,14 @@ namespace smart {
         int stackOffset;
         NameNodeStruct nameNode; // variable name
         SymbolStruct equalSymbol; // =
-        NodeBase *valueNode; // 32
+        NodeBase *expressionNode; // 32
     };
 
     using KeywordAndExpressionStruct = struct {
         NODE_HEADER;
 
         SimpleTextNodeStruct returnText;
-        NodeBase *valueNode;
+        NodeBase *expressionNode;
     };
 
     using ReturnStatementNodeStruct = KeywordAndExpressionStruct; // return 32
@@ -376,7 +376,7 @@ namespace smart {
         SymbolStruct openNode;
         SymbolStruct closeNode;
 
-        NodeBase *valueNode;
+        NodeBase *expressionNode;
     };
 
 

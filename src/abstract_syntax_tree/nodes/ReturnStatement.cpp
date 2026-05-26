@@ -37,8 +37,8 @@ namespace smart {
         auto *prevCodeLine = currentCodeLine;
         auto formerParentDepth = self->context->parentDepth;
 
-        if (self->valueNode) {
-            currentCodeLine = VTableCall::callAppendToLine(self->valueNode, currentCodeLine);
+        if (self->expressionNode) {
+            currentCodeLine = VTableCall::callAppendToLine(self->expressionNode, currentCodeLine);
 
             if (prevCodeLine != currentCodeLine) {
                 currentCodeLine->depth = formerParentDepth + 1;
@@ -59,8 +59,8 @@ namespace smart {
                 func(Cast::upcast(node), ApplyFunc_pass);
             }
         }
-        if (node->valueNode) {
-            node->valueNode->vtable->applyFuncToDescendants(node->valueNode, ApplyFunc_pass2);
+        if (node->expressionNode) {
+            node->expressionNode->vtable->applyFuncToDescendants(node->expressionNode, ApplyFunc_pass2);
         }
 
         if (!parentIsFirst) {
@@ -91,7 +91,7 @@ namespace smart {
     ReturnStatementNodeStruct *Alloc::newReturnStatement(ParseContext *context, NodeBase *parentNode) {
         auto *returnStatement = context->newMem<ReturnStatementNodeStruct>();
 
-        returnStatement->valueNode = nullptr;
+        returnStatement->expressionNode = nullptr;
 
         Init::initReturnStatement(context, parentNode, returnStatement);
         return returnStatement;
@@ -103,7 +103,7 @@ namespace smart {
     void Init::initReturnStatement(ParseContext *context, NodeBase *parentNode, ReturnStatementNodeStruct *returnStatement) {
         INIT_NODE(returnStatement, context, parentNode, &_returnVTable);
 
-        returnStatement->valueNode = nullptr;
+        returnStatement->expressionNode = nullptr;
 
         Init::initSimpleTextNode(&returnStatement->returnText, context, returnStatement, returnTextSize);
     }
@@ -118,15 +118,12 @@ namespace smart {
         auto *returnNode = Cast::downcast<ReturnStatementNodeStruct *>(argNode);
         int result = Tokenizers::tokenizeExpression(Cast::upcast(returnNode), ch,start, context);
         if (Search::IsTokenized(result)) {
-            returnNode->valueNode = context->generatedMainNode;
-            //context->scanEnd = true;
+            returnNode->expressionNode = context->generatedMainNode;
             return result;
         }
         else {
             // no value for return statement. e.g. "return" or "return\n"
-            // context->scanEnd = true;
             return Search::NOTFOUND;
-            //context->setError(ErrorCode::no_value_for_return, start);
         }
     }
 
