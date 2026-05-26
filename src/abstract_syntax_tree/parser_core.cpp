@@ -336,9 +336,6 @@ namespace smart
             }
 
             if (result > -1) {
-                if (firstTokenizedLeftNode == nullptr) {
-                    firstTokenizedLeftNode = context->mostLeftNode;
-                }
                 context->isAfterLineBreak = false;
                 context->lastTokenizedPos = result;
 
