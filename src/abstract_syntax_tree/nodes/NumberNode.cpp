@@ -336,7 +336,7 @@ namespace smart {
 
     static constexpr const char parenthesesNodeTypeText[] = "<parentheses>";
 
-    static int tokenizeExpressionInternal(TokenizerParams_argNode_ch_start_context) {
+    static int tokenizeExpressionForReturnInternal(TokenizerParams_argNode_ch_start_context) {
         auto *parenthesesNode = Cast::downcast<ParenthesesNodeStruct *>(argNode);
 
         if (ch == ')') {
@@ -371,7 +371,7 @@ namespace smart {
         if ('(' == ch) {
             auto *parenthesesNode = Alloc::newParenthesesNode(context, argNode);
             int currentPos = start + 1;
-            int resultPos =  Scanner::scanLoop(parenthesesNode, tokenizeExpressionInternal, context, currentPos);
+            int resultPos =  Scanner::scanLoop(parenthesesNode, tokenizeExpressionForReturnInternal, context, currentPos);
             if (Search::IsTokenized(resultPos)) {
                 context->setCodeNode(parenthesesNode);
                 return resultPos;
