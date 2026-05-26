@@ -102,7 +102,7 @@ namespace smart {
             if (tempList[i].errorIndex >= tempList[i + 1].errorIndex) {
                 return false;
             }
-            if (static_cast<int>(tempList[i].errorIndex) != index++) { // check if error index is continuous and starts from 0
+            if (static_cast<int>(tempList[i].errorIndex) != ++index) { // check if error index is continuous and starts from 0
                 return false;
             }
         }
