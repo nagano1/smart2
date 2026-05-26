@@ -118,7 +118,7 @@ namespace smart {
         auto *returnNode = Cast::downcast<ReturnStatementNodeStruct *>(argNode);
         int result = Tokenizers::tokenizeExpression(Cast::upcast(returnNode), ch,start, context);
         if (Search::IsTokenized(result)) {
-            returnNode->expressionNode = context->generatedMainNode;
+            returnNode->expressionNode = context->generatedPrimaryNode;
             return result;
         }
         else {
@@ -143,12 +143,12 @@ namespace smart {
             int resultPos = Scanner::scanOnce(returnNode, tokenizeExpressionForReturnInternal, context, currentPos);
             if (Search::IsTokenized(resultPos)) {
                 context->mostLeftNode = Cast::upcast(&returnNode->returnText);
-                context->generatedMainNode = Cast::upcast(returnNode);
+                context->generatedPrimaryNode = Cast::upcast(returnNode);
                 return resultPos;
             }
             else { // no value for return statement. 
                 context->mostLeftNode = Cast::upcast(&returnNode->returnText);
-                context->generatedMainNode = Cast::upcast(returnNode);
+                context->generatedPrimaryNode = Cast::upcast(returnNode);
                 return currentPos;
             }
         }

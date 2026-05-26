@@ -464,11 +464,11 @@ namespace smart {
         int result;
 
         if (Search::IsTokenized(result = Tokenizers::classTokenizer(TokenizerParams_pass))) {
-            appendRootNode(doc, context->generatedMainNode);
+            appendRootNode(doc, context->generatedPrimaryNode);
             return result;
         }
         else if (Search::IsTokenized(result = Tokenizers::fnTokenizer(TokenizerParams_pass))) {
-            appendRootNode(doc, context->generatedMainNode);
+            appendRootNode(doc, context->generatedPrimaryNode);
             return result;
         }
 
@@ -522,7 +522,7 @@ namespace smart {
         context->scanEnd = false;
         context->length = length;
         context->mostLeftNode = nullptr;
-        context->generatedMainNode = nullptr;
+        context->generatedPrimaryNode = nullptr;
 
         context->remainedLineBreakNode = nullptr;
         context->remainedCommentNode = nullptr;

@@ -160,13 +160,13 @@ namespace smart {
             int result;
             if (Search::IsTokenized(result = Tokenizers::classTokenizer(parent, ch, start, context))) {
                 auto *innerClassNode = Cast::downcast<ClassNodeStruct *>(parent);
-                appendChildNode(innerClassNode, context->generatedMainNode);
+                appendChildNode(innerClassNode, context->generatedPrimaryNode);
                 return result;
             }
 
             if (Search::IsTokenized(result = Tokenizers::fnTokenizer(parent, ch, start, context))) {
                 auto* innerClassNode = Cast::downcast<ClassNodeStruct*>(parent);
-                appendChildNode(innerClassNode, context->generatedMainNode);
+                appendChildNode(innerClassNode, context->generatedPrimaryNode);
                 return result;
             }
 

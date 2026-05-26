@@ -117,7 +117,7 @@ namespace smart {
             auto *binaryOpNode = Alloc::newBinaryOperationNode(context, argNode, ch);
 
             context->mostLeftNode = Cast::upcast(&binaryOpNode->opNode);
-            context->generatedMainNode = Cast::upcast(binaryOpNode);
+            context->generatedPrimaryNode = Cast::upcast(binaryOpNode);
             return start + 1;
         }
 
@@ -130,24 +130,23 @@ namespace smart {
     int Tokenizers::binaryOperationTokenizer(TokenizerParams_argNode_ch_start_context)
     {
         NodeBase *parent = argNode;
-        assert(context->generatedMainNode != nullptr);
+        assert(context->generatedPrimaryNode != nullptr);
 
-        auto *leftExpressionNode = context->generatedMainNode;
+        auto *leftExpressionNode = context->generatedPrimaryNode;
         auto *leftNode = context->mostLeftNode;
 
         int resultPos = Scanner::scanOnce(parent, inner_op_binaryOpTokenizer, context, start);
         context->mostLeftNode = leftNode;
 
         if (Search::IsTokenized(resultPos)) {
-            auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedMainNode);
+            auto* binaryOpNode = Cast::downcast<BinaryOperationNodeStruct*>(context->generatedPrimaryNode);
             binaryOpNode->leftExprNode = leftExpressionNode;
             binaryOpNode->leftExprNode->parentNode = Cast::upcast(binaryOpNode);
 
-            if (Search::IsTokenized(resultPos = Scanner::scanOnce(binaryOpNode,
-                                                    Tokenizers::tokenizeExpression,
-                                                    context, resultPos))) {
-                binaryOpNode->rightExprNode = context->generatedMainNode;
-                context->generatedMainNode = Cast::upcast(binaryOpNode);
+            resultPos = Scanner::scanOnce(binaryOpNode, Tokenizers::tokenizeExpression, context, resultPos);
+            if (Search::IsTokenized(resultPos)) {
+                binaryOpNode->rightExprNode = context->generatedPrimaryNode;
+                context->generatedPrimaryNode = Cast::upcast(binaryOpNode);
                 context->mostLeftNode = leftNode;
                 return resultPos;
             }

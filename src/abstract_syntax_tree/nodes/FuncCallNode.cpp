@@ -173,7 +173,7 @@ namespace smart {
         if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(TokenizerParams_pass))) {
             auto *nextItem = Alloc::newFuncArgumentItem(context, argNode);
 
-            nextItem->exprNode = context->generatedMainNode;
+            nextItem->exprNode = context->generatedPrimaryNode;
             appendRootNode(funcCallNode, nextItem);
             funcCallNode->parsePhase = phase::EXPECT_COMMA;
             return result;
@@ -224,11 +224,11 @@ namespace smart {
             return Search::NOTFOUND;
         }
 
-        assert(context->generatedMainNode != nullptr);
+        assert(context->generatedPrimaryNode != nullptr);
 
         auto *funcCallNode = Alloc::newFuncCallNode(context, parent);
 
-        funcCallNode->exprNode = context->generatedMainNode;
+        funcCallNode->exprNode = context->generatedPrimaryNode;
         funcCallNode->exprNode->parentNode = Cast::upcast(funcCallNode);
 
         auto *leftNode = context->mostLeftNode; // this is also the generatedMainNode which is the expression before '('
@@ -236,7 +236,7 @@ namespace smart {
         int currentPos = start + 1;
         int resultPos = Scanner::scanLoop(funcCallNode, tokenizeFuncCallInternal, context, currentPos);
         if (Search::IsTokenized(resultPos)) {
-            context->generatedMainNode = Cast::upcast(funcCallNode);
+            context->generatedPrimaryNode = Cast::upcast(funcCallNode);
             context->mostLeftNode = leftNode;
             return resultPos;
         }

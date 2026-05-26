@@ -154,19 +154,19 @@ namespace smart {
             int nextPos;
             // value as a statement
             if (Search::IsTokenized(nextPos = Tokenizers::returnStatementTokenizer(TokenizerParams_pass))) {
-                appendChildNode(body, context->generatedMainNode);
+                appendChildNode(body, context->generatedPrimaryNode);
                 return nextPos;
             }
             else if (Search::IsTokenized(nextPos = Tokenizers::assignStatementTokenizer(TokenizerParams_pass))) {
-                appendChildNode(body, context->generatedMainNode);
+                appendChildNode(body, context->generatedPrimaryNode);
                 return nextPos;
             }
             else if (Search::IsTokenized(nextPos = Tokenizers::assignStatementWithoutLetTokenizer(TokenizerParams_pass))) {
-                appendChildNode(body, context->generatedMainNode);
+                appendChildNode(body, context->generatedPrimaryNode);
                 return nextPos;
             }
             else if (Search::IsTokenized(nextPos = Tokenizers::tokenizeExpression(TokenizerParams_pass))) {
-                appendChildNode(body, context->generatedMainNode);
+                appendChildNode(body, context->generatedPrimaryNode);
                 return nextPos;
             }
         } else {
@@ -249,7 +249,7 @@ namespace smart {
         auto *nextParam = Alloc::newFuncParameterItem(context, parent);
         int result;
         if (Search::IsTokenized(result = Tokenizers::assignStatementTokenizer(Cast::upcast(nextParam), ch, start, context))) {
-            nextParam->assignStatementNodeStruct = Cast::downcast<AssignStatementNodeStruct *>(context->generatedMainNode);
+            nextParam->assignStatementNodeStruct = Cast::downcast<AssignStatementNodeStruct *>(context->generatedPrimaryNode);
             appendChildParameterNode(funcNode, nextParam);
 
             funcNode->parameterParsePhase = FuncParamParsePhase::EXPECT_COMMA2;
@@ -444,13 +444,14 @@ namespace smart {
 
 
 
+    // tokenizer for function declaration, function name is already parsed by the caller, this tokenizer is responsible for parsing function parameters and function body.
     static int inner_fnParamsAndBodyTokenizer(TokenizerParams_argNode_ch_start_context) {
         auto *fnNode = Cast::downcast<FuncNodeStruct *>(argNode);
 
         if (fnNode->parameterStartNode.foundPos == -1) {
             if (ch == '(') {
                 fnNode->parameterStartNode.foundPos = start;
-                context->setCodeNode(&fnNode->parameterStartNode);
+                //context->setCodeNode(&fnNode->parameterStartNode);
                 int nextPos =  start + 1;
                 int result = Scanner::scanLoop(fnNode, internal_parameterListTokenizerLoop, context, nextPos);
                 if (Search::IsTokenized(result)) {
@@ -490,15 +491,14 @@ namespace smart {
 
         // now after "fn "
         auto *fnNode = Alloc::newFuncNode(context, argNode);
-        {
-            resultPos = Scanner::scanOnce(&fnNode->nameNode, Tokenizers::nameTokenizer, context, currentPos);
-            // nameNode should have spaces/comments/lineBreaks before between "fn" and function name,
-            if (!Search::IsTokenized(resultPos)) {
-                // the fn should have a function name
-                context->setError(ErrorCode::invalid_fn_name, start);
-                context->setCodeNode(fnNode);
-                return currentPos;
-            }
+
+        resultPos = Scanner::scanOnce(&fnNode->nameNode, Tokenizers::nameTokenizer, context, currentPos);
+        // nameNode should have spaces/comments/lineBreaks before between "fn" and function name,
+        if (!Search::IsTokenized(resultPos)) {
+            // the fn should have a function name
+            context->setError(ErrorCode::invalid_fn_name, start);
+            context->setCodeNode(fnNode);
+            return currentPos;
         }
 
         // Parse body

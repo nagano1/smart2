@@ -19,10 +19,10 @@
 
 namespace smart {
 
-    // Assignment or variable declaration statement. It can be with or without type declaration. e.g.
-    //     a = 3; // assignment without type declaration
-    //     int a = 3; // assignment with type declaration
-    //     int a; // variable declaration without assignment
+    // Assignment or variable declaration statement. It can be with or without type declaration.
+    // e.g. a = 3; // assignment without type declaration
+    //      int a = 3; // assignment with type declaration
+    //      int a; // variable declaration without assignment
     // this struct is also used in method parameters, e.g. fn func(int a, string *b) { ... }.
     static int selfTextLength(AssignStatementNodeStruct *)
     {
@@ -158,7 +158,7 @@ namespace smart {
         else { // already has name and equal symbol. now should be value node.
             int result = Tokenizers::tokenizeExpression(Cast::upcast(assignment), ch, start, context);
             if (Search::IsTokenized(result)) {
-                assignment->expressionNode = context->generatedMainNode;
+                assignment->expressionNode = context->generatedPrimaryNode;
                 context->scanEnd = true;
                 return result;
             }
@@ -195,7 +195,7 @@ namespace smart {
             assignment->typeOrLet.isLet = false;
 
             context->mostLeftNode = Cast::upcast(&assignment->nameNode);
-            context->generatedMainNode = Cast::upcast(assignment);
+            context->generatedPrimaryNode = Cast::upcast(assignment);
 
             return resultPos;
         }
@@ -230,7 +230,7 @@ namespace smart {
             if (Search::IsTokenized(resultPos = Scanner::scanLoop(assignStatement, tokenizeAssignStatementLoop, context, result)))
             {
                 context->mostLeftNode = Cast::upcast(&assignStatement->typeOrLet);
-                context->generatedMainNode = Cast::upcast(assignStatement);
+                context->generatedPrimaryNode = Cast::upcast(assignStatement);
 
                 return resultPos;
             }
