@@ -73,29 +73,16 @@ namespace smart {
         last_keeper
     };
 
-    // // 
-    // template<
-    //         typename tEnum,
-    //         typename std::enable_if<std::is_enum<tEnum>::value, std::nullptr_t>::type = nullptr
-    // >
-    // std::ostream& operator<<(std::ostream& iOStream, tEnum iEnum)
-    // {
-    //     typedef typename std::underlying_type<tEnum>::type  Type;
-    //     iOStream << static_cast<Type>(iEnum);
-    //     return iOStream;
-    // }
 
-
-    static constexpr int errorListSize = 1 + static_cast<int>(ErrorIndex::last_keeper);
-
+    static constexpr int errorListSize = 1 + static_cast<int>(ErrorIndex::last_keeper); // +1 for last_keeper to get the size of error list.
 
     struct ErrorInfo {
-        ErrorIndex errorIndex; // this is for internal use, should not be exposed to users. it is used for error lookup and should be unique and sorted by this field.
+        ErrorIndex errorIndex; // enum value for error index, used for switch case and array indexing.
         int errorCode; // this is for user friendly error code.
         const char* msg;
 
         static ErrorInfo ErrorInfoList[errorListSize];
-        static bool errorInfoInitialized;
+        static bool errorInfoInitialized; // to make sure error info list is initialized before use.
     };
 
     // C++-14
@@ -209,8 +196,7 @@ namespace smart {
         return nullptr;
     }
 
-    // This function returns a unique error ID for a given error code.
-    // The error ID can be used for user-friendly error reporting and localization.
+    // for error code, we use a large number to avoid conflict with other error codes, and we can also use the error code to indicate the type of error, for example, syntax error, logical error, etc.
     static int getErrorCode(ErrorIndex errorIndex) {
         if (!ErrorInfo::errorInfoInitialized) {
             initErrorInfoList();
