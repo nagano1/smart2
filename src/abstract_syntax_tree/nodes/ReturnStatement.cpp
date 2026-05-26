@@ -108,28 +108,26 @@ namespace smart {
         Init::initSimpleTextNode(&returnStatement->returnText, context, returnStatement, returnTextSize);
     }
 
-    // --------------------- Implements Return Statement Parser ----------------------
+    // "return" already matched, now try to match expression after return keyword
     static int tokenizeExpressionInternal(TokenizerParams_argNode_ch_start_context) {
-
         if (context->isAfterLineBreak) {
+            // if there is line break after return keyword, it means there is no value for return statement.
             return Search::NOTFOUND;
         }
 
         auto *returnNode = Cast::downcast<ReturnStatementNodeStruct *>(argNode);
-        int result;
-        if (Search::IsTokenized(result = Tokenizers::tokenizeExpression(Cast::upcast(returnNode), ch,
-                                                           start, context))) {
+        int result = Tokenizers::tokenizeExpression(Cast::upcast(returnNode), ch,start, context);
+        if (Search::IsTokenized(result)) {
             returnNode->valueNode = context->generatedMainNode;
             context->scanEnd = true;
-
             return result;
         }
         else {
-            //context->scanEnd = true;
-            context->setError(ErrorCode::no_value_for_return, start);
+            // no value for return statement. e.g. "return" or "return\n"
+            context->scanEnd = true;
+            return Search::NOTFOUND;
+            //context->setError(ErrorCode::no_value_for_return, start);
         }
-
-        return Search::NOTFOUND;
     }
 
     // return 1234
@@ -151,7 +149,7 @@ namespace smart {
                 context->generatedMainNode = Cast::upcast(returnNode);
                 return resultPos;
             }
-            else {
+            else { // no value for return statement. 
                 context->mostLeftNode = Cast::upcast(&returnNode->returnText);
                 context->generatedMainNode = Cast::upcast(returnNode);
                 return currentPos;
