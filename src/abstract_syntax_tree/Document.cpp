@@ -458,7 +458,7 @@ namespace smart {
     }
 
 
-    static int tryTokenizeLoop(TokenizerParams_argNode_ch_start_context)
+    static int tokenizeDocumentRootLoop(TokenizerParams_argNode_ch_start_context)
     {
         auto *doc = Cast::downcast<DocumentStruct *>(argNode);
         int result;
@@ -538,7 +538,7 @@ namespace smart {
 
 
         if (docStruct->documentType == DocumentType::CodeDocument) {
-            Scanner::scanRoot(docStruct, tryTokenizeLoop, context);
+            Scanner::scanRoot(docStruct, tokenizeDocumentRootLoop, context);
         }
         
         if (!context->syntaxErrorInfo.hasError) {
