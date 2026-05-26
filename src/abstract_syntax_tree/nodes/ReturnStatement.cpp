@@ -97,8 +97,8 @@ namespace smart {
         return returnStatement;
     }
 
-    constexpr char returnText[] = "return";
-    constexpr int returnTextSize = sizeof(returnText) - 1;
+    constexpr char returnWord[] = "return";
+    constexpr int returnTextSize = sizeof(returnWord) - 1;
 
     void Init::initReturnStatement(ParseContext *context, NodeBase *parentNode, ReturnStatementNodeStruct *returnStatement) {
         INIT_NODE(returnStatement, context, parentNode, &_returnVTable);
@@ -109,7 +109,7 @@ namespace smart {
     }
 
     // --------------------- Implements Return Statement Parser ----------------------
-    static int parenthesesTokenizerInternal(TokenizerParams_argNode_ch_start_context) {
+    static int tokenizeExpressionInternal(TokenizerParams_argNode_ch_start_context) {
 
         if (context->isAfterLineBreak) {
             return Search::NOTFOUND;
@@ -139,17 +139,14 @@ namespace smart {
             return Search::NOTFOUND;
         }
 
-        auto idx = ParseUtil::matchWordWithTerminatableEnd(context->chars, context->length, start, returnText);
+        auto idx = ParseUtil::matchWordWithTerminatableEnd(context->chars, context->length, start, returnWord);
         if (idx > -1) {
             auto *returnNode = Alloc::newReturnStatement(context, argNode);
             Init::assignText_SimpleTextNode(&returnNode->returnText, context, start, returnTextSize);
 
             int currentPos = idx + returnTextSize;
-            int resultPos;
-            if (Search::IsTokenized(resultPos = Scanner::scanLoop(returnNode,
-                                                        parenthesesTokenizerInternal,
-                                                        context, currentPos))) {
-
+            int resultPos = Scanner::scanLoop(returnNode, tokenizeExpressionInternal, context, currentPos);
+            if (Search::IsTokenized(resultPos)) {
                 context->mostLeftNode = Cast::upcast(&returnNode->returnText);
                 context->generatedMainNode = Cast::upcast(returnNode);
                 return resultPos;

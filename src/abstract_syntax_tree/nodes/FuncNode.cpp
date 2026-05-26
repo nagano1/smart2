@@ -183,10 +183,7 @@ namespace smart {
 
         if (ch == '{') {
             int returnPosition = start + 1;
-            int result = Scanner::scanLoop(bodyNode,
-                                            inner_bodyTokenizerLoop,
-                                            context, returnPosition);
-
+            int result = Scanner::scanLoop(bodyNode, inner_bodyTokenizerLoop, context, returnPosition);
             if (Search::IsTokenized(result)) {
                 context->setCodeNode(bodyNode);
                 return result;
@@ -501,7 +498,6 @@ namespace smart {
             if (!Search::IsTokenized(resultPos)) {
                 // the fn should have a function name
                 context->setError(ErrorCode::invalid_fn_name, start);
-
                 context->setCodeNode(fnNode);
                 return currentPos;
             }
@@ -509,16 +505,15 @@ namespace smart {
 
         // Parse body
         currentPos = resultPos;
-        if (!Search::IsTokenized(resultPos = Scanner::scanOnce(fnNode, inner_fnParamsAndBodyTokenizer,
-                                                    context, currentPos))) {
-
+        resultPos = Scanner::scanOnce(fnNode, inner_fnParamsAndBodyTokenizer, context, currentPos);
+        if (Search::IsTokenized(resultPos)) {
+            context->setCodeNode(fnNode);
+            return resultPos;
+        }
+        else {
             context->setError(ErrorCode::syntax_error, context->lastTokenizedPos);
-
             context->setCodeNode(fnNode);
             return currentPos;
         }
-
-        context->setCodeNode(fnNode);
-        return resultPos;
     }
 }

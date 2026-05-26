@@ -227,9 +227,8 @@ namespace smart {
             assignStatement->hasTypeDecl = true;
 
             int resultPos;
-            if (Search::IsTokenized(resultPos = Scanner::scanLoop(assignStatement,
-                                                     tokenizeAssignStatementLoop,
-                                                     context, result))) {
+            if (Search::IsTokenized(resultPos = Scanner::scanLoop(assignStatement, tokenizeAssignStatementLoop, context, result)))
+            {
                 context->mostLeftNode = Cast::upcast(&assignStatement->typeOrLet);
                 context->generatedMainNode = Cast::upcast(assignStatement);
 
