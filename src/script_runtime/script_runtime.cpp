@@ -939,10 +939,13 @@ namespace smart {
                     }
                 }
             } else { // no value
-                if (assign->typeOrLet.hasNullableMark || assign->typeOrLet.hasImmutableMark) {
+                if (assign->typeOrLet.hasImmutableMark) {
+                    context->addErrorWithNode(ErrorIndex::cant_put_immutable_mark_for_non_value_assignment, &assign->typeOrLet);
+                }
+                else if (assign->typeOrLet.hasNullableMark) {
 
                 } else {
-                    context->addErrorWithNode(ErrorIndex::need_mutable_mark_for_no_value_assignment, &assign->typeOrLet);
+                    
                 }
                 if (assign->typeOrLet.isLet) { // let b
                     context->addErrorWithNode(ErrorIndex::no_variable_defined, assign);

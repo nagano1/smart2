@@ -201,7 +201,7 @@ namespace smart
                 errorInfo.lastErrorItem = mem;
             }
 
-            mem->codeErrorItem.errorId = getErrorId(errorCode);
+            mem->codeErrorItem.errorId = getErrorCode(errorCode);
             const char* reason = getErrorMessage(errorCode);
             if (reason == nullptr) {
                 reason = "";

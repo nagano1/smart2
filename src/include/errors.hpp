@@ -58,7 +58,7 @@ namespace smart {
 
         //----------------------------------------------------------------------------------
         //
-        //                                  Logical Errors
+        //                                  Logical/Semantic Errors
         //
         //----------------------------------------------------------------------------------
         no_logical_error,
@@ -66,23 +66,24 @@ namespace smart {
         type_not_found,
         assign_null_to_unnullable,
         assign_to_immutable,
-        need_mutable_mark_for_no_value_assignment,
+        cant_put_immutable_mark_for_non_value_assignment,
         type_is_not_assigneable,
 
 
         last_keeper
     };
 
-    template<
-            typename tEnum,
-            typename std::enable_if<std::is_enum<tEnum>::value, std::nullptr_t>::type = nullptr
-    >
-    std::ostream& operator<<(std::ostream& iOStream, tEnum iEnum)
-    {
-        typedef typename std::underlying_type<tEnum>::type  Type;
-        iOStream << static_cast<Type>(iEnum);
-        return iOStream;
-    }
+    // // 
+    // template<
+    //         typename tEnum,
+    //         typename std::enable_if<std::is_enum<tEnum>::value, std::nullptr_t>::type = nullptr
+    // >
+    // std::ostream& operator<<(std::ostream& iOStream, tEnum iEnum)
+    // {
+    //     typedef typename std::underlying_type<tEnum>::type  Type;
+    //     iOStream << static_cast<Type>(iEnum);
+    //     return iOStream;
+    // }
 
 
     static constexpr int errorListSize = 1 + static_cast<int>(ErrorIndex::last_keeper);
@@ -164,7 +165,7 @@ namespace smart {
 
             //----------------------------------------------------------------------------------
             //
-            //                                  Logical Errors
+            //                                  Logical/Semantic Errors
             //
             //----------------------------------------------------------------------------------
             ErrorInfo{ErrorIndex::no_logical_error, 57770000, "no_logical_error"},
@@ -172,7 +173,7 @@ namespace smart {
             ErrorInfo{ErrorIndex::type_not_found, 57770002, "type not found"},
             ErrorInfo{ErrorIndex::assign_null_to_unnullable, 57770003, "assign null to unnullable type"},
             ErrorInfo{ErrorIndex::assign_to_immutable, 57770004, "assign_to_immutable"},
-            ErrorInfo{ErrorIndex::need_mutable_mark_for_no_value_assignment, 57770005, "need_mutable_mark_for_no_value_assignment"},
+            ErrorInfo{ErrorIndex::cant_put_immutable_mark_for_non_value_assignment, 57770005, "cant_put_immutable_mark_for_non_value_assignment"},
             ErrorInfo{ErrorIndex::type_is_not_assigneable, 57770006, "type_is_not_assigneable"},
 
 
@@ -194,14 +195,8 @@ namespace smart {
             ErrorInfo::ErrorInfoList[static_cast<int>(tempList[i].errorIndex)] = errorInfo;
         }
 
-        //qsort(sortErrorInfoList, sizeof(sortErrorInfoList) / sizeof(sortErrorInfoList[0]), sizeof(ErrorInfo), acompare);
-
         return 0;
     }
-
-
-
-
 
 
     enum class Language {
@@ -216,7 +211,7 @@ namespace smart {
 
     // This function returns a unique error ID for a given error code.
     // The error ID can be used for user-friendly error reporting and localization.
-    static int getErrorId(ErrorIndex errorIndex) {
+    static int getErrorCode(ErrorIndex errorIndex) {
         if (!ErrorInfo::errorInfoInitialized) {
             initErrorInfoList();
         }
