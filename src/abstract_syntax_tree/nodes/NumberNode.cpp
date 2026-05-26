@@ -46,29 +46,25 @@ namespace smart {
         +----------------------------------------------------+
     */
 
-    static CodeLine *appendToLine2(BoolNodeStruct *self, CodeLine *currentCodeLine) {
+    static CodeLine *appendToLine_BoolNode(BoolNodeStruct *self, CodeLine *currentCodeLine) {
         return currentCodeLine->AddAttachedFormatNodes(self)->appendNode(self);
     }
 
-    static void copySelfText2(BoolNodeStruct *self, utf8byte *buf) {
+    static void copySelfText_BoolNode(BoolNodeStruct *self, utf8byte *buf) {
         TEXT_MEMCPY(buf, self->text, self->textLength);
     }
 
-    static int selfTextLength2(BoolNodeStruct*self) {
+    static int selfTextLength_BoolNode(BoolNodeStruct*self) {
         return self->textLength;
     }
 
 
     int Tokenizers::boolTokenizer(TokenizerParams_argNode_ch_start_context)
     {
-        int result = Tokenizers::tokenizeWord(TokenizerParams_pass,
-                                                Alloc::newBoolNode
-                                                ,'t', "true");
+        int result = Tokenizers::tokenizeWord(TokenizerParams_pass, Alloc::newBoolNode,'t', "true");
         bool trueFound = Search::IsTokenized(result);
         if (!trueFound) {
-            result = Tokenizers::tokenizeWord(TokenizerParams_pass,
-                                                Alloc::newBoolNode,
-                                                'f', "false");
+            result = Tokenizers::tokenizeWord(TokenizerParams_pass, Alloc::newBoolNode, 'f', "false");
             if (!Search::IsTokenized(result)) {
                 return Search::NOTFOUND;
             }
@@ -80,9 +76,7 @@ namespace smart {
         return result;
     }
 
-    static int BoolNodeStruct_applyFuncToDescendants(
-            BoolNodeStruct *node, ApplyFunc_params3)
-    {
+    static int BoolNodeStruct_applyFuncToDescendants(BoolNodeStruct *node, ApplyFunc_params3) {
         if (targetVTable == nullptr || node->vtable == targetVTable) {
             func(Cast::upcast(node), ApplyFunc_pass);
         }
@@ -93,10 +87,11 @@ namespace smart {
 
 
     static constexpr const char boolNodeTypeText[] = "<bool>";
-    static node_vtable _boolVTable = CREATE_VTABLE(BoolNodeStruct, selfTextLength2,
-                                                         copySelfText2, appendToLine2,
+    static node_vtable _boolVTable = CREATE_VTABLE(BoolNodeStruct,
+                                                   selfTextLength_BoolNode,
+                                                   copySelfText_BoolNode, appendToLine_BoolNode,
                                                    BoolNodeStruct_applyFuncToDescendants,
-                                                         boolNodeTypeText, NodeTypeId::Bool);
+                                                   boolNodeTypeText, NodeTypeId::Bool);
 
     const node_vtable *VTables::BoolVTable = &_boolVTable;
 
@@ -145,7 +140,6 @@ namespace smart {
         return self->textLength;
     }
 
-    //*/
     inline int64_t S64(const char *s, int length) {
         // have to check over flow
         return atoll(s); // can't use strtoll beacause of wasm conversion
