@@ -360,10 +360,12 @@ namespace smart
             context->lastTokenizedPos = lastTokenizedPos; // reset lastTokenizedPos if not found
         }
         context->scanEnd = false; // reset scanEnd for the next scan
+        /*
         if (Search::IsTokenized(parsingData.returnPos) && firstTokenizedLeftNode != nullptr) {
             context->mostLeftNode = firstTokenizedLeftNode;
         }
         context->firstTokenizedLeftNode = firstTokenizedLeftNode;
+        */
         return parsingData;
     }
 

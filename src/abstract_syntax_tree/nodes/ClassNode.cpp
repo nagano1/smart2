@@ -213,8 +213,6 @@ namespace smart {
                 currentPos = resultPos;
                 if (!Search::IsTokenized(resultPos = Scanner::scanLoop(classNode, inner_classBodyTokenizer,
                                                      context, currentPos))) {
-                    //context->codeNode = Cast::upcast(classNode);
-                    //return currentPos;
                     return Search::NOTFOUND;
                 }
 
