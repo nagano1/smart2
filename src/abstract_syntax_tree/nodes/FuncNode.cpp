@@ -258,6 +258,7 @@ namespace smart {
         return Search::NOTFOUND;
     }
 
+    // This loop is responsible for parsing function parameters. It will keep parsing until it finds the closing parenthesis of the parameter list.
     static int internal_parameterListTokenizerLoop(TokenizerParams_argNode_ch_start_context) {
         NodeBase *parent = argNode;
         auto *funcNode = Cast::downcast<FuncNodeStruct *>(parent);
@@ -452,8 +453,10 @@ namespace smart {
             if (ch == '(') {
                 fnNode->parameterStartNode.foundPos = start;
                 int nextPos =  start + 1;
+                // parse parameters
                 int result = Scanner::scanLoop(fnNode, internal_parameterListTokenizerLoop, context, nextPos);
                 if (Search::IsTokenized(result)) {
+                    // parse body
                     int result2 = Scanner::scanOnce(Cast::upcast(&fnNode->bodyNode), Tokenizers::bodyTokenizer, context, result);
                     if (Search::IsTokenized(result2)) {
                         context->mostLeftNode = Cast::upcast(&fnNode->parameterStartNode);

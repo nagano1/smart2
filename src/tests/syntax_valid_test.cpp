@@ -122,8 +122,8 @@ class fjawioejap
 
 class/**/A/**/{
 
-}
-)");
+}  
+  )");
 
 const char commentTestText[] = u8" /*[A] \r\n/**/  bck\r\n\n[A]*/";
 const char parenthesisText[] = "fn a() { (12) }";
