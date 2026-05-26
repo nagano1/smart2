@@ -797,16 +797,16 @@ namespace smart {
 
         if (node->vtable == VTables::AssignStatementVTable) {
             auto *assign = Cast::downcast<AssignStatementNodeStruct *>(node);
-            if (assign->valueNode != nullptr) {
-                setCalcRegToNode(assign->valueNode, context);
+            if (assign->expressionNode != nullptr) {
+                setCalcRegToNode(assign->expressionNode, context);
             }
         }
 
         if (node->vtable == VTables::ReturnStatementVTable) {
             auto *returnState = Cast::downcast<ReturnStatementNodeStruct *>(node);
 
-            if (returnState->valueNode) {
-                setCalcRegToNode(returnState->valueNode, context);
+            if (returnState->expressionNode) {
+                setCalcRegToNode(returnState->expressionNode, context);
             }
         }
 
@@ -871,22 +871,22 @@ namespace smart {
         assign->typeAtHeap = assign->pointerAsterisk.foundPos > -1;
 
         if (assign->hasTypeDecl) {
-            if (assign->valueNode) { // int b = 8, let b = 8
-                int childTypeIndex = determineChildTypeIndex(context->scriptEnv, assign->valueNode);
-                assign->typeAtHeap = assign->valueNode->typeAtHeap;
+            if (assign->expressionNode) { // int b = 8, let b = 8
+                int childTypeIndex = determineChildTypeIndex(context->scriptEnv, assign->expressionNode);
+                assign->typeAtHeap = assign->expressionNode->typeAtHeap;
 
                 if (assign->typeOrLet.isLet) { // let b = 8
                     assign->typeIndex = childTypeIndex;
 
                     if (assign->pointerAsterisk.foundPos > -1) {
-                        if (assign->valueNode->typeAtHeap) {
+                        if (assign->expressionNode->typeAtHeap) {
                         }
                         else {
                             // error: int *b = 8
                         }
                     }
                     else {
-                        if (assign->valueNode->typeAtHeap) {
+                        if (assign->expressionNode->typeAtHeap) {
                             // error: String str = "jfoiwjio"
                         }
                         else {
@@ -910,7 +910,7 @@ namespace smart {
                                 else {
                                     // check assignable
 
-                                    auto *targetTypeEntry = context->scriptEnv->typeEntryList[assign->valueNode->typeIndex];
+                                    auto *targetTypeEntry = context->scriptEnv->typeEntryList[assign->expressionNode->typeIndex];
                                     bool canAssign = typeEntry->canAssignTypeImplicitly(context, targetTypeEntry);
 
                                     if (!canAssign) {
@@ -926,7 +926,7 @@ namespace smart {
                         }
                         else {
                             if (typeEntry->typeIndex != childTypeIndex) { // int b = 3.4
-                                auto *targetTypeEntry = context->scriptEnv->typeEntryList[assign->valueNode->typeIndex];
+                                auto *targetTypeEntry = context->scriptEnv->typeEntryList[assign->expressionNode->typeIndex];
                                 bool canAssign = typeEntry->canAssignTypeImplicitly(context, targetTypeEntry);
 
                                 if (!canAssign) {
@@ -954,11 +954,11 @@ namespace smart {
             auto *currentStatement = Cast::downcast<NodeBase*>(topLevelNodeInBody);
             auto *bodyNode = Cast::downcast<BodyNodeStruct *>(currentStatement->parentNode);
             assert(bodyNode->vtable == VTables::BodyVTable);
-            assert(assign->valueNode);
+            assert(assign->expressionNode);
 
-            int childTypeIndex = determineChildTypeIndex(context->scriptEnv, assign->valueNode);
+            int childTypeIndex = determineChildTypeIndex(context->scriptEnv, assign->expressionNode);
             assign->typeIndex = childTypeIndex;
-            assign->typeAtHeap = assign->valueNode->typeAtHeap;
+            assign->typeAtHeap = assign->expressionNode->typeAtHeap;
 
             auto *child = bodyNode->firstChildNode;
             bool hit = false;
@@ -988,7 +988,7 @@ namespace smart {
                                 }
                             }
 
-                            if (assign->valueNode->typeAtHeap != declAssign->typeAtHeap) {
+                            if (assign->expressionNode->typeAtHeap != declAssign->typeAtHeap) {
                                 // error
                                 context->addErrorWithNode(ErrorCode::type_is_not_assigneable, assign);
                             }
@@ -1049,9 +1049,9 @@ namespace smart {
 
         if (node->vtable == VTables::ReturnStatementVTable) {
             auto* returnState = Cast::downcast<ReturnStatementNodeStruct*>(node);
-            if (returnState->valueNode) {
-                returnState->typeIndex = determineChildTypeIndex(context->scriptEnv, returnState->valueNode);
-                returnState->typeAtHeap = returnState->valueNode->typeAtHeap;
+            if (returnState->expressionNode) {
+                returnState->typeIndex = determineChildTypeIndex(context->scriptEnv, returnState->expressionNode);
+                returnState->typeAtHeap = returnState->expressionNode->typeAtHeap;
             }
         }
 
@@ -1333,8 +1333,8 @@ namespace smart {
             // assign: int a = 3
             if (statementNode->vtable == VTables::AssignStatementVTable) {
                 auto* assignStatement = Cast::downcast<AssignStatementNodeStruct *>(statementNode);
-                if (assignStatement->valueNode) {
-                    env->context->evaluateExprNode(assignStatement->valueNode);
+                if (assignStatement->expressionNode) {
+                    env->context->evaluateExprNode(assignStatement->expressionNode);
                     // if (valueBase->typeIndex == BuiltInTypeIndex::int32) {}
                     auto *typeEntry = env->typeEntryList[assignStatement->typeIndex];
                     auto dataSize = typeEntry->dataSize;
@@ -1344,22 +1344,22 @@ namespace smart {
 
                     //env->context->stackMemory.moveTo(assignStatement->stackOffset, dataSize,  (char*)valueBase->ptr);
                     env->context->stackMemory.moveTo(assignStatement->stackOffset, dataSize,
-                                                     assignStatement->valueNode->calcReg);
+                                                     assignStatement->expressionNode->calcReg);
                 }
             }
 
             // return 3
             if (statementNode->vtable == VTables::ReturnStatementVTable) {
                 auto* returnNode = Cast::downcast<ReturnStatementNodeStruct*>(statementNode);
-                env->context->evaluateExprNode(returnNode->valueNode);
-                auto* typeEntry = env->typeEntryList[returnNode->valueNode->typeIndex];
+                env->context->evaluateExprNode(returnNode->expressionNode);
+                auto* typeEntry = env->typeEntryList[returnNode->expressionNode->typeIndex];
 
-                if (typeEntry->dataSize == 8 || returnNode->valueNode->typeAtHeap) {
-                    int64_t v = *(int64_t*)returnNode->valueNode->calcReg;
+                if (typeEntry->dataSize == 8 || returnNode->expressionNode->typeAtHeap) {
+                    int64_t v = *(int64_t*)returnNode->expressionNode->calcReg;
                     return (int32_t)v;
                 }
                 else {
-                    return *(int32_t*)returnNode->valueNode->calcReg;
+                    return *(int32_t*)returnNode->expressionNode->calcReg;
                 }
             }
 
