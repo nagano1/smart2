@@ -91,18 +91,15 @@ namespace smart {
     #define  USE_STATIC_SORT
     #endif
     #ifdef USE_STATIC_SORT
-    // check if the error list is sorted with error code, to make sure the binary search for error code can work correctly.
+    // check if error list is sorted by error code in ascending order, and there is no duplicate error code.
     static constexpr bool is_sorted(const ErrorInfo tempList[])
     {
         int index = 0;
         for (std::size_t i = 0; i < errorListSize - 1; ++i) {
-            if (tempList[i].errorCode >= tempList[i + 1].errorCode) {
+            if (tempList[i].errorCode >= tempList[i + 1].errorCode) { // check if error code is sorted in ascending order, and there is no duplicate error code.
                 return false;
             }
-            if (tempList[i].errorIndex >= tempList[i + 1].errorIndex) {
-                return false;
-            }
-            if (static_cast<int>(tempList[i].errorIndex) != ++index) { // check if error index is continuous and starts from 0
+            if (static_cast<int>(tempList[i].errorIndex) != index) { // check if error index is continuous and starts from 0
                 return false;
             }
         }
