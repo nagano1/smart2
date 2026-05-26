@@ -457,7 +457,7 @@ namespace smart {
                 if (Search::IsTokenized(result)) {
                     int result2 = Scanner::scanOnce(Cast::upcast(&fnNode->bodyNode), Tokenizers::bodyTokenizer, context, result);
                     if (Search::IsTokenized(result2)) {
-                        context->scanEnd = true;
+                        //context->scanEnd = true;
                         context->mostLeftNode = Cast::upcast(&fnNode->parameterStartNode);
                         return result2;
                     }
