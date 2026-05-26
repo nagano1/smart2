@@ -74,11 +74,11 @@ namespace smart {
     };
 
 
-    static constexpr int errorListSize = 1 + static_cast<int>(ErrorIndex::last_keeper); // +1 for last_keeper to get the size of error list.
+    static constexpr int errorListSize = 1 + static_cast<int>(ErrorIndex::last_keeper);
 
     struct ErrorInfo {
         ErrorIndex errorIndex; // enum value for error index, used for switch case and array indexing.
-        int errorCode; // this is for user friendly error code.
+        int errorCode; // user friendly error code.
         const char* msg;
 
         static ErrorInfo ErrorInfoList[errorListSize];
@@ -91,13 +91,18 @@ namespace smart {
     #define  USE_STATIC_SORT
     #endif
     #ifdef USE_STATIC_SORT
+    // check if the error list is sorted with error code, to make sure the binary search for error code can work correctly.
     static constexpr bool is_sorted(const ErrorInfo tempList[])
     {
+        int index = 0;
         for (std::size_t i = 0; i < errorListSize - 1; ++i) {
             if (tempList[i].errorCode >= tempList[i + 1].errorCode) {
                 return false;
             }
             if (tempList[i].errorIndex >= tempList[i + 1].errorIndex) {
+                return false;
+            }
+            if (static_cast<int>(tempList[i].errorIndex) != index++) { // check if error index is continuous and starts from 0
                 return false;
             }
         }
@@ -109,7 +114,7 @@ namespace smart {
     {
         ErrorInfo::errorInfoInitialized = true;
 
-        static constexpr ErrorInfo tempList[] = {
+        static constexpr ErrorInfo errorInfoListData[] = {
             
             ErrorInfo{ ErrorIndex::first_keeper, 9912, "start"},
 
@@ -125,7 +130,6 @@ namespace smart {
             ErrorInfo{ ErrorIndex::syntax_error2, 418031, "syntax error2" },
             ErrorInfo{ ErrorIndex::should_break_line, 418032, "should have a line break2" },
             ErrorInfo{ ErrorIndex::indent_error, 418033, "indent error" },
-
 
             // value
             ErrorInfo{ ErrorIndex::expect_end_parenthesis, 418133, "expect_end_parenthesis" },
@@ -143,7 +147,7 @@ namespace smart {
 
             // fn
             ErrorInfo{ ErrorIndex::invalid_fn_name, 7777815, "invalid fn name"},
-            ErrorInfo{ ErrorIndex::expect_bracket_for_fn_body, 7777816, "expect_bracket_for_fn_body"},
+            ErrorInfo{ ErrorIndex::expect_bracket_for_fn_body, 7777816, "expect '{' for fn body"},
             ErrorInfo{ ErrorIndex::expect_parenthesis_for_fn_params, 7777817, "expect '(' for fn parameters"},
             ErrorInfo{ ErrorIndex::expect_end_parenthesis_for_fn_params, 7777818, "expect ')' for fn parameters"},
 
@@ -155,11 +159,11 @@ namespace smart {
             //                                  Logical/Semantic Errors
             //
             //----------------------------------------------------------------------------------
-            ErrorInfo{ErrorIndex::no_logical_error, 57770000, "no_logical_error"},
-            ErrorInfo{ErrorIndex::no_variable_defined, 57770001, "no variable defined"},
-            ErrorInfo{ErrorIndex::type_not_found, 57770002, "type not found"},
+            ErrorInfo{ErrorIndex::no_logical_error,     57770000, "no_logical_error"},
+            ErrorInfo{ErrorIndex::no_variable_defined,  57770001, "no variable defined"},
+            ErrorInfo{ErrorIndex::type_not_found,       57770002, "type not found"},
             ErrorInfo{ErrorIndex::assign_null_to_unnullable, 57770003, "assign null to unnullable type"},
-            ErrorInfo{ErrorIndex::assign_to_immutable, 57770004, "assign_to_immutable"},
+            ErrorInfo{ErrorIndex::assign_to_immutable,  57770004, "assign_to_immutable"},
             ErrorInfo{ErrorIndex::cant_put_immutable_mark_for_non_value_assignment, 57770005, "cant_put_immutable_mark_for_non_value_assignment"},
             ErrorInfo{ErrorIndex::type_is_not_assigneable, 57770006, "type_is_not_assigneable"},
 
@@ -168,18 +172,19 @@ namespace smart {
         };
 
 
-        static_assert(errorListSize == (sizeof tempList) / sizeof(ErrorInfo), "error list should have the same length"); 
+        static_assert(errorListSize == (sizeof errorInfoListData) / sizeof(ErrorInfo), "error list should have the same length"); 
         static_assert(0 == (int)ErrorIndex::first_keeper, "first keeper id = 0");
         static_assert(errorListSize-1 == (int)ErrorIndex::last_keeper, "last keeper id = ");
 
         #ifdef USE_STATIC_SORT
-        static_assert(is_sorted(tempList), "error List should be sorted with error code"); // C++14
+        static_assert(is_sorted(errorInfoListData), "error List should be sorted with error code"); // C++14
         #endif
 
         // initialize error info list
         for (int i = 0; i < errorListSize; i++) {
-            auto &&errorInfo = tempList[i];
-            ErrorInfo::ErrorInfoList[static_cast<int>(tempList[i].errorIndex)] = errorInfo;
+            auto &&errorInfo = errorInfoListData[i];
+            // assign error info to the list to get error info by error index in O(1) time.
+            ErrorInfo::ErrorInfoList[static_cast<int>(errorInfoListData[i].errorIndex)] = errorInfo;
         }
 
         return 0;
@@ -196,7 +201,7 @@ namespace smart {
         return nullptr;
     }
 
-    // for error code, we use a large number to avoid conflict with other error codes, and we can also use the error code to indicate the type of error, for example, syntax error, logical error, etc.
+    // for error code, we use a large number to avoid conflict with other error codes.
     static int getErrorCode(ErrorIndex errorIndex) {
         if (!ErrorInfo::errorInfoInitialized) {
             initErrorInfoList();
@@ -206,7 +211,7 @@ namespace smart {
         return errorInfo.errorCode;
     }
 
-
+    // for error message, we use the message in error info list, and we can also translate the message to other language if needed.
     static const char *getErrorMessage(ErrorIndex errorIndex) {
         if (!ErrorInfo::errorInfoInitialized) {
             initErrorInfoList();
@@ -257,6 +262,4 @@ namespace smart {
         CodeErrorItem  errorItem;
         static const int SYNTAX_ERROR_RETURN = -1;
     };
-
-
 }
