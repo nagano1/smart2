@@ -395,12 +395,12 @@ namespace smart {
     }
 
     static node_vtable _parenthesesVTable = CREATE_VTABLE(ParenthesesNodeStruct,
-                                                                parentheses_selfTextLength,
-                                                                copySelfText_ParenthesesNode,
-                                                                parentheses_appendToLine,
+                                                          parentheses_selfTextLength,
+                                                          copySelfText_ParenthesesNode,
+                                                          parentheses_appendToLine,
                                                           parentheses_applyFuncToDescendants,
-                                                                parenthesesNodeTypeText,
-                                                            NodeTypeId::Parentheses);
+                                                          parenthesesNodeTypeText,
+                                                          NodeTypeId::Parentheses);
 
     const node_vtable *VTables::ParenthesesVTable = &_parenthesesVTable;
 
@@ -410,8 +410,7 @@ namespace smart {
         INIT_NODE(node, context, parentNode, VTables::ParenthesesVTable);
         node->valueNode = nullptr;
 
-        //Init::initSymbolNode(&node->openNode, context, node, '(');
         Init::initSymbolNode(&node->closeNode, context, node, ')');
         return node;
     }
-} // namespace
+}
