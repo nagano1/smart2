@@ -28,7 +28,7 @@
 // */
 namespace smart {
 
-    enum class ErrorCode {
+    enum class ErrorIndex {
         first_keeper,
 
         //----------------------------------------------------------------------------------
@@ -97,12 +97,12 @@ namespace smart {
     }
 
 
-    static constexpr int errorListSize = 1 + static_cast<int>(ErrorCode::last_keeper);
+    static constexpr int errorListSize = 1 + static_cast<int>(ErrorIndex::last_keeper);
 
 
     struct ErrorInfo {
-        ErrorCode errorIndex;
-        int errorCode;
+        ErrorIndex errorIndex; // this is for internal use, should not be exposed to users. it is used for error lookup and should be unique and sorted by this field.
+        int errorCode; // this is for user friendly error code.
         const char* msg;
 
         static ErrorInfo ErrorInfoList[errorListSize];
@@ -138,6 +138,7 @@ namespace smart {
     #define  USE_STATIC_SORT
     #endif
     #ifdef USE_STATIC_SORT
+    // Check if the error list is sorted by error code. This is important for efficient error lookup.
     static constexpr bool is_sorted(const ErrorInfo tempList[])
     {
         for (std::size_t i = 0; i < errorListSize - 1; ++i) {
@@ -157,67 +158,68 @@ namespace smart {
         ErrorInfo::errorInfoInitialized = true;
 
         static constexpr ErrorInfo tempList[] = {
-            ErrorInfo{ ErrorCode::first_keeper, 9912, "start"},
+            
+            ErrorInfo{ ErrorIndex::first_keeper, 9912, "start"},
 
             //----------------------------------------------------------------------------------
             //
             //                                     Syntax Errors
             //
             //----------------------------------------------------------------------------------
-            ErrorInfo{ ErrorCode::no_syntax_error, 10000, "no_syntax_error"},
+            ErrorInfo{ ErrorIndex::no_syntax_error, 10000, "no_syntax_error"},
 
             // common
-            ErrorInfo{ ErrorCode::syntax_error, 418030, "syntax error" },
-            ErrorInfo{ ErrorCode::syntax_error2, 418031, "syntax error2" },
-            ErrorInfo{ ErrorCode::should_break_line, 418032, "should have a line break2" },
-            ErrorInfo{ ErrorCode::indent_error, 418033, "indent error" },
+            ErrorInfo{ ErrorIndex::syntax_error, 418030, "syntax error" },
+            ErrorInfo{ ErrorIndex::syntax_error2, 418031, "syntax error2" },
+            ErrorInfo{ ErrorIndex::should_break_line, 418032, "should have a line break2" },
+            ErrorInfo{ ErrorIndex::indent_error, 418033, "indent error" },
 
 
             // value
-            ErrorInfo{ ErrorCode::expect_end_parenthesis, 418133, "expect_end_parenthesis" },
+            ErrorInfo{ ErrorIndex::expect_end_parenthesis, 418133, "expect_end_parenthesis" },
 
             // string
-            ErrorInfo{ ErrorCode::missing_closing_quote, 989800, "missing closing quote" },
-            ErrorInfo{ ErrorCode::missing_closing_quote2, 989900, "missing closing quote" },
+            ErrorInfo{ ErrorIndex::missing_closing_quote, 989800, "missing closing quote" },
+            ErrorInfo{ ErrorIndex::missing_closing_quote2, 989900, "missing closing quote" },
 
-            ErrorInfo{ ErrorCode::missing_object_delemeter, 7677812, "missing object delimeter"},
+            ErrorInfo{ ErrorIndex::missing_object_delemeter, 7677812, "missing object delimeter"},
 
             // class
-            ErrorInfo{ ErrorCode::invalid_class_name, 7777413, "Invalid class name"},
-            ErrorInfo{ ErrorCode::no_brace_for_class, 7777414, "no brace for class"},
-            ErrorInfo{ ErrorCode::no_brace_of_end_for_class, 7777415, "no brace of end for class"},
+            ErrorInfo{ ErrorIndex::invalid_class_name, 7777413, "Invalid class name"},
+            ErrorInfo{ ErrorIndex::no_brace_for_class, 7777414, "no brace for class"},
+            ErrorInfo{ ErrorIndex::no_brace_of_end_for_class, 7777415, "no brace of end for class"},
 
             // fn
-            ErrorInfo{ ErrorCode::invalid_fn_name, 7777815, "invalid fn name"},
-            ErrorInfo{ ErrorCode::expect_bracket_for_fn_body, 7777816, "expect_bracket_for_fn_body"},
-            ErrorInfo{ ErrorCode::expect_parenthesis_for_fn_params, 7777817, "expect '(' for fn parameters"},
-            ErrorInfo{ ErrorCode::expect_end_parenthesis_for_fn_params, 7777818, "expect ')' for fn parameters"},
+            ErrorInfo{ ErrorIndex::invalid_fn_name, 7777815, "invalid fn name"},
+            ErrorInfo{ ErrorIndex::expect_bracket_for_fn_body, 7777816, "expect_bracket_for_fn_body"},
+            ErrorInfo{ ErrorIndex::expect_parenthesis_for_fn_params, 7777817, "expect '(' for fn parameters"},
+            ErrorInfo{ ErrorIndex::expect_end_parenthesis_for_fn_params, 7777818, "expect ')' for fn parameters"},
 
             // return
-            ErrorInfo{ ErrorCode::no_value_for_return, 7778818, "no_value_for_return"},
+            ErrorInfo{ ErrorIndex::no_value_for_return, 7778818, "no_value_for_return"},
 
             //----------------------------------------------------------------------------------
             //
             //                                  Logical Errors
             //
             //----------------------------------------------------------------------------------
-            ErrorInfo{ErrorCode::no_logical_error, 57770000, "no_logical_error"},
-            ErrorInfo{ErrorCode::no_variable_defined, 57770001, "no_variable_defined"},
-            ErrorInfo{ErrorCode::type_not_found, 57770002, "type not found"},
-            ErrorInfo{ErrorCode::assign_null_to_unnullable, 57770003, "assign_null_to_unnullable"},
-            ErrorInfo{ErrorCode::assign_to_immutable, 57770004, "assign_to_immutable"},
-            ErrorInfo{ErrorCode::need_mutable_mark_for_no_value_assignment, 57770005, "need_mutable_mark_for_no_value_assignment"},
-            ErrorInfo{ErrorCode::type_is_not_assigneable, 57770006, "type_is_not_assigneable"},
+            ErrorInfo{ErrorIndex::no_logical_error, 57770000, "no_logical_error"},
+            ErrorInfo{ErrorIndex::no_variable_defined, 57770001, "no_variable_defined"},
+            ErrorInfo{ErrorIndex::type_not_found, 57770002, "type not found"},
+            ErrorInfo{ErrorIndex::assign_null_to_unnullable, 57770003, "assign_null_to_unnullable"},
+            ErrorInfo{ErrorIndex::assign_to_immutable, 57770004, "assign_to_immutable"},
+            ErrorInfo{ErrorIndex::need_mutable_mark_for_no_value_assignment, 57770005, "need_mutable_mark_for_no_value_assignment"},
+            ErrorInfo{ErrorIndex::type_is_not_assigneable, 57770006, "type_is_not_assigneable"},
 
 
-            ErrorInfo{ ErrorCode::last_keeper, 99999999, "end" },
+            ErrorInfo{ ErrorIndex::last_keeper, 99999999, "end" },
         };
 
 
 
         static_assert(errorListSize == (sizeof tempList) / sizeof(ErrorInfo), "error list should have the same length");
-        static_assert(0 == (int)ErrorCode::first_keeper, "first keeper id = 0");
-        static_assert(errorListSize-1 == (int)ErrorCode::last_keeper, "last keeper id = ");
+        static_assert(0 == (int)ErrorIndex::first_keeper, "first keeper id = 0");
+        static_assert(errorListSize-1 == (int)ErrorIndex::last_keeper, "last keeper id = ");
 
         #ifdef USE_STATIC_SORT
         static_assert(is_sorted(tempList), "error List should be sorted with error code"); // C++14
@@ -244,11 +246,13 @@ namespace smart {
     };
 
 
-    static const char *translateErrorMessage(ErrorCode errorCode, Language lang) {
+    static const char *translateErrorMessage(ErrorIndex errorCode, Language lang) {
         return nullptr;
     }
 
-    static int getErrorId(ErrorCode errorCode) {
+    // This function returns a unique error ID for a given error code.
+    // The error ID can be used for user-friendly error reporting and localization.
+    static int getErrorId(ErrorIndex errorCode) {
         if (!ErrorInfo::errorInfoInitialized) {
             initErrorInfoList();
         }
@@ -258,7 +262,7 @@ namespace smart {
     }
 
 
-    static const char *getErrorMessage(ErrorCode errorCode) {
+    static const char *getErrorMessage(ErrorIndex errorCode) {
         if (!ErrorInfo::errorInfoInitialized) {
             initErrorInfoList();
         }
@@ -279,7 +283,7 @@ namespace smart {
 
 
     using CodeErrorItem = struct _CodeErrorItem {
-        ErrorCode errorCode;
+        ErrorIndex errorCode;
         char reason[MAX_REASON_LENGTH + 1];
         int reasonLength = 0;
 

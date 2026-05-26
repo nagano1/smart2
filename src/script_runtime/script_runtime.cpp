@@ -865,7 +865,7 @@ namespace smart {
             }
             else { // NotDefinedType a
                 // error no type found
-                context->addErrorWithNode(ErrorCode::no_variable_defined, &assign->typeOrLet);
+                context->addErrorWithNode(ErrorIndex::no_variable_defined, &assign->typeOrLet);
             }
         }
         assign->typeAtHeap = assign->pointerAsterisk.foundPos > -1;
@@ -904,7 +904,7 @@ namespace smart {
 
                                     }
                                     else {
-                                        context->addErrorWithNode(ErrorCode::assign_null_to_unnullable, assign);
+                                        context->addErrorWithNode(ErrorIndex::assign_null_to_unnullable, assign);
                                     }
                                 }
                                 else {
@@ -914,7 +914,7 @@ namespace smart {
                                     bool canAssign = typeEntry->canAssignTypeImplicitly(context, targetTypeEntry);
 
                                     if (!canAssign) {
-                                        context->addErrorWithNode(ErrorCode::type_is_not_assigneable, assign);
+                                        context->addErrorWithNode(ErrorIndex::type_is_not_assigneable, assign);
                                     }
                                 }
                             }
@@ -931,7 +931,7 @@ namespace smart {
 
                                 if (!canAssign) {
                                     // error: wrong type
-                                    context->addErrorWithNode(ErrorCode::type_is_not_assigneable, assign);
+                                    context->addErrorWithNode(ErrorIndex::type_is_not_assigneable, assign);
                                 }
                             }
                         }
@@ -942,10 +942,10 @@ namespace smart {
                 if (assign->typeOrLet.hasNullableMark || assign->typeOrLet.hasImmutableMark) {
 
                 } else {
-                    context->addErrorWithNode(ErrorCode::need_mutable_mark_for_no_value_assignment, &assign->typeOrLet);
+                    context->addErrorWithNode(ErrorIndex::need_mutable_mark_for_no_value_assignment, &assign->typeOrLet);
                 }
                 if (assign->typeOrLet.isLet) { // let b
-                    context->addErrorWithNode(ErrorCode::no_variable_defined, assign);
+                    context->addErrorWithNode(ErrorIndex::no_variable_defined, assign);
                 }
                 else {} // int b
             }
@@ -972,7 +972,7 @@ namespace smart {
                         if (ParseUtil::equals(assign->nameNode.name, assign->nameNode.nameLength,
                                              declAssign->nameNode.name, declAssign->nameNode.nameLength)) {
                             if (!declAssign->typeOrLet.hasImmutableMark) {
-                                context->addErrorWithNode(ErrorCode::assign_to_immutable, assign);
+                                context->addErrorWithNode(ErrorIndex::assign_to_immutable, assign);
                             }
 
                             assign->stackOffset = declAssign->stackOffset;
@@ -983,14 +983,14 @@ namespace smart {
                                     bool canAssign = targetTypeEntry->canAssignTypeImplicitly(context, targetTypeEntry);
                                     if (!canAssign) {
                                         // error
-                                        context->addErrorWithNode(ErrorCode::type_is_not_assigneable, assign);
+                                        context->addErrorWithNode(ErrorIndex::type_is_not_assigneable, assign);
                                     }
                                 }
                             }
 
                             if (assign->expressionNode->typeAtHeap != declAssign->typeAtHeap) {
                                 // error
-                                context->addErrorWithNode(ErrorCode::type_is_not_assigneable, assign);
+                                context->addErrorWithNode(ErrorIndex::type_is_not_assigneable, assign);
                             }
                         }
                     }
@@ -1000,7 +1000,7 @@ namespace smart {
 
             if (!hit) {
                 // error: no decl found
-                context->addErrorWithNode(ErrorCode::no_variable_defined, assign);
+                context->addErrorWithNode(ErrorIndex::no_variable_defined, assign);
             }
         }
     }

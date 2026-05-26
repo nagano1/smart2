@@ -165,7 +165,7 @@ namespace smart {
             else {
                 // no value node(expression) found after equal symbol. invalid syntax. stop scanning and report error.
                 context->scanEnd = true;
-                context->setError(ErrorCode::syntax_error, start);
+                context->setError(ErrorIndex::syntax_error, start);
                 return Search::NOTFOUND;
             }
         }

@@ -123,7 +123,7 @@ namespace smart {
 				}
 
 				if (!ok && line->depth * doc->context->baseIndent > nodeIndent) {
-					doc->context->setIndentError(ErrorCode::indent_error, i, line->depth * doc->context->baseIndent);
+					doc->context->setIndentError(ErrorIndex::indent_error, i, line->depth * doc->context->baseIndent);
 					return;
 				}
 

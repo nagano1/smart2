@@ -170,10 +170,10 @@ namespace smart {
                 return nextPos;
             }
         } else {
-            context->setError(ErrorCode::should_break_line, start);
+            context->setError(ErrorIndex::should_break_line, start);
         }
 
-        context->setError(ErrorCode::syntax_error2, start);
+        context->setError(ErrorIndex::syntax_error2, start);
         context->scanEnd = true;
         return Search::NOTFOUND;
     }
@@ -190,7 +190,7 @@ namespace smart {
             }
         }
         else {
-            context->setError(ErrorCode::expect_bracket_for_fn_body, context->lastTokenizedPos);
+            context->setError(ErrorIndex::expect_bracket_for_fn_body, context->lastTokenizedPos);
         }
         return Search::NOTFOUND;
     };
@@ -465,11 +465,11 @@ namespace smart {
                 }
             }
             else {
-                context->setError(ErrorCode::expect_parenthesis_for_fn_params, context->lastTokenizedPos);
+                context->setError(ErrorIndex::expect_parenthesis_for_fn_params, context->lastTokenizedPos);
             }
         }
         else {
-            context->setError(ErrorCode::expect_parenthesis_for_fn_params, context->lastTokenizedPos);
+            context->setError(ErrorIndex::expect_parenthesis_for_fn_params, context->lastTokenizedPos);
         }
         return Search::NOTFOUND;
     }
@@ -497,7 +497,7 @@ namespace smart {
         // nameNode should have spaces/comments/lineBreaks before between "fn" and function name,
         if (!Search::IsTokenized(resultPos)) {
             // the fn should have a function name
-            context->setError(ErrorCode::invalid_fn_name, start);
+            context->setError(ErrorIndex::invalid_fn_name, start);
             context->setCodeNode(fnNode);
             return currentPos;
         }
@@ -510,7 +510,7 @@ namespace smart {
             return resultPos;
         }
         else {
-            context->setError(ErrorCode::syntax_error, context->lastTokenizedPos);
+            context->setError(ErrorIndex::syntax_error, context->lastTokenizedPos);
             context->setCodeNode(fnNode);
             return currentPos;
         }

@@ -148,7 +148,7 @@ namespace smart {
                 return start + 1;
             }
             else {
-                context->setError(ErrorCode::no_brace_for_class, classNode->foundPos);
+                context->setError(ErrorIndex::no_brace_for_class, classNode->foundPos);
             }
         }
         else if (ch == '}') {
@@ -171,7 +171,7 @@ namespace smart {
             }
 
             context->scanEnd = true;
-            context->setError2(ErrorCode::no_brace_of_end_for_class, classNode->foundPos, start);
+            context->setError2(ErrorIndex::no_brace_of_end_for_class, classNode->foundPos, start);
         }
 
         return Search::NOTFOUND;
@@ -203,7 +203,7 @@ namespace smart {
 
                     if (!Search::IsTokenized(resultPos)) {
                         // the class should have a class name
-                        context->setError(ErrorCode::invalid_class_name, start);
+                        context->setError(ErrorIndex::invalid_class_name, start);
                         return Search::NOTFOUND;
                     }
                 }

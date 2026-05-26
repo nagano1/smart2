@@ -177,7 +177,7 @@ namespace smart
 
         void setErrorPositions();
 
-        void addErrorWithNode(ErrorCode errorCode, void* nodeArg) {
+        void addErrorWithNode(ErrorIndex errorCode, void* nodeArg) {
             auto *node = Cast::upcast(nodeArg);
             assert(node->vtable != nullptr);
 

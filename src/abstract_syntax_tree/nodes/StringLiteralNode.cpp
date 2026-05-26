@@ -81,7 +81,7 @@ namespace smart {
         }
 
         if (!endsWithQuote) {
-            context->setError(ErrorCode::missing_closing_quote, start);
+            context->setError(ErrorIndex::missing_closing_quote, start);
             return Search::NOTFOUND;
         }
 

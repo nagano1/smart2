@@ -339,7 +339,7 @@ namespace smart {
         }
         else {
             if (parenthesesNode->valueNode != nullptr && parenthesesNode->valueNode->foundPos > -1) {
-                context->setError(ErrorCode::expect_end_parenthesis, context->lastTokenizedPos);
+                context->setError(ErrorIndex::expect_end_parenthesis, context->lastTokenizedPos);
             }
             else {
                 int result = Tokenizers::tokenizeExpression(Cast::upcast(parenthesesNode), TokenizerParams_pass_3);
@@ -350,7 +350,7 @@ namespace smart {
                     return result;
                 } 
                 else {
-                    context->setError(ErrorCode::expect_end_parenthesis_for_fn_params,
+                    context->setError(ErrorIndex::expect_end_parenthesis_for_fn_params,
                                       context->lastTokenizedPos);
                 }
             }
