@@ -451,13 +451,11 @@ namespace smart {
         if (fnNode->parameterStartNode.foundPos == -1) {
             if (ch == '(') {
                 fnNode->parameterStartNode.foundPos = start;
-                //context->setCodeNode(&fnNode->parameterStartNode);
                 int nextPos =  start + 1;
                 int result = Scanner::scanLoop(fnNode, internal_parameterListTokenizerLoop, context, nextPos);
                 if (Search::IsTokenized(result)) {
                     int result2 = Scanner::scanOnce(Cast::upcast(&fnNode->bodyNode), Tokenizers::bodyTokenizer, context, result);
                     if (Search::IsTokenized(result2)) {
-                        //context->scanEnd = true;
                         context->mostLeftNode = Cast::upcast(&fnNode->parameterStartNode);
                         return result2;
                     }
