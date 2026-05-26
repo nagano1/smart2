@@ -376,7 +376,7 @@ namespace smart {
         SymbolStruct openNode;
         SymbolStruct closeNode;
 
-        NodeBase *expressionNode;
+        NodeBase *valueNode;
     };
 
 
