@@ -159,10 +159,8 @@ namespace smart {
                 currentOffset += typeTextLen;
 
                 if (node->precedingSpaceCount > 0) {
-                    for (int i = 0; i < node->precedingSpaceCount; i++) {
-                        outputText[currentOffset] = ' ';
-                        currentOffset++;
-                    }
+                    memset(outputText + currentOffset, ' ', node->precedingSpaceCount);
+                    currentOffset += node->precedingSpaceCount;
                 }
 
                 int textLen = VTableCall::selfTextLength(node);
@@ -424,10 +422,8 @@ namespace smart {
                 auto *node = line->firstNode;
                 while (node) {
                     if (node->precedingSpaceCount > 0) {
-                        for (int i = 0; i < node->precedingSpaceCount; i++) {
-                            text[currentOffset] = ' ';
-                            currentOffset++;
-                        }
+                        memset(text + currentOffset, ' ', node->precedingSpaceCount);
+                        currentOffset += node->precedingSpaceCount;
                     }
 
                     size_t len = VTableCall::selfTextLength(node);
