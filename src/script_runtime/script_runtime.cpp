@@ -220,7 +220,7 @@ namespace smart {
     char* int32_toString(ScriptEngineContext *context, ValueBase *value)
     {
         auto * chars = (char*)malloc(sizeof(char) * 64);
-        sprintf(chars, "%" PRId32, *(int32_t*)value->ptr);
+        snprintf(chars, 64, "%" PRId32, *(int32_t*)value->ptr);
         return chars;
     }
 
@@ -233,7 +233,7 @@ namespace smart {
     char* int64_toString(ScriptEngineContext *context, ValueBase *value)
     {
         auto * chars = (char*)malloc(sizeof(char) * 128);
-        sprintf(chars, "%" PRId64, *(int64_t*)value->ptr); // PRIx64
+        snprintf(chars, 128, "%" PRId64, *(int64_t*)value->ptr);
         return chars;
     }
 

@@ -1,3 +1,6 @@
+#pragma warning(push)
+#pragma warning(disable : 4267) // conversion from 'size_t' to 'int', possible loss of data
+
 #include <cstdio>
 
 #include "ParseUtil.hpp"
@@ -131,3 +134,5 @@ int testA() {
 void callAllTests() {
     testA();
 }
+
+#pragma warning(pop)
