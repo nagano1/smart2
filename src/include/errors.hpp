@@ -87,10 +87,9 @@ namespace smart {
 
     // C++-14 
     // 201402L (C++14), 201703L (C++17), 202002L (C++20)
-    //#if __cplusplus >= 201402L || _MSVC_LANG >= 201402L
-    //#define  USE_STATIC_SORT
-    //#endif
-    #define USE_STATIC_SORT
+    #if __cplusplus >= 201402L || _MSVC_LANG >= 201402L // C++14 or later
+    #define  USE_STATIC_SORT
+    #endif
     #ifdef USE_STATIC_SORT
     // check if error list is sorted by error code in ascending order, and there is no duplicate error code.
     static constexpr bool is_sorted(const ErrorInfo tempList[])
