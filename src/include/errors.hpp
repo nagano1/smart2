@@ -91,15 +91,16 @@ namespace smart {
     #define  USE_STATIC_SORT
     #endif
     #ifdef USE_STATIC_SORT
-    // check if error list is sorted by error code in ascending order, and there is no duplicate error code.
+    // check if error list is sorted by error index in ascending order, and there is no duplicate error code.
     static constexpr bool is_sorted(const ErrorInfo tempList[])
     {
         int expectedErrorIndex = 0;
         for (std::size_t i = 0; i < errorListSize - 1; ++i) {
-            if (tempList[i].errorCode >= tempList[i + 1].errorCode) { // check if error code is sorted in ascending order, and there is no duplicate error code.
+            if (tempList[i].errorCode >= tempList[i + 1].errorCode) {
                 return false;
             }
-            if (static_cast<int>(tempList[i].errorIndex) != expectedErrorIndex) { // check if error index is continuous and starts from 0
+            // check if errorList has the same order of ErrorIndex
+            if (static_cast<int>(tempList[i].errorIndex) != expectedErrorIndex++) {
                 return false;
             }
         }
@@ -160,9 +161,9 @@ namespace smart {
             ErrorInfo{ErrorIndex::no_variable_defined,  57770001, "no variable defined"},
             ErrorInfo{ErrorIndex::type_not_found,       57770002, "type not found"},
             ErrorInfo{ErrorIndex::assign_null_to_unnullable, 57770003, "assign null to unnullable type"},
-            ErrorInfo{ErrorIndex::assign_to_immutable,  57770004, "assign_to_immutable"},
-            ErrorInfo{ErrorIndex::cant_put_immutable_mark_for_non_value_assignment, 57770005, "cant_put_immutable_mark_for_non_value_assignment"},
-            ErrorInfo{ErrorIndex::type_is_not_assigneable, 57770006, "type_is_not_assigneable"},
+            ErrorInfo{ErrorIndex::assign_to_immutable,  57770004, "assign to immutable"},
+            ErrorInfo{ErrorIndex::cant_put_immutable_mark_for_non_value_assignment, 57770005, "cant put immutable mark for non value assignment"},
+            ErrorInfo{ErrorIndex::type_is_not_assigneable, 57770006, "type is not assigneable"},
 
 
             ErrorInfo{ ErrorIndex::last_keeper, 99999999, "end" },
