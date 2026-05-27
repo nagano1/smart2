@@ -331,6 +331,7 @@ namespace smart {
         auto *parenthesesNode = Cast::downcast<ParenthesesNodeStruct *>(argNode);
 
         if (ch == ')') {
+            parenthesesNode->closeNode.foundPos = start;
             context->setCodeNode(&parenthesesNode->closeNode);
             context->scanEnd = true;
             return start + 1;
