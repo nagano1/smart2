@@ -357,8 +357,8 @@ namespace smart {
         NameNodeStruct nameNode;
         int stackSize;
 
-        SymbolStruct parameterStartNode;
-        SymbolStruct parameterEndNode;
+        SymbolStruct parameterStartNode; // (
+        SymbolStruct parameterEndNode; // )
 
         BodyNodeStruct bodyNode;
 

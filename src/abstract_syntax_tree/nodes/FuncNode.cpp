@@ -352,6 +352,7 @@ namespace smart {
         return size_of_fn;
     }
 
+    // FuncNode itself has "fn" as self text
     static void copySelfText(FuncNodeStruct *self, utf8byte *buf) {
         TEXT_MEMCPY(buf, fn_chars, size_of_fn);
     }
@@ -496,7 +497,7 @@ namespace smart {
         resultPos = Scanner::scanOnce(&fnNode->nameNode, Tokenizers::nameTokenizer, context, currentPos);
         // nameNode should have spaces/comments/lineBreaks before between "fn" and function name,
         if (!Search::IsTokenized(resultPos)) {
-            // the fn should have a function name
+            // fn should have a function name
             context->setError(ErrorIndex::invalid_fn_name, start);
             context->setCodeNode(fnNode);
             return currentPos;
