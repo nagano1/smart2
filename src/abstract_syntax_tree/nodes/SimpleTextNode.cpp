@@ -58,11 +58,11 @@ namespace smart {
 
 
         static node_vtable _nullVTable = CREATE_VTABLE(NullNodeStruct,
-                                                           selfTextLength,
-                                                           copySelfText,
-                                                           appendToLine,
-                                                   SimpleTextNodeStruct_applyFuncToDescendants,
-                                                           "<NULL>", NodeTypeId::NULLId
+                                                       selfTextLength,
+                                                       copySelfText,
+                                                       appendToLine,
+                                                       SimpleTextNodeStruct_applyFuncToDescendants,
+                                                       "<NULL>", NodeTypeId::NULLId
     );
 
     const struct node_vtable *VTables::NullVTable = &_nullVTable;

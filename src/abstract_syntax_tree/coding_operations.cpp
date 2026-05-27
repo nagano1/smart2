@@ -41,9 +41,7 @@ namespace smart {
 	static NodeBase* findFirstElementNode(CodeLine* line) {
 		auto* node = line->firstNode;
 		while (node) {
-			if (node->vtable == VTables::SpaceVTable ||
-				node->vtable == VTables::LineBreakVTable) {
-
+			if (node->vtable == VTables::LineBreakVTable) {
 				node = node->nextNodeInLine;
 				continue;
 			}
