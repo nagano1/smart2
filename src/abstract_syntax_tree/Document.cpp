@@ -362,7 +362,7 @@ namespace smart {
                     int charPos = 0;
                     int prevStart = 0;
                     while (node) {
-                        charPos += node->prevSpaceCount;
+                        charPos += node->precedingSpaceCount;
 
                         char *dst = text != nullptr ? text + totalByteCount : buff;
                         int writeBytes = addSemanticTokens(node, dst, currentLineNo, &first,

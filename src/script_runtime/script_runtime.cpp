@@ -621,7 +621,7 @@ namespace smart {
         NodeBase *currenNode = codeLine->firstNode;
         while (currenNode) {
 
-            utf16Pos += currenNode->prevSpaceCount;
+            utf16Pos += currenNode->precedingSpaceCount;
 
             if (currenNode == node) {
                 if (beginningPos) {
@@ -945,7 +945,7 @@ namespace smart {
                 else if (assign->typeOrLet.hasNullableMark) {
 
                 } else {
-                    
+
                 }
                 if (assign->typeOrLet.isLet) { // let b
                     context->addErrorWithNode(ErrorIndex::no_variable_defined, assign);

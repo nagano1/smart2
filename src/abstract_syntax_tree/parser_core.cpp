@@ -31,8 +31,8 @@ namespace smart
         if (node == nullptr) {
             return currentCodeLine;
         }
-        auto *nodeBase = Cast::upcast(node); //if (nodeBase->prevLineBreakNode)
-        // if the node has prevLineBreakNode, append the prevLineBreakNode before appending the node itself,
+        auto *nodeBase = Cast::upcast(node); //if (nodeBase->precedingLineBreakNode) {
+        // if the node has precedingLineBreakNode, append the precedingLineBreakNode before appending the node itself,
         // so that the line break will be before the node in the code line,
         // which is more intuitive and easier to handle when generating code later
         return nodeBase->vtable->appendToLine(nodeBase, currentCodeLine);
