@@ -94,15 +94,19 @@ namespace smart {
     // check if error list is sorted by error index in ascending order, and there is no duplicate error code.
     static constexpr bool is_sorted(const ErrorInfo tempList[])
     {
-        int expectedErrorIndex = 0;
+        // check if error list is sorted by error index in ascending order, and there is no duplicate error code.
         for (std::size_t i = 0; i < errorListSize - 1; ++i) {
             if (tempList[i].errorCode >= tempList[i + 1].errorCode) {
                 return false;
             }
-            // check if errorList has the same order of ErrorIndex
-            if (static_cast<int>(tempList[i].errorIndex) != expectedErrorIndex++) {
+        }
+        // check if error index is continuous without gap, and starts from 0.
+        int expectedErrorIndex = 0;
+        for (std::size_t i = 0; i < errorListSize; ++i) {
+            if (static_cast<int>(tempList[i].errorIndex) != expectedErrorIndex) {
                 return false;
             }
+            expectedErrorIndex++;
         }
         return true;
     }
