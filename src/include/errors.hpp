@@ -105,7 +105,7 @@ namespace smart {
         }
         return true;
     }
-    #endif
+    //#endif
 
     static int initErrorInfoList()
     {
