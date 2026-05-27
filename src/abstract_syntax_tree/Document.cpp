@@ -93,7 +93,7 @@ namespace smart {
 
     utf8byte *DocumentUtils::getTextFromNode(NodeBase *node) {
         int len = VTableCall::selfTextLength(node);
-        int spaceCount = node->prevSpaceCount;
+        int spaceCount = node->precedingSpaceCount;
         auto *text = node->context->newText(len + spaceCount);
 
         for (int i = 0; i < spaceCount; i++) {
@@ -129,8 +129,8 @@ namespace smart {
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    if (node->prevSpaceCount > 0) {
-                        totalBytes += node->prevSpaceCount;
+                    if (node->precedingSpaceCount > 0) {
+                        totalBytes += node->precedingSpaceCount;
                     }
                     int len = VTableCall::typeTextLength(node) + VTableCall::selfTextLength(node);
                     totalBytes += len;
@@ -158,8 +158,8 @@ namespace smart {
                 memcpy(outputText + currentOffset, typeText, typeTextLen);
                 currentOffset += typeTextLen;
 
-                if (node->prevSpaceCount > 0) {
-                    for (int i = 0; i < node->prevSpaceCount; i++) {
+                if (node->precedingSpaceCount > 0) {
+                    for (int i = 0; i < node->precedingSpaceCount; i++) {
                         outputText[currentOffset] = ' ';
                         currentOffset++;
                     }
@@ -402,8 +402,8 @@ namespace smart {
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    if (node->prevSpaceCount > 0) {
-                        totalCount += node->prevSpaceCount;
+                    if (node->precedingSpaceCount > 0) {
+                        totalCount += node->precedingSpaceCount;
                     }
                     int len = VTableCall::selfTextLength(node);
                     totalCount += len;
@@ -423,8 +423,8 @@ namespace smart {
             while (line) {
                 auto *node = line->firstNode;
                 while (node) {
-                    if (node->prevSpaceCount > 0) {
-                        for (int i = 0; i < node->prevSpaceCount; i++) {
+                    if (node->precedingSpaceCount > 0) {
+                        for (int i = 0; i < node->precedingSpaceCount; i++) {
                             text[currentOffset] = ' ';
                             currentOffset++;
                         }
@@ -549,9 +549,9 @@ namespace smart {
                 docStruct->firstRootNode = Cast::upcast(&docStruct->endOfFile);
             }
             docStruct->lastRootNode = Cast::upcast(&docStruct->endOfFile);
-            docStruct->lastRootNode->prevSpaceCount = context->remainedSpaceCount;
-            docStruct->lastRootNode->prevLineBreakNode = context->remainedLineBreakNode;
-            docStruct->lastRootNode->prevCommentNode = context->remainedCommentNode;
+            docStruct->lastRootNode->precedingSpaceCount = context->remainedSpaceCount;
+            docStruct->lastRootNode->precedingLineBreakNode = context->remainedLineBreakNode;
+            docStruct->lastRootNode->precedingCommentNode = context->remainedCommentNode;
 
             DocumentUtils::regenerateCodeLines(docStruct);
 

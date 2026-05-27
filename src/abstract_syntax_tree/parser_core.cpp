@@ -121,7 +121,7 @@ namespace smart
                 auto *commentFragment = Alloc::newBlockCommentFragmentNode(context, Cast::upcast(parentNode));
 
                 // link with previous line break node
-                commentFragment->prevLineBreakNode = lastBreakLine;
+                commentFragment->precedingLineBreakNode = lastBreakLine;
 
                 int commentLength = endIndex - currentIndex;
                 Init::assignText_SimpleTextNode(commentFragment, context, currentIndex, commentLength);
@@ -175,7 +175,7 @@ namespace smart
             assert(leftNode != nullptr);
 
             if (commentNode != nullptr) {
-                leftNode->prevCommentNode = Cast::upcast(commentNode);
+                leftNode->precedingCommentNode = Cast::upcast(commentNode);
                 commentNode = nullptr;
             }
         }
@@ -184,8 +184,8 @@ namespace smart
         {
             if (whitespace_startpos != -1) {
                 assert(whitespace_startpos < endIndex);
-                // prevSpaceCount allows only ascii whitespace. Japanese whitespaces are not allowed.
-                commentNode->prevSpaceCount = endIndex - whitespace_startpos;
+                // precedingSpaceCount allows only ascii whitespace. Japanese whitespaces are not allowed.
+                commentNode->precedingSpaceCount = endIndex - whitespace_startpos;
                 whitespace_startpos = -1;
             }
         }
@@ -194,7 +194,7 @@ namespace smart
         void assignLineBreak(NodeBase* node)
         {
             if (this->firstLineBreak != nullptr) {
-                node->prevLineBreakNode = firstLineBreak;
+                node->precedingLineBreakNode = firstLineBreak;
                 firstLineBreak = nullptr;
                 lastLineBreak = nullptr;
             }
@@ -239,7 +239,7 @@ namespace smart
             NodeBase* prevCommentNode = parsingData->commentNode;
             parsingData->commentNode = newCommentNode;
             if (prevCommentNode != nullptr) {
-                newCommentNode->prevCommentNode = prevCommentNode;
+                newCommentNode->precedingCommentNode = prevCommentNode;
             }
 
             parsingData->assignLineBreak(newCommentNode);
