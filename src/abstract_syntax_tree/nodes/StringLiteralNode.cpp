@@ -21,9 +21,7 @@ namespace smart {
 
     static CodeLine *appendToLine(StringLiteralNodeStruct *self, CodeLine *currentCodeLine) {
         currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self);
-        currentCodeLine->appendNode(self);
-
-        return currentCodeLine;
+        return currentCodeLine->appendNode(self);
     }
 
     static void copySelfText(StringLiteralNodeStruct *self, utf8byte *buf) {
@@ -58,9 +56,9 @@ namespace smart {
         }
 
 
-        // find the closing quote, and count the length of the literal text
         bool escapeMode = false;
 
+        // find the closing quote, and count the length of the literal text
         for (int_fast32_t i = start + 1; i < context->length; i++) {
             strLength++;
 
@@ -116,17 +114,21 @@ namespace smart {
         return 0;
     }
 
-    static node_vtable _stringVTable = CREATE_VTABLE(StringLiteralNodeStruct, selfTextLength,
-                                                          copySelfText,
-                                                          appendToLine, applyFuncToDescendants, nameTypeText, NodeTypeId::StringLiteral);
+    static node_vtable _stringVTable = CREATE_VTABLE(StringLiteralNodeStruct,
+                                                     selfTextLength,
+                                                     copySelfText,
+                                                     appendToLine,
+                                                     applyFuncToDescendants,
+                                                     nameTypeText,
+                                                     NodeTypeId::StringLiteral);
     const node_vtable *VTables::StringLiteralVTable = &_stringVTable;
 
-    void Init::initStringLiteralNode(StringLiteralNodeStruct *name, ParseContext *context, NodeBase *parentNode) {
+    void Init::initStringLiteralNode(StringLiteralNodeStruct *name, ParseContext *context, NodeBase *parentNode)
+    {
         INIT_NODE(name, context, parentNode, VTables::StringLiteralVTable);
         name->text = nullptr;
         name->textLength = 0;
         name->str = nullptr;
         name->strLength = 0;
-
     }
 }

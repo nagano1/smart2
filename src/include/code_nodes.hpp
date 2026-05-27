@@ -196,7 +196,6 @@ namespace smart {
         SIMPLE_TEXT_CONTENT;
     };
 
-    using SpaceNodeStruct = SimpleTextNodeStruct;
     using NullNodeStruct = SimpleTextNodeStruct;
     using LineCommentNodeStruct = SimpleTextNodeStruct;
     using BlockCommentFragmentStruct = SimpleTextNodeStruct;
@@ -569,9 +568,8 @@ namespace smart {
         }
 
         template<typename T>
-        SpaceNodeStruct *newMemForNode() {
+        T *newMemForNode() {
             return memBuffer.newMem<T>(1);
-            //return spaceBufferList.newNode();
         }
 
         void setError(ErrorIndex errorCode, st_int startPos) {
@@ -716,8 +714,6 @@ namespace smart {
         LineBreak = 10,
         Bool = 11,
         
-        Space = 15,
-
         Func = 17,
         NULLId = 16,
 
@@ -845,7 +841,6 @@ namespace smart {
                 *SymbolVTable,
                 *SimpleTextVTable,
                 *NullVTable,
-                *SpaceVTable,
                 *LineBreakVTable,
                 *ParenthesesVTable,
                 *FuncCallVTable,
@@ -970,7 +965,6 @@ namespace smart {
             }
 
             lastNode = (NodeBase *) node;
-
             if (this->context->appendLineMode == AppendLineMode::Normal) {
                 ((NodeBase *) node)->codeLine = this;
             }
