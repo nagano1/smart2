@@ -261,12 +261,10 @@ namespace smart {
     static CodeLine *parentheses_appendToLine(ParenthesesNodeStruct *self, CodeLine *currentCodeLine)
     {
         // (
-        currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self)
-                                         ->appendNode(self);
+        currentCodeLine = currentCodeLine->AddAttachedFormatNodes(self)->appendNode(self);
 
         auto *openCodeLine = currentCodeLine;
         int formerDepth = currentCodeLine->depth;
-
 
         if (self->valueNode) {
             int formerParentDepth = self->context->parentDepth;

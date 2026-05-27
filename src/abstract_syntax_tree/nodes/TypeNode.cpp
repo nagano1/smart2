@@ -84,13 +84,11 @@ namespace smart
         int result = Tokenizers::nameTokenizer(Cast::upcast(&typeNode->nameNode), context->chars[currentPos], currentPos, context);
 
         if (Search::IsTokenized(result)) {
-            typeNode->isLet = ParseUtil::equals(
-                                   NodeUtils::getTypeName(typeNode),
-                                   NodeUtils::getTypeNameLength(typeNode), let_chars, size_of_let
-                               );
+            typeNode->isLet = ParseUtil::equals(NodeUtils::getTypeName(typeNode), NodeUtils::getTypeNameLength(typeNode),
+                                                let_chars, size_of_let
+                              );
 
             context->setCodeNode(typeNode);
-            
             return result;
         }
 

@@ -524,6 +524,7 @@ namespace smart {
         MemBuffer memBuffer;
         MemBuffer memBufferForCodeLines;
 
+        // set generated node and most left node at the same time.
         void setCodeNode(void* node) {
             this->mostLeftNode = static_cast<NodeBase *>(node);
             this->generatedPrimaryNode = static_cast<NodeBase *>(node);

@@ -142,10 +142,11 @@ namespace smart {
             if (ch == '=') {
                 assignment->equalSymbol.foundPos = start;
                 context->setCodeNode(&assignment->equalSymbol);
-                return start+1;
+                return start + 1;
             }
             else {
                 if (assignment->hasTypeDecl) {
+                    // if has type declaration, it can be just declaration without assignment. e.g. int a
                     context->scanEnd = true;
                     return Search::DONE_WITH_PREVIUS_POSITION;
                 }
@@ -155,7 +156,7 @@ namespace smart {
                 }
             }
         }
-        else { // already has name and equal symbol. now should be value node.
+        else { // already has name and equal symbol. now should be expression node.
             int result = Tokenizers::tokenizeExpression(Cast::upcast(assignment), ch, start, context);
             if (Search::IsTokenized(result)) {
                 assignment->expressionNode = context->generatedPrimaryNode;
@@ -163,7 +164,7 @@ namespace smart {
                 return result;
             }
             else {
-                // no value node(expression) found after equal symbol. invalid syntax. stop scanning and report error.
+                // no expression node found after equal symbol. invalid syntax. stop scanning and report error.
                 context->scanEnd = true;
                 context->setError(ErrorIndex::syntax_error, start);
                 return Search::NOTFOUND;

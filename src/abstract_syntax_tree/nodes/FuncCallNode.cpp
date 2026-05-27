@@ -214,7 +214,7 @@ namespace smart {
     }
 
 
-    // this is called when expression is tokenized. func call is also an expression, so after tokenizing an expression,
+    // expression is already tokenized.
     // we will try to tokenize the function call by looking for '(' after the expression.
     int Tokenizers::tokenizeFuncCall(TokenizerParams_argNode_ch_start_context)
     {
@@ -231,7 +231,7 @@ namespace smart {
         funcCallNode->exprNode = context->generatedPrimaryNode;
         funcCallNode->exprNode->parentNode = Cast::upcast(funcCallNode);
 
-        auto *leftNode = context->mostLeftNode; // this is also the generatedMainNode which is the expression before '('
+        auto *leftNode = context->mostLeftNode; // this is also the generatedPrimaryNode which is the expression before '('
 
         int currentPos = start + 1;
         int resultPos = Scanner::scanLoop(funcCallNode, tokenizeFuncCallInternal, context, currentPos);
